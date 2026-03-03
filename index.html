@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pride in Place Data Explorer</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css"/>
+<style>
+:root {
+  --navy:    #002B5C;
+  --teal:    #009B9F;
+  --blue-lt: #B0E0E6;
+  --blue-xs: #D9E8F2;
+  --slate:   #6E7BA2;
+  --dkgrey:  #44546A;
+  --midgrey: #4A4A4A;
+  --ltgrey:  #E7E6E6;
+  --plum:    #4D293B;
+  --white:   #FFFFFF;
+  --font:    'Abadi MT', 'Abadi', 'Century Gothic', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { font-family: var(--font); font-weight: 300; color: var(--midgrey); background: var(--ltgrey); line-height: 1.5; }
+h1, h2, h3, h4 { font-weight: 400; color: var(--navy); }
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 0.95rem; }
+
+#app { max-width: 1200px; margin: 0 auto; background: var(--white); min-height: 100vh; }
+
+/* HEADER */
+#header { background: var(--navy); padding: 14px 24px; display: flex; align-items: center; gap: 18px; }
+#header-logo { height: 46px; width: auto; flex-shrink: 0; }
+#header-text h1 { color: var(--white); font-size: 1.25rem; }
+#header-text p  { color: var(--blue-lt); font-size: 0.82rem; font-weight: 300; margin-top: 2px; }
+
+/* TABS */
+#tab-bar { background: var(--navy); display: flex; border-top: 1px solid rgba(255,255,255,0.12); }
+.tab-btn { padding: 11px 22px; background: none; border: none; border-bottom: 3px solid transparent; color: var(--blue-lt); font-family: var(--font); font-size: 0.88rem; font-weight: 300; cursor: pointer; transition: color .15s, border-color .15s; white-space: nowrap; }
+.tab-btn:hover  { color: var(--white); }
+.tab-btn.active { color: var(--white); border-bottom-color: var(--teal); }
+
+/* PANELS */
+.panel { display: none; padding: 22px 24px; }
+.panel.active { display: block; }
+
+/* LA SELECTOR */
+#la-selector-wrap { max-width: 460px; margin-bottom: 20px; }
+#la-selector-wrap label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--slate); margin-bottom: 6px; }
+.choices__inner { border-color: var(--ltgrey) !important; border-radius: 4px !important; background: var(--white) !important; min-height: 38px !important; font-family: var(--font) !important; font-size: .875rem !important; }
+.choices__list--dropdown { border-color: var(--teal) !important; z-index: 9999 !important; }
+.choices__item--selectable.is-highlighted { background: var(--blue-xs) !important; color: var(--navy) !important; }
+.choices__input { font-family: var(--font) !important; }
+
+/* LA HEADING */
+#la-heading { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 2px solid var(--ltgrey); display: none; }
+#la-heading h2 { font-size: 1.35rem; }
+.region-tag { display: inline-block; background: var(--blue-xs); color: var(--slate); padding: 2px 10px; border-radius: 20px; font-size: .78rem; margin-top: 4px; }
+
+/* PIP BANNER */
+#pip-banner { background: linear-gradient(135deg, var(--navy) 0%, #00336e 100%); color: var(--white); border-radius: 6px; padding: 12px 16px; margin-bottom: 18px; display: none; }
+.pip-banner-title { font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; color: var(--blue-lt); margin-bottom: 3px; }
+.pip-banner-count { font-size: .95rem; font-weight: 400; margin-bottom: 8px; }
+.pip-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.pip-tag { background: rgba(255,255,255,.14); color: var(--blue-lt); padding: 2px 9px; border-radius: 12px; font-size: .76rem; }
+
+/* SCORECARDS */
+#scorecards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+@media(max-width:860px){ #scorecards { grid-template-columns: 1fr; } }
+.scorecard { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.sc-head { background: var(--navy); color: var(--white); padding: 9px 13px; display: flex; justify-content: space-between; align-items: center; }
+.sc-head-title  { font-size: .78rem; font-weight: 400; text-transform: uppercase; letter-spacing: .05em; }
+.sc-head-domain { font-size: .68rem; opacity: .65; }
+.sc-body { padding: 13px; }
+.sc-pct { font-size: 2.1rem; font-weight: 400; line-height: 1; margin-bottom: 3px; }
+.sc-pct sup { font-size: .95rem; }
+.sc-desc { font-size: .78rem; color: var(--slate); margin-bottom: 10px; line-height: 1.45; }
+
+/* PCT BAR */
+.pct-bar-wrap { height: 7px; background: var(--ltgrey); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+.pct-bar-fill  { height: 100%; border-radius: 4px; transition: width .45s ease; }
+
+/* SUBDOMAIN TOGGLE */
+.sub-toggle { width: 100%; background: none; border: 1px solid var(--ltgrey); border-radius: 4px; padding: 5px 9px; font-family: var(--font); font-size: .76rem; color: var(--slate); cursor: pointer; text-align: left; display: flex; align-items: center; transition: background .12s; }
+.sub-toggle:hover { background: var(--blue-xs); }
+.sub-toggle::after { content: ' \25B8'; margin-left: auto; transition: transform .2s; display: inline-block; }
+.sub-toggle.open::after { transform: rotate(90deg); }
+.subdomains { display: none; margin-top: 7px; }
+.subdomains.open { display: block; }
+.sub-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px solid #f0f0f0; }
+.sub-row:last-child { border-bottom: none; }
+.sub-name { font-size: .75rem; color: var(--midgrey); width: 128px; flex-shrink: 0; }
+.sub-bar-wrap { flex: 1; height: 5px; background: var(--ltgrey); border-radius: 3px; overflow: hidden; }
+.sub-bar-fill { height: 100%; border-radius: 3px; }
+.sub-pct { font-size: .75rem; color: var(--slate); width: 34px; text-align: right; flex-shrink: 0; }
+
+/* MAP */
+#map-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+#map-controls label { font-size: .78rem; color: var(--slate); }
+#map-metric-select { padding: 5px 9px; border: 1px solid var(--ltgrey); border-radius: 4px; font-family: var(--font); font-size: .83rem; color: var(--navy); background: var(--white); min-width: 240px; }
+#map-no-la { font-size: .83rem; color: var(--slate); }
+#map-container { height: 520px; border-radius: 6px; border: 1px solid var(--ltgrey); position: relative; overflow: hidden; }
+#leaflet-map { width: 100%; height: 100%; }
+#map-spinner { position: absolute; inset: 0; background: rgba(255,255,255,.88); display: none; align-items: center; justify-content: center; z-index: 1000; gap: 9px; font-size: .87rem; color: var(--slate); }
+.spinner { width: 18px; height: 18px; border: 2px solid var(--ltgrey); border-top-color: var(--teal); border-radius: 50%; animation: spin .65s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#map-legend { display: none; align-items: center; gap: 8px; margin-top: 8px; font-size: .76rem; color: var(--slate); }
+.legend-grad { width: 160px; height: 9px; border-radius: 5px; flex-shrink: 0; background: linear-gradient(to right,#4D293B,#E7E6E6,#009B9F); }
+.legend-pip { display: flex; align-items: center; gap: 5px; margin-left: auto; }
+.legend-pip-line { width: 18px; height: 3px; background: var(--navy); border-radius: 2px; }
+
+/* TABLE */
+#table-controls { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
+.ctrl-label { font-size: .76rem; color: var(--slate); }
+.col-toggle { padding: 3px 10px; border: 1px solid var(--ltgrey); border-radius: 20px; font-family: var(--font); font-size: .76rem; cursor: pointer; background: var(--white); color: var(--slate); transition: all .12s; }
+.col-toggle.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+#table-container { overflow-x: auto; }
+#msoa-table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+#msoa-table th { background: var(--navy); color: var(--white); padding: 8px 11px; text-align: left; font-weight: 400; font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; user-select: none; white-space: nowrap; }
+#msoa-table th:hover { background: #003876; }
+#msoa-table th.sort-asc::after  { content: ' \25B2'; }
+#msoa-table th.sort-desc::after { content: ' \25BC'; }
+#msoa-table td { padding: 7px 11px; border-bottom: 1px solid #f0f0f0; }
+#msoa-table tr:hover td { background: var(--blue-xs); cursor: pointer; }
+.pip-badge { display: inline-block; background: var(--navy); color: var(--white); font-size: .65rem; padding: 1px 5px; border-radius: 10px; font-weight: 400; margin-left: 4px; }
+.pct-cell { display: flex; align-items: center; gap: 5px; }
+.pct-cell-bar { width: 36px; height: 5px; background: var(--ltgrey); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.pct-cell-fill { height: 100%; border-radius: 3px; }
+
+/* COMPARE */
+#compare-la-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+#compare-selected-las { display: flex; gap: 8px; flex-wrap: wrap; }
+.compare-slot { display: flex; align-items: center; gap: 6px; background: var(--blue-xs); border-radius: 4px; padding: 4px 10px; font-size: .8rem; color: var(--navy); }
+.compare-slot-remove { background: none; border: none; color: var(--slate); cursor: pointer; font-size: 1.05rem; line-height: 1; padding: 0 1px; }
+.compare-slot-remove:hover { color: var(--plum); }
+#compare-add-wrap { display: flex; gap: 7px; align-items: center; }
+#compare-add-select { padding: 5px 9px; border: 1px solid var(--ltgrey); border-radius: 4px; font-family: var(--font); font-size: .83rem; min-width: 195px; }
+#compare-add-btn { padding: 5px 13px; background: var(--teal); color: var(--white); border: none; border-radius: 4px; font-family: var(--font); font-size: .83rem; cursor: pointer; transition: background .12s; }
+#compare-add-btn:hover { background: #007a7e; }
+#compare-charts { display: grid; gap: 14px; }
+.cmp-block { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; padding: 14px; }
+.cmp-block-title { font-size: .83rem; font-weight: 400; color: var(--navy); margin-bottom: 10px; }
+
+/* SHARED */
+.loading-msg { padding: 22px; display: flex; align-items: center; justify-content: center; gap: 9px; color: var(--slate); font-size: .87rem; }
+.error-msg { background: #fdf0f0; border: 1px solid #e0b0b0; border-radius: 4px; padding: 11px 14px; color: #8B1A1A; font-size: .83rem; margin: 6px 0; }
+.no-la-msg { color: var(--slate); font-size: .87rem; padding: 8px 0; }
+.leaflet-tooltip { font-family: var(--font) !important; font-size: 13px !important; line-height: 1.4 !important; }
+</style>
+</head>
+<body>
+<div id="app">
+
+<div id="header">
+  <img id="header-logo" src="" alt="ICON Logo" onerror="this.style.display='none'"/>
+  <div id="header-text">
+    <h1>Pride in Place Data Explorer</h1>
+    <p>Explore deprivation and neighbourhood need across England</p>
+  </div>
+</div>
+
+<div id="tab-bar" role="tablist">
+  <button class="tab-btn active" data-tab="overview" role="tab">Overview</button>
+  <button class="tab-btn" data-tab="map"      role="tab">Map</button>
+  <button class="tab-btn" data-tab="table"    role="tab">Table</button>
+  <button class="tab-btn" data-tab="compare"  role="tab">Compare</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="panel-overview" class="panel active">
+  <div id="la-selector-wrap">
+    <label for="la-select">Select a local authority</label>
+    <select id="la-select"><option value="">Loading geography…</option></select>
+  </div>
+  <div id="la-heading"></div>
+  <div id="pip-banner"></div>
+  <div id="scorecards"><div class="no-la-msg">Select a local authority above to begin.</div></div>
+</div>
+
+<!-- MAP -->
+<div id="panel-map" class="panel">
+  <div id="map-controls">
+    <label for="map-metric-select">Metric:</label>
+    <select id="map-metric-select"></select>
+    <span id="map-no-la" class="no-la-msg">Select a local authority in the Overview tab first.</span>
+  </div>
+  <div id="map-container">
+    <div id="map-spinner"><div class="spinner"></div>Loading map…</div>
+    <div id="leaflet-map"></div>
+  </div>
+  <div id="map-legend">
+    <span>More deprived</span>
+    <div class="legend-grad"></div>
+    <span>Less deprived</span>
+    <div class="legend-pip"><div class="legend-pip-line"></div><span>Pride in Place area</span></div>
+  </div>
+</div>
+
+<!-- TABLE -->
+<div id="panel-table" class="panel">
+  <div id="table-no-la" class="no-la-msg">Select a local authority in the Overview tab first.</div>
+  <div id="table-inner" style="display:none">
+    <div id="table-controls">
+      <span class="ctrl-label">Show subdomains:</span>
+      <button class="col-toggle" data-group="imd">IMD domains</button>
+      <button class="col-toggle" data-group="cni">CNI domains</button>
+      <button class="col-toggle" data-group="hlnm">HLNM domains</button>
+    </div>
+    <div id="table-container"></div>
+  </div>
+</div>
+
+<!-- COMPARE -->
+<div id="panel-compare" class="panel">
+  <div id="compare-la-controls">
+    <div id="compare-selected-las"></div>
+    <div id="compare-add-wrap">
+      <select id="compare-add-select"><option value="">Add a local authority…</option></select>
+      <button id="compare-add-btn">+ Add</button>
+    </div>
+  </div>
+  <div id="compare-charts"><p class="no-la-msg">Add local authorities above to compare them.</p></div>
+</div>
+
+</div><!-- #app -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+'use strict';
+
+// ── CONFIG ────────────────────────────────────────────────────────
+const DATA_BASE_URL = "https://rmudie96.github.io/pip-explorer-v2/data/";
+
+const METRICS = {
+  imd: { id:'imd', label:'Index of Multiple Deprivation 2025', shortLabel:'IMD', type:'index', parentIndex:null, domain:'Deprivation', file:'MSOA_Index of Multiple Deprivation 2025 (IMD) Rank_2025.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Overall deprivation rank across 7 domains. Lower rank = more deprived.' },
+  imd_income: { id:'imd_income', label:'Income Deprivation', shortLabel:'Income', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Income Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Proportion of population experiencing income deprivation.' },
+  imd_employment: { id:'imd_employment', label:'Employment Deprivation', shortLabel:'Employment', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Employment Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Involuntary exclusion from the labour market.' },
+  imd_education: { id:'imd_education', label:'Education, Skills & Training', shortLabel:'Education', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Education, Skills and Training Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Lack of attainment and skills in the local population.' },
+  imd_health: { id:'imd_health', label:'Health Deprivation & Disability', shortLabel:'Health (IMD)', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Health Deprivation and Disability Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Risk of premature death and impairment of quality of life.' },
+  imd_crime: { id:'imd_crime', label:'Crime (IMD)', shortLabel:'Crime (IMD)', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Crime Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Risk of personal and material victimisation at local level.' },
+  imd_barriers: { id:'imd_barriers', label:'Barriers to Housing & Services', shortLabel:'Barriers', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Barriers to Housing and Services Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Physical and financial accessibility of housing and local services.' },
+  imd_living_env: { id:'imd_living_env', label:'Living Environment', shortLabel:'Living Env.', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Living Environment Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Quality of the local environment — indoor and outdoor.' },
+  cni: { id:'cni', label:'Community Needs Index 2023', shortLabel:'CNI', type:'index', parentIndex:null, domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Community Needs rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Overall community needs rank. Lower rank = greater community need.' },
+  cni_active: { id:'cni_active', label:'Active & Engaged Community', shortLabel:'Active Community', type:'subdomain', parentIndex:'cni', domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Active and Engaged Community rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Participation in civic and community life.' },
+  cni_civic: { id:'cni_civic', label:'Civic Assets', shortLabel:'Civic Assets', type:'subdomain', parentIndex:'cni', domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Civic Assets rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Availability of community spaces, infrastructure and institutions.' },
+  cni_connectedness: { id:'cni_connectedness', label:'Connectedness', shortLabel:'Connectedness', type:'subdomain', parentIndex:'cni', domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Connectedness rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Social cohesion, trust and sense of belonging.' },
+  hlnm: { id:'hlnm', label:'Hyper-Local Need Measure', shortLabel:'HLNM', type:'index', parentIndex:null, domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:null, direction:'derived', description:'Composite of 5 need dimensions — mean of subdomain percentiles.' },
+  hlnm_growth: { id:'hlnm_growth', label:'Growth Need (HLNM)', shortLabel:'Growth', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Growth', direction:'higher_is_worse', description:'Economic growth need. Higher score = greater need.' },
+  hlnm_energy: { id:'hlnm_energy', label:'Energy Need (HLNM)', shortLabel:'Energy', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Energy', direction:'higher_is_worse', description:'Energy poverty need. Higher score = greater need.' },
+  hlnm_crime: { id:'hlnm_crime', label:'Crime Need (HLNM)', shortLabel:'Crime (HLNM)', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Crime', direction:'lower_is_worse', description:'Crime rank within HLNM. Lower rank = worse (same convention as IMD).' },
+  hlnm_opportunity: { id:'hlnm_opportunity', label:'Opportunity Need (HLNM)', shortLabel:'Opportunity', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Opportunity', direction:'higher_is_worse', description:'Economic opportunity need. Higher score = greater need.' },
+  hlnm_health: { id:'hlnm_health', label:'Health Need (HLNM)', shortLabel:'Health (HLNM)', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Health', direction:'higher_is_worse', description:'Health need indicators. Higher score = greater need.' }
+};
+
+const HEADLINE_IDS = ['imd','cni','hlnm'];
+const SUBDOMAINS = {
+  imd:  ['imd_income','imd_employment','imd_education','imd_health','imd_crime','imd_barriers','imd_living_env'],
+  cni:  ['cni_active','cni_civic','cni_connectedness'],
+  hlnm: ['hlnm_growth','hlnm_energy','hlnm_crime','hlnm_opportunity','hlnm_health']
+};
+
+// ── STATE ─────────────────────────────────────────────────────────
+const APP = {
+  selectedLA:    null,
+  geo: {
+    lookup: new Map(),  // msoaCode → {laCode,laName,regionName,msoaName}
+    laMap:  new Map(),  // laCode   → {name,regionName,msoaCodes:Set}
+    laList: []          // [{code,name,regionName}] sorted
+  },
+  data:        new Map(), // metricId → Map<msoaCode, pct>
+  pipMSOAs:    new Map(), // msoaCode → {neighbourhood,la}
+  compareLAs:  [],
+  map:         null,
+  mapLayer:    null,
+  mapMetric:   'imd',
+  msoaGeojson: null,
+  sortState:   { col:'name', dir:'asc' },
+  subdomainsOn:{ imd:false, cni:false, hlnm:false },
+  laChoices:   null
+};
+
+// One promise per file — prevents duplicate fetches
+const _fileCache = new Map();
+
+// ── UTILITIES ─────────────────────────────────────────────────────
+function lerpColor(h1, h2, t) {
+  t = Math.max(0, Math.min(1, t));
+  const p = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+  const [r1,g1,b1] = p(h1), [r2,g2,b2] = p(h2);
+  return 'rgb('+Math.round(r1+(r2-r1)*t)+','+Math.round(g1+(g2-g1)*t)+','+Math.round(b1+(b2-b1)*t)+')';
+}
+
+function getColor(pct) {
+  if (pct == null || isNaN(pct)) return '#E7E6E6';
+  const t = pct / 100;
+  return t <= 0.5 ? lerpColor('#4D293B','#E7E6E6', t*2) : lerpColor('#E7E6E6','#009B9F',(t-0.5)*2);
+}
+
+function ordinal(n) {
+  n = Math.round(n);
+  const v = n % 100;
+  return n + (['th','st','nd','rd'][(v-20)%10] || ['th','st','nd','rd'][v] || 'th');
+}
+
+function pctNarrative(pct) {
+  if (pct == null || isNaN(pct)) return 'Data not available';
+  const p = Math.round(pct);
+  return 'At the ' + ordinal(p) + ' percentile nationally — ' + (100-p) + '% of areas have a higher level of need';
+}
+
+function msoaAvg(metricId, msoaCodes) {
+  const m = APP.data.get(metricId);
+  if (!m) return null;
+  const vals = msoaCodes.map(c => m.get(c)).filter(v => v != null && !isNaN(v));
+  return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+}
+
+function spinHTML(msg) { return '<div class="loading-msg"><div class="spinner"></div>'+msg+'</div>'; }
+function errHTML(msg)  { return '<div class="error-msg">&#9888; '+msg+'</div>'; }
+
+// ── DATA LOADING ──────────────────────────────────────────────────
+function fetchCSV(filename) {
+  if (_fileCache.has(filename)) return _fileCache.get(filename);
+  const url = DATA_BASE_URL + filename.replace(/[^A-Za-z0-9\-_.~]/g, c => encodeURIComponent(c));
+  const promise = new Promise((resolve, reject) => {
+    Papa.parse(url, {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      transformHeader: h => h.replace(/^\uFEFF/,'').trim(),
+      complete: r => resolve(r),
+      error: e => reject(new Error('Failed to load ' + filename + ': ' + e.message))
+    });
+  });
+  _fileCache.set(filename, promise);
+  return promise;
+}
+
+function computeRankPct(rows, codeCol, valCol) {
+  const result = new Map();
+  const vals = rows.map(r => parseFloat(String(r[valCol]||'').replace(/,/g,''))).filter(v => !isNaN(v));
+  const maxVal = vals.length ? Math.max(...vals) : 0;
+  if (!maxVal) return result;
+  rows.forEach(r => {
+    const code = String(r[codeCol]||'').trim();
+    const v = parseFloat(String(r[valCol]||'').replace(/,/g,''));
+    if (code && !isNaN(v)) result.set(code, (v/maxVal)*100);
+  });
+  return result;
+}
+
+function computeScorePct(rows, codeCol, valCol) {
+  const result = new Map();
+  const pairs = rows
+    .map(r => ({ code: String(r[codeCol]||'').trim(), v: parseFloat(String(r[valCol]||'').replace(/,/g,'')) }))
+    .filter(p => p.code && !isNaN(p.v));
+  if (!pairs.length) return result;
+  pairs.sort((a,b) => a.v - b.v);
+  const N = pairs.length;
+  pairs.forEach((p,i) => result.set(p.code, 100 - ((i+1)/N*100)));
+  return result;
+}
+
+async function loadHLNM() {
+  const fname = 'HLNM_MSOA_csv.csv';
+  if (_fileCache.has('__hlnm_done__')) return;
+  _fileCache.set('__hlnm_done__', true);
+  const results = await fetchCSV(fname);
+  const rows = results.data;
+  const cc = 'Area Code';
+  const subs = [
+    { id:'hlnm_growth',      col:'Growth',      dir:'higher_is_worse' },
+    { id:'hlnm_energy',      col:'Energy',      dir:'higher_is_worse' },
+    { id:'hlnm_crime',       col:'Crime',       dir:'lower_is_worse'  },
+    { id:'hlnm_opportunity', col:'Opportunity', dir:'higher_is_worse' },
+    { id:'hlnm_health',      col:'Health',      dir:'higher_is_worse' }
+  ];
+  subs.forEach(s => {
+    APP.data.set(s.id, s.dir === 'lower_is_worse'
+      ? computeRankPct(rows, cc, s.col)
+      : computeScorePct(rows, cc, s.col));
+  });
+  // Derived overall = mean of 5 subdomain percentiles
+  const overallMap = new Map();
+  rows.forEach(r => {
+    const code = String(r[cc]||'').trim();
+    if (!code) return;
+    const pcts = subs.map(s => APP.data.get(s.id).get(code)).filter(v => v != null && !isNaN(v));
+    if (pcts.length) overallMap.set(code, pcts.reduce((a,b)=>a+b,0)/pcts.length);
+  });
+  APP.data.set('hlnm', overallMap);
+}
+
+async function loadMetric(id) {
+  if (APP.data.has(id) && APP.data.get(id).size > 0) return;
+  const m = METRICS[id];
+  if (!m) return;
+  if (m.file === 'HLNM_MSOA_csv.csv') { await loadHLNM(); return; }
+  if (m.direction === 'derived') return;
+  const results = await fetchCSV(m.file);
+  APP.data.set(id, m.direction === 'lower_is_worse'
+    ? computeRankPct(results.data, m.codeColumn, m.valueColumn)
+    : computeScorePct(results.data, m.codeColumn, m.valueColumn));
+}
+
+async function loadGeoLookup() {
+  const results = await fetchCSV('lsoa_msoa_la_region_lookup_csv.csv');
+  results.data.forEach(r => {
+    const msoa = String(r['MSOA21CD']||'').trim();
+    const la   = String(r['LAD22CD']||'').trim();
+    if (!msoa || !la) return;
+    if (!APP.geo.lookup.has(msoa)) {
+      APP.geo.lookup.set(msoa, { laCode: la, laName: r['LAD22NM'], regionCode: r['RGN22CD'], regionName: r['RGN22NM'], msoaName: r['MSOA21NM'] });
+    }
+    if (!APP.geo.laMap.has(la)) {
+      APP.geo.laMap.set(la, { name: r['LAD22NM'], regionName: r['RGN22NM'], msoaCodes: new Set() });
+    }
+    APP.geo.laMap.get(la).msoaCodes.add(msoa);
+  });
+  APP.geo.laList = [...APP.geo.laMap.entries()]
+    .map(([code, info]) => ({ code, name: info.name, regionName: info.regionName }))
+    .sort((a,b) => a.name.localeCompare(b.name));
+}
+
+async function loadPiP() {
+  const results = await fetchCSV('pride_in_place_msoas.csv');
+  results.data.forEach(r => {
+    const code = String(r['MSOA code']||'').trim();
+    if (code) APP.pipMSOAs.set(code, { neighbourhood: r['Pride in Place Programme Neighbourhood']||'', la: r['Local Authority']||'' });
+  });
+}
+
+async function loadMSOAGeoJSON() {
+  if (APP.msoaGeojson) return APP.msoaGeojson;
+  const fname = 'Middle_layer_Super_Output_Areas_December_2021_Boundaries_EW_BGC_V3_4916445166053426.geojson';
+  const url = DATA_BASE_URL + fname;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error('GeoJSON fetch failed: HTTP ' + resp.status);
+  APP.msoaGeojson = await resp.json();
+  return APP.msoaGeojson;
+}
+
+// ── LA DROPDOWN ───────────────────────────────────────────────────
+function populateLADropdown() {
+  const sel = document.getElementById('la-select');
+  sel.innerHTML = '<option value="">Select a local authority\u2026</option>';
+  const byRegion = {};
+  APP.geo.laList.forEach(la => {
+    (byRegion[la.regionName] = byRegion[la.regionName]||[]).push(la);
+  });
+  Object.entries(byRegion).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([region, las]) => {
+    const og = document.createElement('optgroup');
+    og.label = region;
+    las.forEach(la => {
+      const opt = document.createElement('option');
+      opt.value = la.code;
+      opt.textContent = la.name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+  if (APP.laChoices) APP.laChoices.destroy();
+  APP.laChoices = new Choices(sel, { searchEnabled:true, itemSelectText:'', allowHTML:false, searchPlaceholderValue:'Type to search\u2026', noResultsText:'No areas found', shouldSort:false });
+}
+
+function populateCompareDropdown() {
+  const sel = document.getElementById('compare-add-select');
+  sel.innerHTML = '<option value="">Add a local authority\u2026</option>';
+  APP.geo.laList.forEach(la => {
+    const opt = document.createElement('option');
+    opt.value = la.code; opt.textContent = la.name;
+    sel.appendChild(opt);
+  });
+}
+
+function populateMapMetricSelect() {
+  const sel = document.getElementById('map-metric-select');
+  sel.innerHTML = '';
+  const grouped = {};
+  Object.values(METRICS).forEach(m => (grouped[m.domain]=grouped[m.domain]||[]).push(m));
+  Object.entries(grouped).forEach(([domain, metrics]) => {
+    const og = document.createElement('optgroup');
+    og.label = domain;
+    metrics.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.id; opt.textContent = m.label;
+      if (m.id === 'imd') opt.selected = true;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+
+// ── OVERVIEW TAB ──────────────────────────────────────────────────
+async function renderOverview(laCode) {
+  const la = APP.geo.laMap.get(laCode);
+  if (!la) return;
+
+  // Heading
+  const heading = document.getElementById('la-heading');
+  heading.style.display = 'block';
+  heading.innerHTML = '<h2>'+la.name+'</h2><span class="region-tag">'+la.regionName+'</span>';
+
+  // PiP banner
+  const pipInLA = [...la.msoaCodes].filter(c => APP.pipMSOAs.has(c));
+  const pipBanner = document.getElementById('pip-banner');
+  if (pipInLA.length) {
+    pipBanner.style.display = 'block';
+    const tags = pipInLA.map(c => {
+      const info = APP.pipMSOAs.get(c);
+      const name = info.neighbourhood || (APP.geo.lookup.get(c)||{}).msoaName || c;
+      return '<span class="pip-tag">'+name+'</span>';
+    }).join('');
+    pipBanner.innerHTML = '<div class="pip-banner-title">Pride in Place Programme Areas</div>'
+      + '<div class="pip-banner-count">'+pipInLA.length+' neighbourhood'+(pipInLA.length>1?'s':'')+' in this local authority</div>'
+      + '<div class="pip-tags">'+tags+'</div>';
+  } else {
+    pipBanner.style.display = 'none';
+  }
+
+  // Scorecards
+  const container = document.getElementById('scorecards');
+  container.innerHTML = spinHTML('Loading metrics\u2026');
+  try {
+    await Promise.all(HEADLINE_IDS.map(id => loadMetric(id)));
+    container.innerHTML = '';
+    HEADLINE_IDS.forEach(id => container.appendChild(buildScorecard(id, la)));
+  } catch(e) {
+    container.innerHTML = errHTML('Failed to load metric data: '+e.message);
+  }
+}
+
+function buildScorecard(metricId, la) {
+  const m   = METRICS[metricId];
+  const codes = [...la.msoaCodes];
+  const avg = msoaAvg(metricId, codes);
+  const col = getColor(avg);
+  const pDisp = avg != null ? Math.round(avg) : null;
+
+  const card = document.createElement('div');
+  card.className = 'scorecard';
+  card.innerHTML =
+    '<div class="sc-head">'
+    + '<span class="sc-head-title">'+m.shortLabel+'</span>'
+    + '<span class="sc-head-domain">'+m.domain+'</span>'
+    + '</div>'
+    + '<div class="sc-body">'
+    + '<div class="sc-pct" style="color:'+col+'">'
+    + (pDisp != null ? pDisp+'<sup>th pct</sup>' : 'N/A')
+    + '</div>'
+    + '<div class="sc-desc">'+(avg != null ? pctNarrative(avg) : 'Data not available')+'</div>'
+    + '<div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:'+(pDisp||0)+'%;background:'+col+'"></div></div>'
+    + '<button class="sub-toggle" data-parent="'+metricId+'">View '+m.domain+' subdomains</button>'
+    + '<div class="subdomains" id="subs-'+metricId+'">'+spinHTML('Loading\u2026')+'</div>'
+    + '</div>';
+
+  card.querySelector('.sub-toggle').addEventListener('click', function() {
+    const panel = document.getElementById('subs-'+metricId);
+    const open  = panel.classList.toggle('open');
+    this.classList.toggle('open', open);
+    if (open) expandSubdomains(metricId, la, panel);
+  });
+  return card;
+}
+
+async function expandSubdomains(parentId, la, panel) {
+  if (panel.dataset.loaded) return;
+  panel.innerHTML = spinHTML('Loading\u2026');
+  try {
+    await Promise.all(SUBDOMAINS[parentId].map(id => loadMetric(id)));
+    panel.dataset.loaded = '1';
+    renderSubdomainRows(parentId, la, panel);
+  } catch(e) {
+    panel.innerHTML = errHTML(e.message);
+  }
+}
+
+function renderSubdomainRows(parentId, la, panel) {
+  const codes = [...la.msoaCodes];
+  panel.innerHTML = SUBDOMAINS[parentId].map(id => {
+    const m   = METRICS[id];
+    const avg = msoaAvg(id, codes);
+    const col = getColor(avg);
+    return '<div class="sub-row">'
+      + '<span class="sub-name">'+m.shortLabel+'</span>'
+      + '<div class="sub-bar-wrap"><div class="sub-bar-fill" style="width:'+(avg!=null?Math.round(avg):0)+'%;background:'+col+'"></div></div>'
+      + '<span class="sub-pct">'+(avg!=null?Math.round(avg)+'%':'N/A')+'</span>'
+      + '</div>';
+  }).join('');
+}
+
+// ── MAP TAB ───────────────────────────────────────────────────────
+function initLeaflet() {
+  if (APP.map) return;
+  APP.map = L.map('leaflet-map', { zoomControl:true });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors &copy; <a href="https://carto.com">CARTO</a>',
+    maxZoom: 18
+  }).addTo(APP.map);
+}
+
+async function renderMap(laCode) {
+  const la = APP.geo.laMap.get(laCode);
+  if (!la) return;
+  initLeaflet();
+
+  const spinner = document.getElementById('map-spinner');
+  spinner.style.display = 'flex';
+
+  try {
+    await loadMetric(APP.mapMetric);
+    const geojson = await loadMSOAGeoJSON();
+
+    // Filter to this LA's MSOAs only
+    const laCodes = la.msoaCodes;
+    const filtered = {
+      type: 'FeatureCollection',
+      features: geojson.features.filter(f => laCodes.has(f.properties.MSOA21CD))
+    };
+
+    if (APP.mapLayer) { APP.map.removeLayer(APP.mapLayer); APP.mapLayer = null; }
+
+    const dataMap = APP.data.get(APP.mapMetric);
+
+    APP.mapLayer = L.geoJSON(filtered, {
+      style: feat => {
+        const code  = feat.properties.MSOA21CD;
+        const pct   = dataMap ? dataMap.get(code) : null;
+        const isPiP = APP.pipMSOAs.has(code);
+        return { fillColor: getColor(pct), fillOpacity: 0.75, color: isPiP ? '#002B5C' : '#ffffff', weight: isPiP ? 2.5 : 0.5, opacity: 1 };
+      },
+      onEachFeature: (feat, layer) => {
+        const code  = feat.properties.MSOA21CD;
+        const name  = feat.properties.MSOA21NM;
+        const pct   = dataMap ? dataMap.get(code) : null;
+        const isPiP = APP.pipMSOAs.has(code);
+        const pipNm = isPiP ? APP.pipMSOAs.get(code).neighbourhood : '';
+        const ml    = METRICS[APP.mapMetric] ? METRICS[APP.mapMetric].shortLabel : APP.mapMetric;
+        layer.bindTooltip(
+          '<div style="font-family:\'Abadi MT\',\'Century Gothic\',sans-serif">'
+          + '<div style="font-weight:400;color:#002B5C;margin-bottom:3px">'+name+'</div>'
+          + '<div style="font-size:0.85em;color:#4A4A4A">'+ml+': <span style="color:'+getColor(pct)+';font-weight:400">'+(pct!=null?Math.round(pct)+'th pct':'N/A')+'</span></div>'
+          + '<div style="font-size:0.77em;color:#6E7BA2;margin-top:2px">'+(pct!=null?pctNarrative(pct):'')+'</div>'
+          + (isPiP ? '<div style="margin-top:4px;font-size:0.77em;color:#002B5C">\u2605 PiP: '+pipNm+'</div>' : '')
+          + '</div>',
+          { sticky:true, className:'leaflet-tooltip' }
+        );
+        layer.on('click', () => { switchTab('table'); setTimeout(()=>highlightTableRow(code),300); });
+      }
+    }).addTo(APP.map);
+
+    APP.map.fitBounds(APP.mapLayer.getBounds(), { padding:[20,20] });
+    document.getElementById('map-legend').style.display = 'flex';
+    document.getElementById('map-no-la').style.display  = 'none';
+  } catch(e) {
+    document.getElementById('map-container').insertAdjacentHTML('afterbegin', errHTML('Map error: '+e.message));
+  } finally {
+    spinner.style.display = 'none';
+  }
+}
+
+// ── TABLE TAB ─────────────────────────────────────────────────────
+async function renderTable(laCode) {
+  const la = APP.geo.laMap.get(laCode);
+  if (!la) return;
+  document.getElementById('table-no-la').style.display  = 'none';
+  document.getElementById('table-inner').style.display  = 'block';
+  const container = document.getElementById('table-container');
+  container.innerHTML = spinHTML('Loading table\u2026');
+  try {
+    await Promise.all(HEADLINE_IDS.map(id => loadMetric(id)));
+    // If subdomain columns visible, load those too
+    for (const [group, on] of Object.entries(APP.subdomainsOn)) {
+      if (on) await Promise.all(SUBDOMAINS[group].map(id => loadMetric(id)));
+    }
+    buildTable(la, container);
+  } catch(e) {
+    container.innerHTML = errHTML(e.message);
+  }
+}
+
+function buildTable(la, container) {
+  const codes = [...la.msoaCodes];
+  const { col: sortCol, dir: sortDir } = APP.sortState;
+
+  // Column definitions
+  const baseCols = [
+    { id:'name',  label:'MSOA Name',   metric:null },
+    { id:'imd',   label:'IMD %ile',    metric:'imd'  },
+    { id:'cni',   label:'CNI %ile',    metric:'cni'  },
+    { id:'hlnm',  label:'HLNM %ile',   metric:'hlnm' },
+    { id:'pip',   label:'PiP',         metric:null   }
+  ];
+  const extraCols = [];
+  if (APP.subdomainsOn.imd)  SUBDOMAINS.imd.forEach(id  => extraCols.push({ id, label:METRICS[id].shortLabel, metric:id }));
+  if (APP.subdomainsOn.cni)  SUBDOMAINS.cni.forEach(id  => extraCols.push({ id, label:METRICS[id].shortLabel, metric:id }));
+  if (APP.subdomainsOn.hlnm) SUBDOMAINS.hlnm.forEach(id => extraCols.push({ id, label:METRICS[id].shortLabel, metric:id }));
+  const allCols = [...baseCols, ...extraCols];
+
+  // Build data rows
+  let rows = codes.map(code => {
+    const geo  = APP.geo.lookup.get(code)||{};
+    const row  = { code, name: geo.msoaName||code, pip: APP.pipMSOAs.has(code) };
+    allCols.forEach(c => { if (c.metric) row[c.id] = (APP.data.get(c.metric)||new Map()).get(code) ?? null; });
+    return row;
+  });
+
+  // Sort
+  rows.sort((a,b) => {
+    let av = a[sortCol], bv = b[sortCol];
+    if (sortCol === 'name' || sortCol === 'pip') { av = String(av||''); bv = String(bv||''); }
+    else { av = av ?? -1; bv = bv ?? -1; }
+    const cmp = typeof av === 'string' ? av.localeCompare(bv) : av - bv;
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
+
+  const headers = allCols.map(c => {
+    const cls = sortCol===c.id ? 'sort-'+sortDir : '';
+    return '<th class="'+cls+'" data-col="'+c.id+'">'+c.label+'</th>';
+  }).join('');
+
+  const bodyRows = rows.map(row => {
+    const cells = allCols.map(c => {
+      if (c.id === 'name') return '<td>'+row.name+(row.pip?'<span class="pip-badge">PiP</span>':'')+'</td>';
+      if (c.id === 'pip')  return '<td>'+(row.pip?'<span class="pip-badge">\u2605 PiP</span>':'')+'</td>';
+      const v = row[c.id];
+      const col = getColor(v);
+      return '<td><div class="pct-cell"><div class="pct-cell-bar"><div class="pct-cell-fill" style="width:'+(v!=null?Math.round(v):0)+'%;background:'+col+'"></div></div><span>'+(v!=null?Math.round(v)+'%':'N/A')+'</span></div></td>';
+    }).join('');
+    return '<tr data-code="'+row.code+'">'+cells+'</tr>';
+  }).join('');
+
+  container.innerHTML = '<table id="msoa-table"><thead><tr>'+headers+'</tr></thead><tbody>'+bodyRows+'</tbody></table>';
+
+  container.querySelectorAll('#msoa-table th').forEach(th => {
+    th.addEventListener('click', () => {
+      const c = th.dataset.col;
+      APP.sortState = { col:c, dir: APP.sortState.col===c && APP.sortState.dir==='asc'?'desc':'asc' };
+      if (c === 'name' || c === 'pip') APP.sortState.dir = APP.sortState.dir;
+      buildTable(la, container);
+    });
+  });
+
+  container.querySelectorAll('#msoa-table tr[data-code]').forEach(tr => {
+    tr.addEventListener('click', () => highlightMapFeature(tr.dataset.code));
+  });
+}
+
+function highlightTableRow(code) {
+  const row = document.querySelector('#msoa-table tr[data-code="'+code+'"]');
+  if (!row) return;
+  row.scrollIntoView({ behavior:'smooth', block:'center' });
+  row.style.outline = '2px solid #009B9F';
+  setTimeout(() => row.style.outline = '', 2500);
+}
+
+function highlightMapFeature(code) {
+  if (!APP.mapLayer) return;
+  APP.mapLayer.eachLayer(layer => {
+    if (layer.feature && layer.feature.properties.MSOA21CD === code) {
+      layer.setStyle({ color:'#009B9F', weight:3 });
+      if (APP.map) APP.map.fitBounds(layer.getBounds(), { padding:[40,40] });
+      setTimeout(() => APP.mapLayer && APP.mapLayer.resetStyle(layer), 2500);
+    }
+  });
+}
+
+// ── COMPARE TAB ───────────────────────────────────────────────────
+const CMP_COLORS = ['#002B5C','#009B9F','#6E7BA2','#4D293B'];
+
+function renderCompareSlots() {
+  const container = document.getElementById('compare-selected-las');
+  container.innerHTML = APP.compareLAs.map(code => {
+    const la = APP.geo.laMap.get(code);
+    return '<div class="compare-slot">'+(la?la.name:code)+'<button class="compare-slot-remove" data-code="'+code+'" title="Remove">\u00d7</button></div>';
+  }).join('');
+  container.querySelectorAll('.compare-slot-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      APP.compareLAs = APP.compareLAs.filter(c => c !== btn.dataset.code);
+      renderCompareSlots();
+      renderCompareCharts();
+    });
+  });
+}
+
+async function renderCompareCharts() {
+  const container = document.getElementById('compare-charts');
+  if (!APP.compareLAs.length) {
+    container.innerHTML = '<p class="no-la-msg">Add local authorities above to compare them.</p>';
+    return;
+  }
+  container.innerHTML = spinHTML('Loading comparison data\u2026');
+  try {
+    await Promise.all(HEADLINE_IDS.map(id => loadMetric(id)));
+
+    // LA averages
+    const laData = APP.compareLAs.map(code => {
+      const la   = APP.geo.laMap.get(code);
+      const codes = la ? [...la.msoaCodes] : [];
+      const row  = { code, name: la ? la.name : code };
+      HEADLINE_IDS.forEach(id => { row[id] = msoaAvg(id, codes); });
+      return row;
+    });
+
+    // National medians from full loaded datasets
+    const natMedians = {};
+    HEADLINE_IDS.forEach(id => {
+      const vals = [...(APP.data.get(id)||new Map()).values()].filter(v=>v!=null&&!isNaN(v));
+      vals.sort((a,b)=>a-b);
+      natMedians[id] = vals.length ? vals[Math.floor(vals.length/2)] : 50;
+    });
+
+    container.innerHTML = '';
+    HEADLINE_IDS.forEach(id => {
+      const block = document.createElement('div');
+      block.className = 'cmp-block';
+      block.innerHTML = '<div class="cmp-block-title">'+METRICS[id].label+'</div><div id="cmp-chart-'+id+'"></div>';
+      container.appendChild(block);
+      drawBarChart('cmp-chart-'+id, laData, id, natMedians[id]);
+    });
+  } catch(e) {
+    container.innerHTML = errHTML(e.message);
+  }
+}
+
+function drawBarChart(elId, laData, metricId, nationalMedian) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const margin = { top:16, right:55, bottom:22, left:170 };
+  const totalW = Math.min((el.closest('.cmp-block')||el).offsetWidth - 28, 820);
+  const barH = 26, gap = 8;
+  const innerH = laData.length * (barH + gap) - gap;
+  const svgH   = innerH + margin.top + margin.bottom;
+  const innerW = totalW - margin.left - margin.right;
+
+  const svg = d3.select(el).append('svg')
+    .attr('width', totalW).attr('height', svgH).style('display','block');
+  const g = svg.append('g').attr('transform','translate('+margin.left+','+margin.top+')');
+
+  const x = d3.scaleLinear().domain([0,100]).range([0,innerW]);
+
+  laData.forEach((la, i) => {
+    const y   = i * (barH + gap);
+    const val = la[metricId];
+    const clr = CMP_COLORS[i % CMP_COLORS.length];
+    const lbl = la.name.length > 22 ? la.name.slice(0,20)+'\u2026' : la.name;
+
+    g.append('text').attr('x',-8).attr('y',y+barH/2+4.5)
+      .attr('text-anchor','end').attr('font-family',"'Abadi MT','Century Gothic',sans-serif")
+      .attr('font-size','12').attr('fill','#4A4A4A').text(lbl);
+
+    g.append('rect').attr('x',0).attr('y',y).attr('width',innerW).attr('height',barH)
+      .attr('fill','#E7E6E6').attr('rx',3);
+
+    if (val != null) {
+      g.append('rect').attr('x',0).attr('y',y).attr('width',x(val)).attr('height',barH)
+        .attr('fill',clr).attr('rx',3).attr('opacity',0.85);
+      g.append('text').attr('x',x(val)+5).attr('y',y+barH/2+4.5)
+        .attr('font-family',"'Abadi MT','Century Gothic',sans-serif")
+        .attr('font-size','11').attr('fill','#002B5C').text(Math.round(val)+'%ile');
+    }
+  });
+
+  // National median reference line
+  if (nationalMedian != null) {
+    const mx = x(nationalMedian);
+    g.append('line').attr('x1',mx).attr('x2',mx).attr('y1',-4).attr('y2',innerH+4)
+      .attr('stroke','#44546A').attr('stroke-width',1.5).attr('stroke-dasharray','4,3');
+    g.append('text').attr('x',mx).attr('y',-7).attr('text-anchor','middle')
+      .attr('font-family',"'Abadi MT','Century Gothic',sans-serif")
+      .attr('font-size','9.5').attr('fill','#44546A')
+      .text('Nat. median ('+Math.round(nationalMedian)+'%)');
+  }
+
+  // X axis
+  g.append('g').attr('transform','translate(0,'+( innerH+2)+')')
+    .call(d3.axisBottom(x).ticks(5).tickFormat(d=>d+'%'))
+    .call(a => a.select('.domain').attr('stroke','#E7E6E6'))
+    .call(a => a.selectAll('text').attr('font-family',"'Abadi MT','Century Gothic',sans-serif").attr('font-size','10').attr('fill','#6E7BA2'));
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-'+name));
+
+  if (name === 'map'     && APP.selectedLA) renderMap(APP.selectedLA);
+  if (name === 'table'   && APP.selectedLA) renderTable(APP.selectedLA);
+  if (name === 'compare') {
+    if (APP.selectedLA && !APP.compareLAs.includes(APP.selectedLA)) {
+      APP.compareLAs = [APP.selectedLA, ...APP.compareLAs].slice(0,4);
+    }
+    renderCompareSlots();
+    renderCompareCharts();
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+async function init() {
+  document.getElementById('header-logo').src = DATA_BASE_URL + 'ICON-Logo-Final_optimised.png';
+
+  try {
+    await Promise.all([loadGeoLookup(), loadPiP()]);
+    populateLADropdown();
+    populateCompareDropdown();
+    populateMapMetricSelect();
+  } catch(e) {
+    document.getElementById('scorecards').innerHTML = errHTML('Failed to load geography: '+e.message);
+    return;
+  }
+
+  // Tab clicks
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  // LA selection
+  document.getElementById('la-select').addEventListener('change', async function() {
+    const code = this.value;
+    APP.selectedLA = code || null;
+    if (!code) return;
+    if (!APP.compareLAs.includes(code)) APP.compareLAs = [code, ...APP.compareLAs].slice(0,4);
+    await renderOverview(code);
+  });
+
+  // Map metric selector
+  document.getElementById('map-metric-select').addEventListener('change', function() {
+    APP.mapMetric = this.value;
+    if (APP.selectedLA) renderMap(APP.selectedLA);
+  });
+
+  // Table subdomain toggles
+  document.querySelectorAll('.col-toggle[data-group]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const g = this.dataset.group;
+      APP.subdomainsOn[g] = !APP.subdomainsOn[g];
+      this.classList.toggle('active', APP.subdomainsOn[g]);
+      if (APP.selectedLA) renderTable(APP.selectedLA);
+    });
+  });
+
+  // Compare add
+  document.getElementById('compare-add-btn').addEventListener('click', () => {
+    const sel  = document.getElementById('compare-add-select');
+    const code = sel.value;
+    if (!code || APP.compareLAs.includes(code) || APP.compareLAs.length >= 4) return;
+    APP.compareLAs.push(code);
+    sel.value = '';
+    renderCompareSlots();
+    renderCompareCharts();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
