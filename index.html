@@ -774,47 +774,72 @@ async function renderMap(msoaCode) {
 }
 
 // ── LSOA DETAIL PANEL ─────────────────────────────────────────────
-function renderLSOADetail(lsoaCode) {
+async function renderLSOADetail(lsoaCode) {
   const panel = document.getElementById('lsoa-detail');
   const d     = APP.lsoaData.get(lsoaCode);
   if (!d) { panel.classList.remove('open'); return; }
 
   panel.classList.add('open');
-
   const typCls = typologyClass(d.typology);
 
-  const metricDefs = Object.values(LSOA_METRICS);
-  const metricsHTML = metricDefs.map(lm => {
-    const pct = d.pcts[lm.id];
-    const col = getColor(pct);
-    return '<div class="lsoa-metric">'
-      +'<div class="lsoa-metric-label">'+lm.shortLabel+'</div>'
-      +'<div class="lsoa-metric-pct" style="color:'+col+'">'+(pct!=null?Math.round(pct)+'th pct':'N/A')+'</div>'
-      +'<div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:'+(pct!=null?Math.round(pct):0)+'%;background:'+col+'"></div></div>'
-      +'<div style="font-size:.7rem;color:var(--slate);margin-top:1px">'+(pct!=null?pctNarrative(pct):'Data not available')+'</div>'
-      +'</div>';
-  }).join('');
+  // Resolve metric group from the currently selected map metric
+  const isLSOA = !!LSOA_METRICS[APP.mapMetric];
+  let groupIds, groupLabel, getPct;
+  if (isLSOA) {
+    // HLNM25 LSOA-level metrics — data already in d.pcts
+    groupLabel = 'Hyper-Local Need Measure';
+    groupIds   = Object.keys(LSOA_METRICS);
+    getPct     = id => d.pcts[id];
+  } else {
+    // MSOA-level: resolve to parent index then include overall + all subdomains
+    const m        = METRICS[APP.mapMetric] || {};
+    const parentId = m.parentIndex || APP.mapMetric;
+    groupLabel     = (METRICS[parentId] || {}).shortLabel || parentId;
+    groupIds       = [parentId, ...(SUBDOMAINS[parentId] || [])];
+    getPct         = id => (APP.data.get(id) || new Map()).get(APP.selectedMSOA) ?? null;
+  }
 
+  // Render head immediately; metrics body shows spinner until data is ready
   panel.innerHTML =
     '<div class="lsoa-det-head">'
     +'<div>'
     +'<div class="lsoa-det-name">'+escapeHTML(d.name)+'</div>'
     +'<div class="lsoa-det-sub">'+escapeHTML(d.laName)+' &middot; LSOA: '+lsoaCode+'</div>'
+    +'<div class="lsoa-det-sub" style="margin-top:3px;color:var(--navy)">'+escapeHTML(groupLabel)+'</div>'
     +'</div>'
     +'<div style="display:flex;gap:8px;align-items:center">'
     +(d.typology ? '<span class="typology-badge '+typCls+'">'+d.typology+'</span>' : '')
     +'<button id="lsoa-det-close" title="Close">\u00d7</button>'
     +'</div>'
     +'</div>'
-    +'<div class="lsoa-metrics-grid">'+metricsHTML+'</div>';
+    +'<div id="lsoa-metrics-body">'+spinHTML('Loading\u2026')+'</div>';
 
   document.getElementById('lsoa-det-close').addEventListener('click', () => {
     panel.classList.remove('open');
     APP.selectedLSOA = null;
   });
-
-  // Scroll panel into view
   panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  // Load any not-yet-cached MSOA metrics, then render metric cards
+  const body = document.getElementById('lsoa-metrics-body');
+  try {
+    if (!isLSOA) await Promise.all(groupIds.map(id => loadMetric(id)));
+    body.className = 'lsoa-metrics-grid';
+    body.innerHTML = groupIds.map(id => {
+      const m   = isLSOA ? LSOA_METRICS[id] : METRICS[id];
+      if (!m) return '';
+      const pct = getPct(id);
+      const col = getColor(pct);
+      return '<div class="lsoa-metric">'
+        +'<div class="lsoa-metric-label">'+m.shortLabel+'</div>'
+        +'<div class="lsoa-metric-pct" style="color:'+col+'">'+(pct!=null?Math.round(pct)+'th pct':'N/A')+'</div>'
+        +'<div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:'+(pct!=null?Math.round(pct):0)+'%;background:'+col+'"></div></div>'
+        +'<div style="font-size:.7rem;color:var(--slate);margin-top:1px">'+(pct!=null?pctNarrative(pct):'Data not available')+'</div>'
+        +'</div>';
+    }).join('');
+  } catch(e) {
+    body.innerHTML = errHTML(e.message);
+  }
 }
 
 // ── TABLE TAB — LSOA listing ──────────────────────────────────────
