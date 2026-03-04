@@ -171,6 +171,16 @@ h3 { font-size: 0.95rem; }
 .cmp-section-divider span { font-size: .75rem; font-weight: 500; color: var(--slate); text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
 .cmp-section-divider::before,.cmp-section-divider::after { content: ''; flex: 1; height: 1px; background: var(--ltgrey); }
 .cmp-section-divider::before { display: none; }
+#cmp-filter { border: 1px solid var(--ltgrey); border-radius: 6px; margin-bottom: 12px; display: none; }
+#cmp-filter summary { padding: 8px 13px; cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; font-size: .83rem; color: var(--navy); font-weight: 500; user-select: none; }
+#cmp-filter summary::-webkit-details-marker { display: none; }
+#cmp-filter-count { font-weight: 400; color: var(--slate); margin-left: 4px; }
+#cmp-filter-body { padding: 10px 13px 13px; border-top: 1px solid var(--ltgrey); display: flex; flex-direction: column; gap: 10px; }
+.cmp-filter-group-label { font-size: .72rem; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
+.cmp-filter-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.cmp-pill { padding: 3px 10px; border: 1px solid var(--ltgrey); border-radius: 20px; font-size: .77rem; font-family: var(--font); cursor: pointer; background: var(--white); color: var(--slate); transition: background .1s, color .1s, border-color .1s; }
+.cmp-pill.active { background: var(--teal); color: var(--white); border-color: var(--teal); }
+.cmp-pill:hover:not(.active) { background: var(--blue-xs); border-color: var(--teal); color: var(--navy); }
 
 /* SHARED */
 .loading-msg { padding: 22px; display: flex; align-items: center; justify-content: center; gap: 9px; color: var(--slate); font-size: .87rem; }
@@ -251,6 +261,14 @@ h3 { font-size: 0.95rem; }
       <button id="compare-add-btn">+ Add</button>
     </div>
   </div>
+  <details id="cmp-filter">
+    <summary>Subdomains <span id="cmp-filter-count"></span></summary>
+    <div id="cmp-filter-body"></div>
+  </details>
+  <div class="dl-btn-wrap" id="cmp-dl-wrap" style="display:none">
+    <button class="dl-btn" id="cmp-dl-filtered">Download filtered data (CSV)</button>
+    <button class="dl-btn" id="cmp-dl-full">Download full dataset (CSV)</button>
+  </div>
   <div id="compare-charts"><p class="no-la-msg">Add Pride in Place neighbourhoods above to compare them.</p></div>
 </div>
 
@@ -326,6 +344,51 @@ const CNI_LSOA_METRICS = {
   cni_lsoa_connect: { id:'cni_lsoa_connect', col:'connectedness_pct', label:'Community Needs Index — Connectedness (LSOA)',              shortLabel:'Connectedness'          }
 };
 
+// ── COMPARE: all 21 metrics grouped for the subdomain filter ──────
+const CMP_METRIC_GROUPS = [
+  {
+    label: 'MSOA Headline Indices',
+    metrics: [
+      { id:'imd',  label:'Index of Multiple Deprivation',  shortLabel:'IMD Overall',  source:'msoa' },
+      { id:'cni',  label:'Community Needs Index',           shortLabel:'CNI Overall',  source:'msoa' },
+      { id:'hlnm', label:'Hyper-Local Need Measure',        shortLabel:'HLNM Overall', source:'msoa' }
+    ]
+  },
+  {
+    label: 'Hyper-Local Need Measure 2025 (LSOA avg.)',
+    metrics: [
+      { id:'hlnm25_overall',     label:'HLNM — Overall',       shortLabel:'HLNM Overall',     source:'pcts' },
+      { id:'hlnm25_growth',      label:'HLNM — Growth',        shortLabel:'Growth',            source:'pcts' },
+      { id:'hlnm25_energy',      label:'HLNM — Energy',        shortLabel:'Energy',            source:'pcts' },
+      { id:'hlnm25_crime',       label:'HLNM — Crime',         shortLabel:'Crime',             source:'pcts' },
+      { id:'hlnm25_opportunity', label:'HLNM — Opportunity',   shortLabel:'Opportunity',       source:'pcts' },
+      { id:'hlnm25_health',      label:'HLNM — Health',        shortLabel:'Health',            source:'pcts' }
+    ]
+  },
+  {
+    label: 'Index of Multiple Deprivation (LSOA avg.)',
+    metrics: [
+      { id:'imd_lsoa_overall',    label:'IMD — Overall',             shortLabel:'IMD Overall',          source:'lsoaPcts' },
+      { id:'imd_lsoa_income',     label:'IMD — Income',              shortLabel:'Income',               source:'lsoaPcts' },
+      { id:'imd_lsoa_employment', label:'IMD — Employment',          shortLabel:'Employment',           source:'lsoaPcts' },
+      { id:'imd_lsoa_education',  label:'IMD — Education',           shortLabel:'Education',            source:'lsoaPcts' },
+      { id:'imd_lsoa_health',     label:'IMD — Health',              shortLabel:'Health',               source:'lsoaPcts' },
+      { id:'imd_lsoa_crime',      label:'IMD — Crime',               shortLabel:'Crime',                source:'lsoaPcts' },
+      { id:'imd_lsoa_barriers',   label:'IMD — Barriers to Housing', shortLabel:'Barriers to Housing',  source:'lsoaPcts' },
+      { id:'imd_lsoa_living_env', label:'IMD — Living Environment',  shortLabel:'Living Environment',   source:'lsoaPcts' }
+    ]
+  },
+  {
+    label: 'Community Needs Index (LSOA avg.)',
+    metrics: [
+      { id:'cni_lsoa_overall',  label:'CNI — Overall',            shortLabel:'CNI Overall',      source:'lsoaPcts' },
+      { id:'cni_lsoa_active',   label:'CNI — Active & Engaged',   shortLabel:'Active Community', source:'lsoaPcts' },
+      { id:'cni_lsoa_civic',    label:'CNI — Civic Assets',       shortLabel:'Civic Assets',     source:'lsoaPcts' },
+      { id:'cni_lsoa_connect',  label:'CNI — Connectedness',      shortLabel:'Connectedness',    source:'lsoaPcts' }
+    ]
+  }
+];
+
 // ── STATE ─────────────────────────────────────────────────────────
 const APP = {
   selectedMSOA:  null,            // currently selected PiP MSOA code
@@ -340,6 +403,8 @@ const APP = {
   lsoaPcts:      new Map(),       // lsoaMetricId → Map<lsoaCode, pct>
   pipMSOAs:      new Map(),       // msoaCode → {neighbourhood, la}
   compareMSOAs:  [],              // array of MSOA codes for compare tab (max 4, PiP only)
+  compareMetrics: null,           // array of active metric ids (null = all); initialized on first load
+  compareDataCache: null,         // per-MSOA cached values for all 21 metrics
   map:           null,
   mapLayer:      null,
   mapMetric:     'hlnm25_overall',
@@ -1127,71 +1192,137 @@ function renderCompareSlots() {
   });
 }
 
-async function renderCompareCharts() {
+// ── Return one metric value for an MSOA (avg across LSOAs where applicable) ──
+function _cmpMetricVal(msoaCode, m) {
+  if (m.source === 'msoa') {
+    return (APP.data.get(m.id) || new Map()).get(msoaCode) ?? null;
+  }
+  const lsoaCodes = [...(APP.geo.msoaToLSOAs.get(msoaCode) || new Set())];
+  if (!lsoaCodes.length) return null;
+  let vals;
+  if (m.source === 'pcts') {
+    vals = lsoaCodes
+      .map(lc => { const d = APP.lsoaData.get(lc); return d && d.pcts ? d.pcts[m.id] : null; })
+      .filter(v => v != null);
+  } else { // lsoaPcts
+    const pctMap = APP.lsoaPcts.get(m.id) || new Map();
+    vals = lsoaCodes.map(lc => pctMap.get(lc)).filter(v => v != null);
+  }
+  return vals.length ? Math.round(vals.reduce((s, v) => s + v, 0) / vals.length * 10) / 10 : null;
+}
+
+// ── Update the "X of 21 shown" count in the filter summary ────────
+function updateCompareFilterCount() {
+  const total  = CMP_METRIC_GROUPS.reduce((s, g) => s + g.metrics.length, 0);
+  const active = (APP.compareMetrics || []).length;
+  const el = document.getElementById('cmp-filter-count');
+  if (el) el.textContent = '\u2014 ' + active + ' of ' + total + ' shown';
+}
+
+// ── Rebuild the pill toggle UI inside #cmp-filter-body ────────────
+function buildCompareFilter() {
+  const body = document.getElementById('cmp-filter-body');
+  if (!body) return;
+  body.innerHTML = '';
+  CMP_METRIC_GROUPS.forEach(group => {
+    const lbl = document.createElement('div');
+    lbl.className = 'cmp-filter-group-label';
+    lbl.textContent = group.label;
+    body.appendChild(lbl);
+    const pillRow = document.createElement('div');
+    pillRow.className = 'cmp-filter-pills';
+    group.metrics.forEach(m => {
+      const btn = document.createElement('button');
+      btn.className = 'cmp-pill' + (APP.compareMetrics && APP.compareMetrics.includes(m.id) ? ' active' : '');
+      btn.textContent = m.shortLabel;
+      btn.dataset.id  = m.id;
+      btn.addEventListener('click', () => {
+        if (!APP.compareMetrics) return;
+        const idx = APP.compareMetrics.indexOf(m.id);
+        if (idx === -1) APP.compareMetrics.push(m.id);
+        else            APP.compareMetrics.splice(idx, 1);
+        btn.classList.toggle('active', APP.compareMetrics.includes(m.id));
+        updateCompareFilterCount();
+        drawCompareCharts(APP.compareDataCache);
+      });
+      pillRow.appendChild(btn);
+    });
+    body.appendChild(pillRow);
+  });
+  updateCompareFilterCount();
+}
+
+// ── Render chart blocks from cached data (no data loading) ─────────
+function drawCompareCharts(compareData) {
   const container = document.getElementById('compare-charts');
+  if (!container || !compareData || !APP.compareMetrics) return;
+  container.innerHTML = '';
+  if (!APP.compareMetrics.length) {
+    container.innerHTML = '<p class="no-la-msg">No subdomains selected. Use the filter above to choose metrics to display.</p>';
+    return;
+  }
+  let firstGroup = true;
+  CMP_METRIC_GROUPS.forEach(group => {
+    const active = group.metrics.filter(m => APP.compareMetrics.includes(m.id));
+    if (!active.length) return;
+    if (!firstGroup) {
+      const divider = document.createElement('div');
+      divider.className = 'cmp-section-divider';
+      divider.innerHTML = '<span>' + group.label + '</span>';
+      container.appendChild(divider);
+    }
+    firstGroup = false;
+    active.forEach(m => {
+      const block = document.createElement('div');
+      block.className = 'cmp-block';
+      block.innerHTML = '<div class="cmp-block-title">' + m.label + '</div><div id="cmp-chart-' + m.id + '"></div>';
+      container.appendChild(block);
+      drawBarChart('cmp-chart-' + m.id, compareData, m.id, null);
+    });
+  });
+}
+
+async function renderCompareCharts() {
+  const container   = document.getElementById('compare-charts');
+  const filterEl    = document.getElementById('cmp-filter');
+  const dlWrap      = document.getElementById('cmp-dl-wrap');
   if (!APP.compareMSOAs.length) {
     container.innerHTML = '<p class="no-la-msg">Add Pride in Place neighbourhoods above to compare them.</p>';
+    if (filterEl) filterEl.style.display = 'none';
+    if (dlWrap)   dlWrap.style.display   = 'none';
     return;
   }
   container.innerHTML = spinHTML('Loading comparison data\u2026');
   try {
-    await Promise.all(HEADLINE_IDS.map(id => loadMetric(id)));
+    await Promise.all([
+      ...HEADLINE_IDS.map(id => loadMetric(id)),
+      loadLSOAData(),
+      loadIMDLSOAData(),
+      loadCNILSOAData()
+    ]);
 
-    // Per-MSOA percentiles (individual, not averages)
-    const msoaData = APP.compareMSOAs.map(code => {
+    // Initialise compareMetrics to all IDs on first load
+    if (!APP.compareMetrics) {
+      APP.compareMetrics = CMP_METRIC_GROUPS.flatMap(g => g.metrics.map(m => m.id));
+    }
+
+    // Build per-MSOA data cache with all 21 metric values
+    APP.compareDataCache = APP.compareMSOAs.map(code => {
       const pip = APP.pipMSOAs.get(code);
       const row = {
         code,
-        name: pip && pip.neighbourhood ? pip.neighbourhood : (APP.geo.lookup.get(code)||{}).msoaName || code
+        name: pip && pip.neighbourhood ? pip.neighbourhood : (APP.geo.lookup.get(code) || {}).msoaName || code
       };
-      HEADLINE_IDS.forEach(id => { row[id] = (APP.data.get(id)||new Map()).get(code) ?? null; });
-      return row;
-    });
-
-    // Also load CNI LSOA data for the subdomain section
-    await loadCNILSOAData();
-
-    container.innerHTML = '';
-
-    // ── Headline MSOA metrics ──────────────────────────────────────
-    HEADLINE_IDS.forEach(id => {
-      const block = document.createElement('div');
-      block.className = 'cmp-block';
-      block.innerHTML = '<div class="cmp-block-title">'+METRICS[id].label+'</div><div id="cmp-'+id+'"></div>';
-      container.appendChild(block);
-      drawBarChart('cmp-'+id, msoaData, id, null); // no median line for composite indexes
-    });
-
-    // ── CNI LSOA subdomains — mean percentile across neighbourhood LSOAs ──
-    const cniIds  = Object.keys(CNI_LSOA_METRICS);
-    const cniData = APP.compareMSOAs.map(code => {
-      const pip = APP.pipMSOAs.get(code);
-      const row = {
-        code,
-        name: pip && pip.neighbourhood ? pip.neighbourhood : (APP.geo.lookup.get(code)||{}).msoaName || code
-      };
-      const lsoaCodes = [...(APP.geo.msoaToLSOAs.get(code) || new Set())];
-      cniIds.forEach(id => {
-        const pctMap = APP.lsoaPcts.get(id) || new Map();
-        const vals   = lsoaCodes.map(lc => pctMap.get(lc)).filter(v => v != null);
-        row[id]      = vals.length ? Math.round(vals.reduce((s,v) => s+v, 0) / vals.length * 10) / 10 : null;
+      CMP_METRIC_GROUPS.forEach(group => {
+        group.metrics.forEach(m => { row[m.id] = _cmpMetricVal(code, m); });
       });
       return row;
     });
 
-    const divider = document.createElement('div');
-    divider.className = 'cmp-section-divider';
-    divider.innerHTML = '<span>Community Needs Index (LSOA \u2014 neighbourhood average)</span>';
-    container.appendChild(divider);
-
-    cniIds.forEach(id => {
-      const m     = CNI_LSOA_METRICS[id];
-      const block = document.createElement('div');
-      block.className = 'cmp-block';
-      block.innerHTML = '<div class="cmp-block-title">'+m.shortLabel+'</div><div id="cmp-'+id+'"></div>';
-      container.appendChild(block);
-      drawBarChart('cmp-'+id, cniData, id, null);
-    });
+    buildCompareFilter();
+    if (filterEl) filterEl.style.display = '';
+    if (dlWrap)   dlWrap.style.display   = '';
+    drawCompareCharts(APP.compareDataCache);
   } catch(e) {
     container.innerHTML = errHTML(e.message);
   }
@@ -1345,6 +1476,56 @@ async function downloadTableFull() {
   downloadCSV('pride-in-place-full.csv', TABLE_CSV_HEADERS, rows);
 }
 
+function downloadCmpFiltered() {
+  if (!APP.compareDataCache || !APP.compareMetrics) return;
+  const allMetrics = CMP_METRIC_GROUPS.flatMap(g => g.metrics);
+  const active = allMetrics.filter(m => APP.compareMetrics.includes(m.id));
+  const esc = v => { const s = String(v == null ? '' : v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const header  = ['neighbourhood', 'msoa_code', ...active.map(m => m.label)].map(esc).join(',');
+  const dataRows = APP.compareDataCache.map(row =>
+    [row.name, row.code, ...active.map(m => row[m.id] != null ? row[m.id] : '')].map(esc).join(',')
+  );
+  const blob = new Blob([[header, ...dataRows].join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'pip-compare-filtered.csv'; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+async function downloadCmpFull() {
+  const btn = document.getElementById('cmp-dl-full');
+  if (btn) { btn.disabled = true; btn.textContent = 'Loading\u2026'; }
+  try {
+    await Promise.all([
+      ...HEADLINE_IDS.map(id => loadMetric(id)),
+      loadLSOAData(),
+      loadIMDLSOAData(),
+      loadCNILSOAData()
+    ]);
+    const allMetrics = CMP_METRIC_GROUPS.flatMap(g => g.metrics);
+    const esc = v => { const s = String(v == null ? '' : v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const header  = ['neighbourhood', 'la_name', 'msoa_code', ...allMetrics.map(m => m.label)].map(esc).join(',');
+    const dataRows = APP.geo.pipList.map(pip => {
+      const code = pip.msoaCode;
+      return [
+        pip.neighbourhood || '',
+        pip.laName        || '',
+        code,
+        ...allMetrics.map(m => { const v = _cmpMetricVal(code, m); return v != null ? v : ''; })
+      ].map(esc).join(',');
+    });
+    const blob = new Blob([[header, ...dataRows].join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'pip-compare-full.csv'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  } catch(e) {
+    alert('Download failed: ' + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Download full dataset (CSV)'; }
+  }
+}
+
 function downloadMapFiltered() {
   if (!APP.selectedMSOA) return;
   const isLSOA  = !!(LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric] || CNI_LSOA_METRICS[APP.mapMetric]);
@@ -1480,6 +1661,8 @@ async function init() {
   document.getElementById('table-dl-full').addEventListener('click',     downloadTableFull);
   document.getElementById('map-dl-filtered').addEventListener('click',   downloadMapFiltered);
   document.getElementById('map-dl-full').addEventListener('click',       downloadMapFull);
+  document.getElementById('cmp-dl-filtered').addEventListener('click',   downloadCmpFiltered);
+  document.getElementById('cmp-dl-full').addEventListener('click',       downloadCmpFull);
 }
 
 document.addEventListener('DOMContentLoaded', init);
