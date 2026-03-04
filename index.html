@@ -555,16 +555,35 @@ function populateCompareDropdown() {
   });
 }
 
-// Map metric selector — LSOA-level metrics only
+// Map metric selector — IMD, CNI and Hyper-Local Need Measure groups
 function populateMapMetricSelect() {
   const sel = document.getElementById('map-metric-select');
   sel.innerHTML = '';
-  Object.values(LSOA_METRICS).forEach(lm => {
-    const opt = document.createElement('option');
-    opt.value = lm.id; opt.textContent = lm.label;
-    if (lm.id === 'hlnm25_overall') opt.selected = true;
-    sel.appendChild(opt);
-  });
+
+  function addGroup(groupLabel, ids, metrics) {
+    const grp = document.createElement('optgroup');
+    grp.label = groupLabel;
+    ids.forEach(id => {
+      const m = metrics[id];
+      if (!m) return;
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = m.shortLabel;
+      if (id === APP.mapMetric) opt.selected = true;
+      grp.appendChild(opt);
+    });
+    sel.appendChild(grp);
+  }
+
+  addGroup('Index of Multiple Deprivation',
+    ['imd','imd_income','imd_employment','imd_education','imd_health','imd_crime','imd_barriers','imd_living_env'],
+    METRICS);
+  addGroup('Community Needs Index',
+    ['cni','cni_active','cni_civic','cni_connectedness'],
+    METRICS);
+  addGroup('Hyper-Local Need Measure',
+    Object.keys(LSOA_METRICS),
+    LSOA_METRICS);
 }
 
 // ── OVERVIEW TAB ──────────────────────────────────────────────────
@@ -678,8 +697,9 @@ async function renderMap(msoaCode) {
   document.getElementById('lsoa-detail').classList.remove('open');
 
   try {
-    // Load LSOA data + GeoJSON in parallel
-    await Promise.all([loadLSOAData(), loadLSOAGeoJSON()]);
+    // Load LSOA data + GeoJSON in parallel; also load MSOA metric if needed
+    const extraLoads = LSOA_METRICS[APP.mapMetric] ? [] : [loadMetric(APP.mapMetric)];
+    await Promise.all([loadLSOAData(), loadLSOAGeoJSON(), ...extraLoads]);
 
     const msoaLSOAs = APP.geo.msoaToLSOAs.get(msoaCode) || new Set();
     if (!msoaLSOAs.size) throw new Error('No LSOAs found for MSOA '+msoaCode+' in geography lookup.');
@@ -698,27 +718,36 @@ async function renderMap(msoaCode) {
 
     if (APP.mapLayer) { APP.map.removeLayer(APP.mapLayer); APP.mapLayer = null; }
 
-    const pctMap = APP.lsoaPcts.get(APP.mapMetric) || new Map();
+    // Build a pct-lookup function that works for both LSOA-level and MSOA-level metrics
+    const metricLabel = (LSOA_METRICS[APP.mapMetric] || METRICS[APP.mapMetric] || {}).shortLabel || APP.mapMetric;
+    let getPct;
+    if (LSOA_METRICS[APP.mapMetric]) {
+      const pctMap = APP.lsoaPcts.get(APP.mapMetric) || new Map();
+      getPct = code => pctMap.get(code);
+    } else {
+      // MSOA-level metric: every LSOA in this MSOA gets the same percentile
+      const msoaPct = (APP.data.get(APP.mapMetric) || new Map()).get(msoaCode) ?? null;
+      getPct = () => msoaPct;
+    }
 
     APP.mapLayer = L.geoJSON(filtered, {
       style: feat => {
         const code = feat.properties.LSOA21CD || feat.properties.lsoa21cd || feat.properties.LSOA11CD || '';
-        const pct  = pctMap.get(code);
+        const pct  = getPct(code);
         return { fillColor: getColor(pct), fillOpacity: 0.78, color: '#ffffff', weight: 1.5, opacity: 1 };
       },
       onEachFeature: (feat, layer) => {
         const code   = feat.properties.LSOA21CD || feat.properties.lsoa21cd || feat.properties.LSOA11CD || '';
         const lsoa   = APP.lsoaData.get(code);
         const name   = feat.properties.LSOA21NM || feat.properties.lsoa21nm || (lsoa ? lsoa.name : code);
-        const pct    = pctMap.get(code);
-        const ml     = LSOA_METRICS[APP.mapMetric] ? LSOA_METRICS[APP.mapMetric].shortLabel : APP.mapMetric;
+        const pct    = getPct(code);
         const typ    = lsoa ? lsoa.typology : '';
 
         layer.bindTooltip(
           '<div style="font-family:\'Abadi MT\',\'Century Gothic\',sans-serif">'
           +'<div style="font-weight:400;color:#002B5C;margin-bottom:3px">'+name+'</div>'
           +(typ ? '<div style="font-size:0.77em;color:#4A4A4A;margin-bottom:3px">'+typ+'</div>' : '')
-          +'<div style="font-size:0.85em;color:#4A4A4A">'+ml+': <span style="color:'+getColor(pct)+';font-weight:400">'+(pct!=null?Math.round(pct)+'th pct':'N/A')+'</span></div>'
+          +'<div style="font-size:0.85em;color:#4A4A4A">'+metricLabel+': <span style="color:'+getColor(pct)+';font-weight:400">'+(pct!=null?Math.round(pct)+'th pct':'N/A')+'</span></div>'
           +'<div style="font-size:0.77em;color:#6E7BA2;margin-top:2px">'+(pct!=null?pctNarrative(pct):'')+'</div>'
           +'<div style="font-size:0.77em;color:#009B9F;margin-top:4px">Click for full breakdown</div>'
           +'</div>',
