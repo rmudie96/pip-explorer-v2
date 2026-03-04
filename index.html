@@ -241,7 +241,7 @@ const DATA_BASE_URL = "https://rmudie96.github.io/pip-explorer-v2/data/";
 
 // MSOA-level metrics (IMD, CNI, HLNM) — same as before
 const METRICS = {
-  imd: { id:'imd', label:'Index of Multiple Deprivation 2025', shortLabel:'IMD', type:'index', parentIndex:null, domain:'Deprivation', file:'MSOA_Index of Multiple Deprivation 2025 (IMD) Rank_2025.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Overall deprivation rank across 7 domains. Lower rank = more deprived.' },
+  imd: { id:'imd', label:'Index of Multiple Deprivation 2025', shortLabel:'Index of Multiple Deprivation', type:'index', parentIndex:null, domain:'Deprivation', file:'MSOA_Index of Multiple Deprivation 2025 (IMD) Rank_2025.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Overall deprivation rank across 7 domains. Lower rank = more deprived.' },
   imd_income: { id:'imd_income', label:'Income Deprivation', shortLabel:'Income', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Income Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Proportion of population experiencing income deprivation.' },
   imd_employment: { id:'imd_employment', label:'Employment Deprivation', shortLabel:'Employment', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Employment Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Involuntary exclusion from the labour market.' },
   imd_education: { id:'imd_education', label:'Education, Skills & Training', shortLabel:'Education', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Education, Skills and Training Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Lack of attainment and skills in the local population.' },
@@ -249,11 +249,11 @@ const METRICS = {
   imd_crime: { id:'imd_crime', label:'Crime (IMD)', shortLabel:'Crime (IMD)', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Crime Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Risk of personal and material victimisation at local level.' },
   imd_barriers: { id:'imd_barriers', label:'Barriers to Housing & Services', shortLabel:'Barriers', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Barriers to Housing and Services Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Physical and financial accessibility of housing and local services.' },
   imd_living_env: { id:'imd_living_env', label:'Living Environment', shortLabel:'Living Env.', type:'subdomain', parentIndex:'imd', domain:'Deprivation', file:'MSOA_IoD 2025 Living Environment Rank_2025_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Quality of the local environment — indoor and outdoor.' },
-  cni: { id:'cni', label:'Community Needs Index 2023', shortLabel:'CNI', type:'index', parentIndex:null, domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Community Needs rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Overall community needs rank. Lower rank = greater community need.' },
+  cni: { id:'cni', label:'Community Needs Index 2023', shortLabel:'Community Needs Index', type:'index', parentIndex:null, domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Community Needs rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Overall community needs rank. Lower rank = greater community need.' },
   cni_active: { id:'cni_active', label:'Active & Engaged Community', shortLabel:'Active Community', type:'subdomain', parentIndex:'cni', domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Active and Engaged Community rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Participation in civic and community life.' },
   cni_civic: { id:'cni_civic', label:'Civic Assets', shortLabel:'Civic Assets', type:'subdomain', parentIndex:'cni', domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Civic Assets rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Availability of community spaces, infrastructure and institutions.' },
   cni_connectedness: { id:'cni_connectedness', label:'Connectedness', shortLabel:'Connectedness', type:'subdomain', parentIndex:'cni', domain:'Community Need', file:'MSOA_Community Needs Index 2023_ Connectedness rank_2023-01-01_csv.csv', codeColumn:'Area Code', valueColumn:'Value', direction:'lower_is_worse', description:'Social cohesion, trust and sense of belonging.' },
-  hlnm: { id:'hlnm', label:'Hyper-Local Need Measure', shortLabel:'HLNM', type:'index', parentIndex:null, domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:null, direction:'derived', description:'Composite of 5 need dimensions — mean of subdomain percentiles.' },
+  hlnm: { id:'hlnm', label:'Hyper-Local Need Measure', shortLabel:'Hyper-Local Need Measure', type:'index', parentIndex:null, domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:null, direction:'derived', description:'Composite of 5 need dimensions — mean of subdomain percentiles.' },
   hlnm_growth: { id:'hlnm_growth', label:'Growth Need (HLNM)', shortLabel:'Growth', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Growth', direction:'higher_is_worse', description:'Economic growth need. Higher score = greater need.' },
   hlnm_energy: { id:'hlnm_energy', label:'Energy Need (HLNM)', shortLabel:'Energy', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Energy', direction:'higher_is_worse', description:'Energy poverty need. Higher score = greater need.' },
   hlnm_crime: { id:'hlnm_crime', label:'Crime Need (HLNM)', shortLabel:'Crime (HLNM)', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Crime', direction:'lower_is_worse', description:'Crime rank within HLNM. Lower rank = worse.' },
@@ -271,12 +271,12 @@ const SUBDOMAINS = {
 // LSOA-level metrics from Hyper-Local-Need-Measure-2025 file
 // All are ranks: lower rank = more deprived = lower display percentile
 const LSOA_METRICS = {
-  hlnm25_overall:     { id:'hlnm25_overall',     col:'HLNM_overall', label:'HLNM Overall',      shortLabel:'HLNM Overall'  },
-  hlnm25_growth:      { id:'hlnm25_growth',      col:'growth',       label:'Growth Need',        shortLabel:'Growth'        },
-  hlnm25_energy:      { id:'hlnm25_energy',      col:'energy',       label:'Energy Need',        shortLabel:'Energy'        },
-  hlnm25_crime:       { id:'hlnm25_crime',       col:'crime',        label:'Crime Need',         shortLabel:'Crime'         },
-  hlnm25_opportunity: { id:'hlnm25_opportunity', col:'opportunity',  label:'Opportunity Need',   shortLabel:'Opportunity'   },
-  hlnm25_health:      { id:'hlnm25_health',      col:'health',       label:'Health Need',        shortLabel:'Health'        }
+  hlnm25_overall:     { id:'hlnm25_overall',     col:'HLNM_overall', label:'Hyper-Local Need Measure — Overall', shortLabel:'Hyper-Local Need Measure' },
+  hlnm25_growth:      { id:'hlnm25_growth',      col:'growth',       label:'Hyper-Local Need Measure — Growth',      shortLabel:'Growth'       },
+  hlnm25_energy:      { id:'hlnm25_energy',      col:'energy',       label:'Hyper-Local Need Measure — Energy',      shortLabel:'Energy'       },
+  hlnm25_crime:       { id:'hlnm25_crime',       col:'crime',        label:'Hyper-Local Need Measure — Crime',       shortLabel:'Crime'        },
+  hlnm25_opportunity: { id:'hlnm25_opportunity', col:'opportunity',  label:'Hyper-Local Need Measure — Opportunity', shortLabel:'Opportunity'  },
+  hlnm25_health:      { id:'hlnm25_health',      col:'health',       label:'Hyper-Local Need Measure — Health',      shortLabel:'Health'       }
 };
 
 // ── STATE ─────────────────────────────────────────────────────────
@@ -815,12 +815,12 @@ function buildTable(msoaCode, container) {
   const cols = [
     { id:'name',            label:'LSOA Name',       lsoa:false },
     { id:'typology',        label:'Typology',         lsoa:false },
-    { id:'hlnm25_overall',  label:'HLNM Overall',     lsoa:true  },
-    { id:'hlnm25_growth',   label:'Growth',           lsoa:true  },
-    { id:'hlnm25_energy',   label:'Energy',           lsoa:true  },
-    { id:'hlnm25_crime',    label:'Crime',            lsoa:true  },
-    { id:'hlnm25_opportunity', label:'Opportunity',   lsoa:true  },
-    { id:'hlnm25_health',   label:'Health',           lsoa:true  }
+    { id:'hlnm25_overall',     label: LSOA_METRICS.hlnm25_overall.shortLabel,     lsoa:true },
+    { id:'hlnm25_growth',      label: LSOA_METRICS.hlnm25_growth.shortLabel,      lsoa:true },
+    { id:'hlnm25_energy',      label: LSOA_METRICS.hlnm25_energy.shortLabel,      lsoa:true },
+    { id:'hlnm25_crime',       label: LSOA_METRICS.hlnm25_crime.shortLabel,       lsoa:true },
+    { id:'hlnm25_opportunity',  label: LSOA_METRICS.hlnm25_opportunity.shortLabel, lsoa:true },
+    { id:'hlnm25_health',      label: LSOA_METRICS.hlnm25_health.shortLabel,      lsoa:true }
   ];
 
   // Build data rows
