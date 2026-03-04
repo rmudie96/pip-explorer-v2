@@ -142,6 +142,7 @@ h3 { font-size: 0.95rem; }
 .pct-cell-bar { width: 36px; height: 5px; background: var(--ltgrey); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
 .pct-cell-fill { height: 100%; border-radius: 3px; }
 .pct-rank { font-size: .68rem; color: var(--slate); white-space: nowrap; margin-top: 2px; line-height: 1.2; }
+.pct-rank-hint { font-size: .6rem; color: var(--slate); opacity: .65; white-space: nowrap; margin-top: 1px; line-height: 1.2; }
 
 /* COMPARE */
 #compare-la-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
@@ -968,10 +969,10 @@ function buildTable(msoaCode, container) {
       }
       const v    = row[c.id];
       const col  = getColor(v);
-      const rank = v != null ? Math.max(1, Math.round(33755 - (v / 100 * 33755))) : null;
+      const rank = v != null ? Math.max(1, Math.round((v / 100) * 33755)) : null;
       return '<td>'
         +'<div class="pct-cell"><div class="pct-cell-bar"><div class="pct-cell-fill" style="width:'+(v!=null?Math.round(v):0)+'%;background:'+col+'"></div></div><span>'+(v!=null?Math.round(v)+'%':'N/A')+'</span></div>'
-        +(rank!=null?'<div class="pct-rank">'+rank.toLocaleString('en-GB')+'\u202f/\u202f33,755 LSOAs</div>':'')
+        +(rank!=null?'<div class="pct-rank">'+rank.toLocaleString('en-GB')+'\u202f/\u202f33,755 LSOAs</div><div class="pct-rank-hint">1\u2009=\u2009highest need</div>':'')
         +'</td>';
     }).join('');
     return '<tr data-code="'+row.code+'">'+cells+'</tr>';
