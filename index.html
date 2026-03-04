@@ -35,7 +35,7 @@ h3 { font-size: 0.95rem; }
 
 /* HEADER */
 #header { background: var(--navy); padding: 14px 24px; display: flex; align-items: center; gap: 18px; }
-#header-logo { height: 46px; width: auto; flex-shrink: 0; }
+#header-logo { max-height: 40px; width: auto; flex-shrink: 0; }
 #header-text h1 { color: var(--white); font-size: 1.25rem; }
 #header-text p  { color: var(--blue-lt); font-size: 0.82rem; font-weight: 300; margin-top: 2px; }
 
@@ -167,7 +167,7 @@ h3 { font-size: 0.95rem; }
 <div id="app">
 
 <div id="header">
-  <img id="header-logo" src="" alt="ICON Logo" onerror="this.style.display='none'"/>
+  <img id="header-logo" src="" alt="ICON Logo" style="display:none" onerror="this.style.display='none'"/>
   <div id="header-text">
     <h1>Pride in Place Data Explorer</h1>
     <p>Explore deprivation and neighbourhood need across England</p>
@@ -1071,7 +1071,9 @@ function switchTab(name) {
 
 // ── INIT ──────────────────────────────────────────────────────────
 async function init() {
-  document.getElementById('header-logo').src = DATA_BASE_URL + 'ICON-Logo-Final_optimised.png';
+  const logoEl = document.getElementById('header-logo');
+  logoEl.onload = () => { logoEl.style.display = ''; };
+  logoEl.src = DATA_BASE_URL + 'ICON-Logo-Final_optimised.png';
 
   try {
     await Promise.all([loadGeoLookup(), loadPiP()]);
