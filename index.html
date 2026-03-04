@@ -354,8 +354,8 @@ function ordinal(n) {
 
 function pctNarrative(pct) {
   if (pct == null || isNaN(pct)) return 'Data not available';
-  const p = Math.round(pct);
-  return 'At the '+ordinal(p)+' percentile nationally \u2014 '+(100-p)+'% of areas have a higher level of need';
+  const p = Math.max(1, Math.round(pct));
+  return 'At the '+ordinal(p)+' percentile nationally \u2014 '+p+'% of areas have a higher level of need';
 }
 
 function spinHTML(msg) { return '<div class="loading-msg"><div class="spinner"></div>'+msg+'</div>'; }
@@ -689,7 +689,7 @@ function buildScorecard(metricId, msoaCode) {
   const m   = METRICS[metricId];
   const pct = (APP.data.get(metricId)||new Map()).get(msoaCode) ?? null;
   const col = getColor(pct);
-  const pDisp = pct != null ? Math.round(pct) : null;
+  const pDisp = pct != null ? Math.max(1, Math.round(pct)) : null;
 
   const card = document.createElement('div');
   card.className = 'scorecard';
@@ -798,7 +798,7 @@ async function renderMap(msoaCode) {
           '<div style="font-family:\'Inter\',sans-serif">'
           +'<div style="font-weight:400;color:#002B5C;margin-bottom:3px">'+name+'</div>'
           +(typ ? '<div style="font-size:0.77em;color:#4A4A4A;margin-bottom:3px">'+typ+'</div>' : '')
-          +'<div style="font-size:0.85em;color:#4A4A4A">'+metricLabel+': <span style="color:'+getColor(pct)+';font-weight:400">'+(pct!=null?Math.round(pct)+'th pct':'N/A')+'</span></div>'
+          +'<div style="font-size:0.85em;color:#4A4A4A">'+metricLabel+': <span style="color:'+getColor(pct)+';font-weight:400">'+(pct!=null?Math.max(1,Math.round(pct))+'th pct':'N/A')+'</span></div>'
           +'<div style="font-size:0.77em;color:#6E7BA2;margin-top:2px">'+(pct!=null?pctNarrative(pct):'')+'</div>'
           +'<div style="font-size:0.77em;color:#009B9F;margin-top:4px">Click for full breakdown</div>'
           +'</div>',
@@ -891,7 +891,7 @@ async function renderLSOADetail(lsoaCode) {
       const col = getColor(pct);
       return '<div class="lsoa-metric">'
         +'<div class="lsoa-metric-label">'+m.shortLabel+'</div>'
-        +'<div class="lsoa-metric-pct" style="color:'+col+'">'+(pct!=null?Math.round(pct)+'th pct':'N/A')+'</div>'
+        +'<div class="lsoa-metric-pct" style="color:'+col+'">'+(pct!=null?Math.max(1,Math.round(pct))+'th pct':'N/A')+'</div>'
         +'<div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:'+(pct!=null?Math.round(pct):0)+'%;background:'+col+'"></div></div>'
         +'<div style="font-size:.7rem;color:var(--slate);margin-top:1px">'+(pct!=null?pctNarrative(pct):'Data not available')+'</div>'
         +'</div>';
@@ -1094,7 +1094,7 @@ function drawBarChart(elId, data, metricId, nationalMedian) {
         .attr('fill',clr).attr('rx',3).attr('opacity',0.85);
       g.append('text').attr('x',x(val)+5).attr('y',y+barH/2+4.5)
         .attr('font-family',"'Inter',sans-serif")
-        .attr('font-size','11').attr('fill','#002B5C').text(Math.round(val)+'%ile');
+        .attr('font-size','11').attr('fill','#002B5C').text(Math.max(1,Math.round(val))+'%ile');
     }
   });
 
