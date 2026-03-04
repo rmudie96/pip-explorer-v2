@@ -645,16 +645,10 @@ function buildScorecard(metricId, msoaCode) {
     +'<div class="sc-pct" style="color:'+col+'">'+(pDisp!=null?pDisp+'<sup>th pct</sup>':'N/A')+'</div>'
     +'<div class="sc-desc">'+(pct!=null?pctNarrative(pct):'Data not available')+'</div>'
     +'<div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:'+(pDisp||0)+'%;background:'+col+'"></div></div>'
-    +'<button class="sub-toggle" data-parent="'+metricId+'">View '+m.domain+' subdomains</button>'
-    +'<div class="subdomains" id="subs-'+metricId+'">'+spinHTML('Loading\u2026')+'</div>'
+    +'<div class="subdomains open" id="subs-'+metricId+'">'+spinHTML('Loading\u2026')+'</div>'
     +'</div>';
 
-  card.querySelector('.sub-toggle').addEventListener('click', function() {
-    const panel = document.getElementById('subs-'+metricId);
-    const open  = panel.classList.toggle('open');
-    this.classList.toggle('open', open);
-    if (open) expandSubdomains(metricId, msoaCode, panel);
-  });
+  expandSubdomains(metricId, msoaCode, card.querySelector('.subdomains'));
   return card;
 }
 
