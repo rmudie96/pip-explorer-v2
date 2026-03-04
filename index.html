@@ -75,7 +75,7 @@ h3 { font-size: 0.95rem; }
 /* SCORECARDS */
 #scorecards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; align-items: stretch; }
 @media(max-width:860px){ #scorecards { grid-template-columns: 1fr; } }
-.scorecard { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+.scorecard { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; }
 .sc-head { background: var(--navy); color: var(--white); padding: 9px 13px; display: flex; justify-content: space-between; align-items: center; }
 .sc-head-title  { font-size: .78rem; font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
 .sc-head-domain { font-size: .68rem; opacity: .65; }
@@ -101,7 +101,7 @@ h3 { font-size: 0.95rem; }
 .sub-bar-wrap { flex: 1; height: 5px; background: var(--ltgrey); border-radius: 3px; overflow: hidden; }
 .sub-bar-fill { height: 100%; border-radius: 3px; }
 .sub-pct { font-size: .75rem; color: var(--slate); width: 34px; text-align: right; flex-shrink: 0; }
-.sc-info { padding: 11px 13px; background: var(--blue-xs); border-top: 1px solid rgba(0,43,92,.1); font-size: .76rem; color: var(--slate); line-height: 1.55; }
+.sc-info { padding: 11px 13px; background: var(--blue-xs); border: 1px solid var(--ltgrey); border-radius: 6px; font-size: .76rem; color: var(--slate); line-height: 1.55; }
 
 /* MAP */
 #map-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -797,6 +797,13 @@ async function renderOverview(msoaCode) {
     loadLSOAData().catch(() => {}); // fire and forget — don't block overview
     container.innerHTML = '';
     HEADLINE_IDS.forEach(id => container.appendChild(buildScorecard(id, msoaCode)));
+    // Description panels rendered as a second grid row so all three align at the same Y position
+    HEADLINE_IDS.forEach(id => {
+      const d = document.createElement('div');
+      d.className = 'sc-info';
+      if (METRIC_DESCRIPTIONS[id]) d.textContent = METRIC_DESCRIPTIONS[id];
+      container.appendChild(d);
+    });
   } catch(e) {
     container.innerHTML = errHTML('Failed to load metric data: '+e.message);
   }
@@ -821,8 +828,7 @@ function buildScorecard(metricId, msoaCode) {
     +'<div class="sc-desc">'+(pct!=null?pctNarrative(pct):'Data not available')+'</div>'
     +'<div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:'+(pDisp||0)+'%;background:'+col+'"></div></div>'
     +'<div class="subdomains open" id="subs-'+metricId+'">'+spinHTML('Loading\u2026')+'</div>'
-    +'</div>'
-    +(METRIC_DESCRIPTIONS[metricId] ? '<div class="sc-info">'+METRIC_DESCRIPTIONS[metricId]+'</div>' : '');
+    +'</div>';
 
   expandSubdomains(metricId, msoaCode, card.querySelector('.subdomains'));
   return card;
