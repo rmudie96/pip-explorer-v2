@@ -153,6 +153,12 @@ h3 { font-size: 0.95rem; }
 #compare-add-btn { padding: 5px 13px; background: var(--teal); color: var(--white); border: none; border-radius: 4px; font-family: var(--font); font-size: .83rem; cursor: pointer; transition: background .12s; }
 #compare-add-btn:hover { background: #007a7e; }
 #compare-charts { display: grid; gap: 14px; }
+
+/* DOWNLOAD BUTTONS */
+.dl-btn { padding: 5px 13px; background: var(--teal); color: var(--white); border: none; border-radius: 4px; font-family: var(--font); font-size: .83rem; cursor: pointer; transition: background .12s; white-space: nowrap; }
+.dl-btn:hover { background: #007a7e; }
+.dl-btn:disabled { background: var(--ltgrey); color: var(--slate); cursor: default; }
+.dl-btn-wrap { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 10px; flex-wrap: wrap; }
 .cmp-block { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; padding: 14px; }
 .cmp-block-title { font-size: .83rem; font-weight: 400; color: var(--navy); margin-bottom: 10px; }
 
@@ -197,6 +203,10 @@ h3 { font-size: 0.95rem; }
     <label for="map-metric-select">Colour by:</label>
     <select id="map-metric-select"></select>
     <span id="map-no-la" class="no-la-msg">Search for a neighbourhood in the Overview tab first.</span>
+    <div id="map-dl-wrap" class="dl-btn-wrap" style="margin-bottom:0;margin-left:auto">
+      <button class="dl-btn" id="map-dl-filtered" disabled>Download filtered data (CSV)</button>
+      <button class="dl-btn" id="map-dl-full">Download full dataset (CSV)</button>
+    </div>
   </div>
   <div id="map-container">
     <div id="map-spinner"><div class="spinner"></div>Loading map…</div>
@@ -214,6 +224,10 @@ h3 { font-size: 0.95rem; }
 <div id="panel-table" class="panel">
   <div id="table-no-la" class="no-la-msg">Search for a neighbourhood in the Overview tab first.</div>
   <div id="table-inner" style="display:none">
+    <div class="dl-btn-wrap">
+      <button class="dl-btn" id="table-dl-filtered">Download filtered data (CSV)</button>
+      <button class="dl-btn" id="table-dl-full">Download full dataset (CSV)</button>
+    </div>
     <div id="table-container"></div>
   </div>
 </div>
@@ -761,8 +775,9 @@ async function renderMap(msoaCode) {
     }).addTo(APP.map);
 
     APP.map.fitBounds(APP.mapLayer.getBounds(), { padding:[20,20] });
-    document.getElementById('map-legend').style.display = 'flex';
-    document.getElementById('map-no-la').style.display  = 'none';
+    document.getElementById('map-legend').style.display  = 'flex';
+    document.getElementById('map-no-la').style.display   = 'none';
+    document.getElementById('map-dl-filtered').disabled  = false;
   } catch(e) {
     document.getElementById('map-container').insertAdjacentHTML('afterbegin', '<div class="error-msg" style="position:absolute;top:8px;left:8px;right:8px;z-index:1001">'+errHTML('Map error: '+e.message)+'</div>');
   } finally {
@@ -1069,6 +1084,141 @@ function switchTab(name) {
   }
 }
 
+// ── CSV DOWNLOADS ─────────────────────────────────────────────────
+function downloadCSV(filename, headers, rows) {
+  const esc = v => {
+    if (v == null) return '';
+    const s = String(v);
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const lines = [
+    headers.map(esc).join(','),
+    ...rows.map(r => headers.map(h => esc(r[h])).join(','))
+  ];
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+const TABLE_CSV_HEADERS = [
+  'lsoa_code','lsoa_name','typology','msoa_code','neighbourhood','la_name',
+  'hlnm25_overall_pctile','hlnm25_growth_pctile','hlnm25_energy_pctile',
+  'hlnm25_crime_pctile','hlnm25_opportunity_pctile','hlnm25_health_pctile'
+];
+
+function buildLSOARow(lsoaCode, msoaCode) {
+  const d   = APP.lsoaData.get(lsoaCode) || {};
+  const pip = APP.pipMSOAs.get(msoaCode);
+  const geo = APP.geo.lookup.get(msoaCode) || {};
+  const p   = d.pcts || {};
+  return {
+    lsoa_code:                 lsoaCode,
+    lsoa_name:                 d.name     || lsoaCode,
+    typology:                  d.typology || '',
+    msoa_code:                 msoaCode   || '',
+    neighbourhood:             pip ? pip.neighbourhood : (geo.msoaName || ''),
+    la_name:                   d.laName   || geo.laName || '',
+    hlnm25_overall_pctile:     p.hlnm25_overall     != null ? p.hlnm25_overall     : '',
+    hlnm25_growth_pctile:      p.hlnm25_growth      != null ? p.hlnm25_growth      : '',
+    hlnm25_energy_pctile:      p.hlnm25_energy      != null ? p.hlnm25_energy      : '',
+    hlnm25_crime_pctile:       p.hlnm25_crime       != null ? p.hlnm25_crime       : '',
+    hlnm25_opportunity_pctile: p.hlnm25_opportunity != null ? p.hlnm25_opportunity : '',
+    hlnm25_health_pctile:      p.hlnm25_health      != null ? p.hlnm25_health      : ''
+  };
+}
+
+function downloadTableFiltered() {
+  if (!APP.selectedMSOA) return;
+  const rows = [...(APP.geo.msoaToLSOAs.get(APP.selectedMSOA) || new Set())]
+    .map(c => buildLSOARow(c, APP.selectedMSOA));
+  downloadCSV('pride-in-place-filtered.csv', TABLE_CSV_HEADERS, rows);
+}
+
+async function downloadTableFull() {
+  await loadLSOAData();
+  const rows = [];
+  for (const msoaCode of APP.pipMSOAs.keys()) {
+    for (const lsoaCode of (APP.geo.msoaToLSOAs.get(msoaCode) || new Set())) {
+      rows.push(buildLSOARow(lsoaCode, msoaCode));
+    }
+  }
+  downloadCSV('pride-in-place-full.csv', TABLE_CSV_HEADERS, rows);
+}
+
+function downloadMapFiltered() {
+  if (!APP.selectedMSOA) return;
+  const isLSOA  = !!LSOA_METRICS[APP.mapMetric];
+  const colName = APP.mapMetric + '_pctile';
+  const headers = ['lsoa_code','lsoa_name','msoa_code','neighbourhood','la_name', colName];
+  const pctMap  = isLSOA
+    ? (APP.lsoaPcts.get(APP.mapMetric) || new Map())
+    : (APP.data.get(APP.mapMetric)     || new Map());
+  const pip     = APP.pipMSOAs.get(APP.selectedMSOA);
+  const geo     = APP.geo.lookup.get(APP.selectedMSOA) || {};
+  const nbName  = pip ? pip.neighbourhood : (geo.msoaName || APP.selectedMSOA);
+  const rows    = [...(APP.geo.msoaToLSOAs.get(APP.selectedMSOA) || new Set())].map(lsoaCode => {
+    const d   = APP.lsoaData.get(lsoaCode) || {};
+    const pct = isLSOA ? pctMap.get(lsoaCode) : pctMap.get(APP.selectedMSOA);
+    return {
+      lsoa_code:     lsoaCode,
+      lsoa_name:     d.name || lsoaCode,
+      msoa_code:     APP.selectedMSOA,
+      neighbourhood: nbName,
+      la_name:       d.laName || geo.laName || '',
+      [colName]:     pct != null ? pct : ''
+    };
+  });
+  const slug = nbName.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase().replace(/^-|-$/g, '');
+  downloadCSV('pride-in-place-map-' + slug + '.csv', headers, rows);
+}
+
+async function downloadMapFull() {
+  const isLSOA  = !!LSOA_METRICS[APP.mapMetric];
+  const colName = APP.mapMetric + '_pctile';
+  if (isLSOA) {
+    await loadLSOAData();
+    const headers = ['lsoa_code','lsoa_name','msoa_code','neighbourhood','la_name', colName];
+    const pctMap  = APP.lsoaPcts.get(APP.mapMetric) || new Map();
+    const rows    = [];
+    for (const msoaCode of APP.pipMSOAs.keys()) {
+      const pip = APP.pipMSOAs.get(msoaCode);
+      const geo = APP.geo.lookup.get(msoaCode) || {};
+      for (const lsoaCode of (APP.geo.msoaToLSOAs.get(msoaCode) || new Set())) {
+        const d   = APP.lsoaData.get(lsoaCode) || {};
+        const pct = pctMap.get(lsoaCode);
+        rows.push({
+          lsoa_code:     lsoaCode,
+          lsoa_name:     d.name || lsoaCode,
+          msoa_code:     msoaCode,
+          neighbourhood: pip ? pip.neighbourhood : (geo.msoaName || ''),
+          la_name:       d.laName || geo.laName || '',
+          [colName]:     pct != null ? pct : ''
+        });
+      }
+    }
+    downloadCSV('pride-in-place-map-full.csv', headers, rows);
+  } else {
+    await loadMetric(APP.mapMetric);
+    const headers = ['msoa_code','neighbourhood','la_name', colName];
+    const pctMap  = APP.data.get(APP.mapMetric) || new Map();
+    const rows    = [];
+    for (const msoaCode of APP.pipMSOAs.keys()) {
+      const pip = APP.pipMSOAs.get(msoaCode);
+      const geo = APP.geo.lookup.get(msoaCode) || {};
+      const pct = pctMap.get(msoaCode);
+      rows.push({
+        msoa_code:     msoaCode,
+        neighbourhood: pip ? pip.neighbourhood : (geo.msoaName || ''),
+        la_name:       geo.laName || '',
+        [colName]:     pct != null ? pct : ''
+      });
+    }
+    downloadCSV('pride-in-place-map-full.csv', headers, rows);
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────────────
 async function init() {
   const logoEl = document.getElementById('header-logo');
@@ -1124,6 +1274,12 @@ async function init() {
     renderCompareSlots();
     renderCompareCharts();
   });
+
+  // Download buttons
+  document.getElementById('table-dl-filtered').addEventListener('click', downloadTableFiltered);
+  document.getElementById('table-dl-full').addEventListener('click',     downloadTableFull);
+  document.getElementById('map-dl-filtered').addEventListener('click',   downloadMapFiltered);
+  document.getElementById('map-dl-full').addEventListener('click',       downloadMapFull);
 }
 
 document.addEventListener('DOMContentLoaded', init);
