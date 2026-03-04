@@ -113,7 +113,7 @@ h3 { font-size: 0.95rem; }
 .spinner { width: 18px; height: 18px; border: 2px solid var(--ltgrey); border-top-color: var(--teal); border-radius: 50%; animation: spin .65s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 #map-legend { display: none; align-items: center; gap: 8px; margin-top: 8px; font-size: .76rem; color: var(--slate); }
-.legend-grad { width: 160px; height: 9px; border-radius: 5px; flex-shrink: 0; background: linear-gradient(to right,#d73027,#f7f7f7,#1a9850); }
+.legend-grad { width: 160px; height: 9px; border-radius: 5px; flex-shrink: 0; background: linear-gradient(to right,#d73027,#f7e500,#1a9850); }
 
 /* LSOA DETAIL PANEL */
 #lsoa-detail { display: none; margin-top: 12px; border: 1px solid var(--ltgrey); border-radius: 6px; padding: 14px; background: var(--white); }
@@ -343,7 +343,7 @@ function lerpColor(h1, h2, t) {
 function getColor(pct) {
   if (pct == null || isNaN(pct)) return '#f7f7f7';
   const t = pct / 100;
-  return t <= 0.5 ? lerpColor('#d73027','#f7f7f7', t*2) : lerpColor('#f7f7f7','#1a9850',(t-0.5)*2);
+  return t <= 0.5 ? lerpColor('#d73027','#f7e500', t*2) : lerpColor('#f7e500','#1a9850',(t-0.5)*2);
 }
 
 function ordinal(n) {
@@ -1087,7 +1087,7 @@ function drawBarChart(elId, data, metricId, nationalMedian) {
       .attr('font-size','12').attr('fill','#4A4A4A').text(lbl);
 
     g.append('rect').attr('x',0).attr('y',y).attr('width',innerW).attr('height',barH)
-      .attr('fill','#f7f7f7').attr('rx',3);
+      .attr('fill','#e5e7eb').attr('rx',3);
 
     if (val != null) {
       g.append('rect').attr('x',0).attr('y',y).attr('width',x(val)).attr('height',barH)
