@@ -332,6 +332,18 @@ function pctNarrative(pct) {
 function spinHTML(msg) { return '<div class="loading-msg"><div class="spinner"></div>'+msg+'</div>'; }
 function errHTML(msg)  { return '<div class="error-msg">&#9888; '+msg+'</div>'; }
 
+// Decode HTML entities in CSV strings (e.g. &amp; → &)
+function decodeHTML(str) {
+  if (!str) return '';
+  const ta = document.createElement('textarea');
+  ta.innerHTML = str;
+  return ta.value;
+}
+// Safely escape text for insertion into innerHTML
+function escapeHTML(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function typologyClass(t) {
   if (!t) return 'typology-unk';
   const lc = t.toLowerCase();
@@ -435,8 +447,8 @@ async function loadLSOAData() {
     const code = String(r['lsoa_code']||'').trim();
     if (!code) return;
     APP.lsoaData.set(code, {
-      name:     r['lsoa_name'] || code,
-      laName:   r['la_name']   || '',
+      name:     decodeHTML(r['lsoa_name'] || code),
+      laName:   decodeHTML(r['la_name']   || ''),
       typology: r['neighbourhood_typology'] || '',
       pcts:     {}
     });
@@ -471,7 +483,7 @@ async function loadGeoLookup() {
     if (!msoa || !la) return;
 
     if (!APP.geo.lookup.has(msoa)) {
-      APP.geo.lookup.set(msoa, { laCode: la, laName: r['LAD22NM'], regionCode: r['RGN22CD'], regionName: r['RGN22NM'], msoaName: r['MSOA21NM'] });
+      APP.geo.lookup.set(msoa, { laCode: la, laName: decodeHTML(r['LAD22NM']), regionCode: r['RGN22CD'], regionName: decodeHTML(r['RGN22NM']), msoaName: decodeHTML(r['MSOA21NM']) });
     }
     // Build MSOA → LSOA index
     if (lsoa) {
@@ -486,8 +498,8 @@ async function loadPiP() {
   results.data.forEach(r => {
     const code = String(r['MSOA code']||'').trim();
     if (code) APP.pipMSOAs.set(code, {
-      neighbourhood: r['Pride in Place Programme Neighbourhood']||'',
-      la: r['Local Authority']||''
+      neighbourhood: decodeHTML(r['Pride in Place Programme Neighbourhood']||''),
+      la: decodeHTML(r['Local Authority']||'')
     });
   });
 }
@@ -576,10 +588,10 @@ async function renderOverview(msoaCode) {
   }
 
   heading.innerHTML =
-    '<h2>'+name+'</h2>'
-    +'<span class="region-tag">'+(geo?geo.regionName:'')+'</span>'
-    +'<span class="msoa-tag">'+(geo?geo.laName:'')+'</span>'
-    +(geo ? '<span class="msoa-tag" title="MSOA code">'+geo.msoaName+'</span>' : '')
+    '<h2>'+escapeHTML(name)+'</h2>'
+    +'<span class="region-tag">'+escapeHTML(geo?geo.regionName:'')+'</span>'
+    +'<span class="msoa-tag">'+escapeHTML(geo?geo.laName:'')+'</span>'
+    +(geo ? '<span class="msoa-tag" title="MSOA code">'+escapeHTML(geo.msoaName)+'</span>' : '')
     +typologyHTML;
 
   // Scorecards — load MSOA-level metrics for the single selected MSOA
@@ -757,8 +769,8 @@ function renderLSOADetail(lsoaCode) {
   panel.innerHTML =
     '<div class="lsoa-det-head">'
     +'<div>'
-    +'<div class="lsoa-det-name">'+d.name+'</div>'
-    +'<div class="lsoa-det-sub">'+d.laName+' &middot; LSOA: '+lsoaCode+'</div>'
+    +'<div class="lsoa-det-name">'+escapeHTML(d.name)+'</div>'
+    +'<div class="lsoa-det-sub">'+escapeHTML(d.laName)+' &middot; LSOA: '+lsoaCode+'</div>'
     +'</div>'
     +'<div style="display:flex;gap:8px;align-items:center">'
     +(d.typology ? '<span class="typology-badge '+typCls+'">'+d.typology+'</span>' : '')
@@ -835,7 +847,7 @@ function buildTable(msoaCode, container) {
 
   const bodyRows = rows.map(row => {
     const cells = cols.map(c => {
-      if (c.id === 'name')     return '<td>'+row.name+'</td>';
+      if (c.id === 'name')     return '<td>'+escapeHTML(row.name)+'</td>';
       if (c.id === 'typology') {
         const cls = typologyClass(row.typology);
         return '<td>'+(row.typology ? '<span class="typology-badge '+cls+'">'+row.typology+'</span>' : '')+'</td>';
@@ -890,7 +902,7 @@ function renderCompareSlots() {
   container.innerHTML = APP.compareMSOAs.map(code => {
     const pip = APP.pipMSOAs.get(code);
     const lbl = pip && pip.neighbourhood ? pip.neighbourhood : code;
-    return '<div class="compare-slot">'+lbl
+    return '<div class="compare-slot">'+escapeHTML(lbl)
       +'<button class="compare-slot-remove" data-code="'+code+'" title="Remove">\u00d7</button>'
       +'</div>';
   }).join('');
