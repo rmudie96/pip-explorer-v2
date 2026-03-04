@@ -73,9 +73,9 @@ h3 { font-size: 0.95rem; }
 .typology-unk { background: var(--ltgrey);color: var(--midgrey); }
 
 /* SCORECARDS */
-#scorecards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+#scorecards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; align-items: stretch; }
 @media(max-width:860px){ #scorecards { grid-template-columns: 1fr; } }
-.scorecard { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; }
+.scorecard { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
 .sc-head { background: var(--navy); color: var(--white); padding: 9px 13px; display: flex; justify-content: space-between; align-items: center; }
 .sc-head-title  { font-size: .78rem; font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
 .sc-head-domain { font-size: .68rem; opacity: .65; }
