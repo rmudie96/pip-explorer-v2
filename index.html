@@ -6,6 +6,9 @@
 <title>Pride in Place Data Explorer</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --navy:    #002B5C;
@@ -18,12 +21,12 @@
   --ltgrey:  #E7E6E6;
   --plum:    #4D293B;
   --white:   #FFFFFF;
-  --font:    'Abadi MT', 'Abadi', 'Century Gothic', sans-serif;
+  --font:    'Inter', sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 14px; }
 body { font-family: var(--font); font-weight: 300; color: var(--midgrey); background: var(--ltgrey); line-height: 1.5; }
-h1, h2, h3, h4 { font-weight: 400; color: var(--navy); }
+h1, h2, h3, h4 { font-weight: 600; color: var(--navy); }
 h1 { font-size: 1.4rem; }
 h2 { font-size: 1.15rem; }
 h3 { font-size: 0.95rem; }
@@ -38,7 +41,7 @@ h3 { font-size: 0.95rem; }
 
 /* TABS */
 #tab-bar { background: var(--navy); display: flex; border-top: 1px solid rgba(255,255,255,0.12); }
-.tab-btn { padding: 11px 22px; background: none; border: none; border-bottom: 3px solid transparent; color: var(--blue-lt); font-family: var(--font); font-size: 0.88rem; font-weight: 300; cursor: pointer; transition: color .15s, border-color .15s; white-space: nowrap; }
+.tab-btn { padding: 11px 22px; background: none; border: none; border-bottom: 3px solid transparent; color: var(--blue-lt); font-family: var(--font); font-size: 0.88rem; font-weight: 400; cursor: pointer; transition: color .15s, border-color .15s; white-space: nowrap; }
 .tab-btn:hover  { color: var(--white); }
 .tab-btn.active { color: var(--white); border-bottom-color: var(--teal); }
 
@@ -74,10 +77,10 @@ h3 { font-size: 0.95rem; }
 @media(max-width:860px){ #scorecards { grid-template-columns: 1fr; } }
 .scorecard { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
 .sc-head { background: var(--navy); color: var(--white); padding: 9px 13px; display: flex; justify-content: space-between; align-items: center; }
-.sc-head-title  { font-size: .78rem; font-weight: 400; text-transform: uppercase; letter-spacing: .05em; }
+.sc-head-title  { font-size: .78rem; font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
 .sc-head-domain { font-size: .68rem; opacity: .65; }
 .sc-body { padding: 13px; }
-.sc-pct { font-size: 2.1rem; font-weight: 400; line-height: 1; margin-bottom: 3px; }
+.sc-pct { font-size: 2.1rem; font-weight: 600; line-height: 1; margin-bottom: 3px; }
 .sc-pct sup { font-size: .95rem; }
 .sc-desc { font-size: .78rem; color: var(--slate); margin-bottom: 10px; line-height: 1.45; }
 
@@ -124,12 +127,12 @@ h3 { font-size: 0.95rem; }
 @media(max-width:700px){ .lsoa-metrics-grid { grid-template-columns: 1fr 1fr; } }
 .lsoa-metric { padding: 8px; background: #fafafa; border-radius: 4px; border: 1px solid var(--ltgrey); }
 .lsoa-metric-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; color: var(--slate); margin-bottom: 3px; }
-.lsoa-metric-pct   { font-size: 1.05rem; font-weight: 400; margin-bottom: 4px; }
+.lsoa-metric-pct   { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
 
 /* TABLE */
 #table-container { overflow-x: auto; }
 #msoa-table { width: 100%; border-collapse: collapse; font-size: .8rem; }
-#msoa-table th { background: var(--navy); color: var(--white); padding: 8px 11px; text-align: left; font-weight: 400; font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; user-select: none; white-space: nowrap; }
+#msoa-table th { background: var(--navy); color: var(--white); padding: 8px 11px; text-align: left; font-weight: 500; font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; user-select: none; white-space: nowrap; }
 #msoa-table th:hover { background: #003876; }
 #msoa-table th.sort-asc::after  { content: ' \25B2'; }
 #msoa-table th.sort-desc::after { content: ' \25BC'; }
@@ -738,7 +741,7 @@ async function renderMap(msoaCode) {
         const typ    = lsoa ? lsoa.typology : '';
 
         layer.bindTooltip(
-          '<div style="font-family:\'Abadi MT\',\'Century Gothic\',sans-serif">'
+          '<div style="font-family:\'Inter\',sans-serif">'
           +'<div style="font-weight:400;color:#002B5C;margin-bottom:3px">'+name+'</div>'
           +(typ ? '<div style="font-size:0.77em;color:#4A4A4A;margin-bottom:3px">'+typ+'</div>' : '')
           +'<div style="font-size:0.85em;color:#4A4A4A">'+metricLabel+': <span style="color:'+getColor(pct)+';font-weight:400">'+(pct!=null?Math.round(pct)+'th pct':'N/A')+'</span></div>'
@@ -1018,7 +1021,7 @@ function drawBarChart(elId, data, metricId, nationalMedian) {
     const lbl = row.name.length > 23 ? row.name.slice(0,21)+'\u2026' : row.name;
 
     g.append('text').attr('x',-8).attr('y',y+barH/2+4.5)
-      .attr('text-anchor','end').attr('font-family',"'Abadi MT','Century Gothic',sans-serif")
+      .attr('text-anchor','end').attr('font-family',"'Inter',sans-serif")
       .attr('font-size','12').attr('fill','#4A4A4A').text(lbl);
 
     g.append('rect').attr('x',0).attr('y',y).attr('width',innerW).attr('height',barH)
@@ -1028,7 +1031,7 @@ function drawBarChart(elId, data, metricId, nationalMedian) {
       g.append('rect').attr('x',0).attr('y',y).attr('width',x(val)).attr('height',barH)
         .attr('fill',clr).attr('rx',3).attr('opacity',0.85);
       g.append('text').attr('x',x(val)+5).attr('y',y+barH/2+4.5)
-        .attr('font-family',"'Abadi MT','Century Gothic',sans-serif")
+        .attr('font-family',"'Inter',sans-serif")
         .attr('font-size','11').attr('fill','#002B5C').text(Math.round(val)+'%ile');
     }
   });
@@ -1038,7 +1041,7 @@ function drawBarChart(elId, data, metricId, nationalMedian) {
     g.append('line').attr('x1',mx).attr('x2',mx).attr('y1',-4).attr('y2',innerH+4)
       .attr('stroke','#44546A').attr('stroke-width',1.5).attr('stroke-dasharray','4,3');
     g.append('text').attr('x',mx).attr('y',-7).attr('text-anchor','middle')
-      .attr('font-family',"'Abadi MT','Century Gothic',sans-serif")
+      .attr('font-family',"'Inter',sans-serif")
       .attr('font-size','9.5').attr('fill','#44546A')
       .text('Nat. median ('+Math.round(nationalMedian)+'%)');
   }
@@ -1046,7 +1049,7 @@ function drawBarChart(elId, data, metricId, nationalMedian) {
   g.append('g').attr('transform','translate(0,'+(innerH+2)+')')
     .call(d3.axisBottom(x).ticks(5).tickFormat(d=>d+'%'))
     .call(a => a.select('.domain').attr('stroke','#E7E6E6'))
-    .call(a => a.selectAll('text').attr('font-family',"'Abadi MT','Century Gothic',sans-serif").attr('font-size','10').attr('fill','#6E7BA2'));
+    .call(a => a.selectAll('text').attr('font-family',"'Inter',sans-serif").attr('font-size','10').attr('fill','#6E7BA2'));
 }
 
 // ── TAB SWITCHING ─────────────────────────────────────────────────
