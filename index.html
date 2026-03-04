@@ -936,21 +936,13 @@ async function renderCompareCharts() {
       return row;
     });
 
-    // National medians from full loaded distributions
-    const natMedians = {};
-    HEADLINE_IDS.forEach(id => {
-      const vals = [...(APP.data.get(id)||new Map()).values()].filter(v=>v!=null&&!isNaN(v));
-      vals.sort((a,b)=>a-b);
-      natMedians[id] = vals.length ? vals[Math.floor(vals.length/2)] : 50;
-    });
-
     container.innerHTML = '';
     HEADLINE_IDS.forEach(id => {
       const block = document.createElement('div');
       block.className = 'cmp-block';
       block.innerHTML = '<div class="cmp-block-title">'+METRICS[id].label+'</div><div id="cmp-'+id+'"></div>';
       container.appendChild(block);
-      drawBarChart('cmp-'+id, msoaData, id, natMedians[id]);
+      drawBarChart('cmp-'+id, msoaData, id, null); // no median line for composite indexes
     });
   } catch(e) {
     container.innerHTML = errHTML(e.message);
