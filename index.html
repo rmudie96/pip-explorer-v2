@@ -101,6 +101,7 @@ h3 { font-size: 0.95rem; }
 .sub-bar-wrap { flex: 1; height: 5px; background: var(--ltgrey); border-radius: 3px; overflow: hidden; }
 .sub-bar-fill { height: 100%; border-radius: 3px; }
 .sub-pct { font-size: .75rem; color: var(--slate); width: 34px; text-align: right; flex-shrink: 0; }
+.sc-info { padding: 11px 13px; background: var(--blue-xs); border-top: 1px solid rgba(0,43,92,.1); font-size: .76rem; color: var(--slate); line-height: 1.55; }
 
 /* MAP */
 #map-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -304,6 +305,12 @@ const METRICS = {
   hlnm_crime: { id:'hlnm_crime', label:'Crime Need', shortLabel:'Crime', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Crime', direction:'lower_is_worse', description:'Crime rank within HLNM. Lower rank = worse.' },
   hlnm_opportunity: { id:'hlnm_opportunity', label:'Opportunity Need', shortLabel:'Opportunity', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Opportunity', direction:'higher_is_worse', description:'Economic opportunity need. Higher score = greater need.' },
   hlnm_health: { id:'hlnm_health', label:'Health Need', shortLabel:'Health', type:'subdomain', parentIndex:'hlnm', domain:'Hyper-Local Need', file:'HLNM_MSOA_csv.csv', codeColumn:'Area Code', valueColumn:'Health', direction:'higher_is_worse', description:'Health need indicators. Higher score = greater need.' }
+};
+
+const METRIC_DESCRIPTIONS = {
+  imd:  'The Indices of Multiple Deprivation (IMD) is England\u2019s official measure of relative deprivation, ranking every neighbourhood (LSOA) from most to least deprived across seven domains: income, employment, education, health, crime, barriers to housing, and living environment. It is produced by the Ministry of Housing, Communities and Local Government and is the most widely used tool for targeting resources and informing policy at a local level.',
+  cni:  'The Community Needs Index (CNI) is a measure of social infrastructure and social capital, capturing the absence of civic assets, community engagement, and connectedness that can compound the effects of economic deprivation. Developed by OCSI in partnership with Local Trust, it covers three domains \u2014 Civic Assets, Connectedness, and Active and Engaged Community \u2014 and has been used to identify \u201cleft behind\u201d neighbourhoods experiencing a double disadvantage of high deprivation and weak social conditions.',
+  hlnm: 'The Hyper-Local Need Measure (HLNM) is ICON\u2019s own measure of neighbourhood disadvantage, developed with OCSI to assess socio-economic challenges at LSOA level across five domains aligned to the government\u2019s national missions: growth, energy, crime, opportunity, and health. It identifies the neighbourhoods where the need for policy intervention is most acute.'
 };
 
 const HEADLINE_IDS = ['imd','cni','hlnm'];
@@ -814,7 +821,8 @@ function buildScorecard(metricId, msoaCode) {
     +'<div class="sc-desc">'+(pct!=null?pctNarrative(pct):'Data not available')+'</div>'
     +'<div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:'+(pDisp||0)+'%;background:'+col+'"></div></div>'
     +'<div class="subdomains open" id="subs-'+metricId+'">'+spinHTML('Loading\u2026')+'</div>'
-    +'</div>';
+    +'</div>'
+    +(METRIC_DESCRIPTIONS[metricId] ? '<div class="sc-info">'+METRIC_DESCRIPTIONS[metricId]+'</div>' : '');
 
   expandSubdomains(metricId, msoaCode, card.querySelector('.subdomains'));
   return card;
