@@ -143,6 +143,10 @@ h3 { font-size: 0.95rem; }
 .pct-cell-fill { height: 100%; border-radius: 3px; }
 .pct-rank { font-size: .68rem; color: var(--slate); white-space: nowrap; margin-top: 2px; line-height: 1.2; }
 .pct-rank-hint { font-size: .6rem; color: var(--slate); opacity: .65; white-space: nowrap; margin-top: 1px; line-height: 1.2; }
+#msoa-table th.col-group-hdr { text-align: center; border-bottom: 2px solid rgba(255,255,255,.22); cursor: default; letter-spacing: .06em; }
+#msoa-table th.col-group-hdr:hover { background: var(--navy); }
+#msoa-table th.col-group-start { border-left: 2px solid rgba(255,255,255,.3); }
+#msoa-table td.col-group-start { border-left: 2px solid #d4d9e2; }
 
 /* COMPARE */
 #compare-la-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
@@ -957,7 +961,7 @@ async function renderTable(msoaCode) {
   const container = document.getElementById('table-container');
   container.innerHTML = spinHTML('Loading LSOA data\u2026');
   try {
-    await Promise.all([loadLSOAData(), loadCNILSOAData()]);
+    await Promise.all([loadLSOAData(), loadIMDLSOAData(), loadCNILSOAData()]);
     buildTable(msoaCode, container);
   } catch(e) {
     container.innerHTML = errHTML(e.message);
@@ -973,37 +977,59 @@ function buildTable(msoaCode, container) {
 
   const { col: sortCol, dir: sortDir } = APP.sortState;
 
-  // Column definitions  (source:'pcts' = d.pcts map; source:'lsoaPcts' = APP.lsoaPcts)
-  const cols = [
-    { id:'name',               label:'LSOA Name',       lsoa:false },
-    { id:'typology',           label:'Typology',         lsoa:false },
-    { id:'hlnm25_overall',     label: LSOA_METRICS.hlnm25_overall.shortLabel,        lsoa:true, source:'pcts'     },
-    { id:'hlnm25_growth',      label: LSOA_METRICS.hlnm25_growth.shortLabel,         lsoa:true, source:'pcts'     },
-    { id:'hlnm25_energy',      label: LSOA_METRICS.hlnm25_energy.shortLabel,         lsoa:true, source:'pcts'     },
-    { id:'hlnm25_crime',       label: LSOA_METRICS.hlnm25_crime.shortLabel,          lsoa:true, source:'pcts'     },
-    { id:'hlnm25_opportunity', label: LSOA_METRICS.hlnm25_opportunity.shortLabel,    lsoa:true, source:'pcts'     },
-    { id:'hlnm25_health',      label: LSOA_METRICS.hlnm25_health.shortLabel,         lsoa:true, source:'pcts'     },
-    { id:'cni_lsoa_overall',   label: CNI_LSOA_METRICS.cni_lsoa_overall.shortLabel,  lsoa:true, source:'lsoaPcts' },
-    { id:'cni_lsoa_active',    label: CNI_LSOA_METRICS.cni_lsoa_active.shortLabel,   lsoa:true, source:'lsoaPcts' },
-    { id:'cni_lsoa_civic',     label: CNI_LSOA_METRICS.cni_lsoa_civic.shortLabel,    lsoa:true, source:'lsoaPcts' },
-    { id:'cni_lsoa_connect',   label: CNI_LSOA_METRICS.cni_lsoa_connect.shortLabel,  lsoa:true, source:'lsoaPcts' }
+  // ── Column groups ─────────────────────────────────────────────────────────
+  const GROUPS = [
+    {
+      label: 'Hyper-Local Need Measure',
+      cols: [
+        { id:'hlnm25_overall',     label: LSOA_METRICS.hlnm25_overall.shortLabel,        source:'pcts'     },
+        { id:'hlnm25_growth',      label: LSOA_METRICS.hlnm25_growth.shortLabel,         source:'pcts'     },
+        { id:'hlnm25_energy',      label: LSOA_METRICS.hlnm25_energy.shortLabel,         source:'pcts'     },
+        { id:'hlnm25_crime',       label: LSOA_METRICS.hlnm25_crime.shortLabel,          source:'pcts'     },
+        { id:'hlnm25_opportunity', label: LSOA_METRICS.hlnm25_opportunity.shortLabel,    source:'pcts'     },
+        { id:'hlnm25_health',      label: LSOA_METRICS.hlnm25_health.shortLabel,         source:'pcts'     }
+      ]
+    },
+    {
+      label: 'Index of Multiple Deprivation (LSOA)',
+      cols: [
+        { id:'imd_lsoa_overall',    label: IMD_LSOA_METRICS.imd_lsoa_overall.shortLabel,    source:'lsoaPcts' },
+        { id:'imd_lsoa_income',     label: IMD_LSOA_METRICS.imd_lsoa_income.shortLabel,     source:'lsoaPcts' },
+        { id:'imd_lsoa_employment', label: IMD_LSOA_METRICS.imd_lsoa_employment.shortLabel, source:'lsoaPcts' },
+        { id:'imd_lsoa_education',  label: IMD_LSOA_METRICS.imd_lsoa_education.shortLabel,  source:'lsoaPcts' },
+        { id:'imd_lsoa_health',     label: IMD_LSOA_METRICS.imd_lsoa_health.shortLabel,     source:'lsoaPcts' },
+        { id:'imd_lsoa_crime',      label: IMD_LSOA_METRICS.imd_lsoa_crime.shortLabel,      source:'lsoaPcts' },
+        { id:'imd_lsoa_barriers',   label: IMD_LSOA_METRICS.imd_lsoa_barriers.shortLabel,   source:'lsoaPcts' },
+        { id:'imd_lsoa_living_env', label: IMD_LSOA_METRICS.imd_lsoa_living_env.shortLabel, source:'lsoaPcts' }
+      ]
+    },
+    {
+      label: 'Community Needs Index (LSOA)',
+      cols: [
+        { id:'cni_lsoa_overall',  label: CNI_LSOA_METRICS.cni_lsoa_overall.shortLabel,  source:'lsoaPcts' },
+        { id:'cni_lsoa_active',   label: CNI_LSOA_METRICS.cni_lsoa_active.shortLabel,   source:'lsoaPcts' },
+        { id:'cni_lsoa_civic',    label: CNI_LSOA_METRICS.cni_lsoa_civic.shortLabel,    source:'lsoaPcts' },
+        { id:'cni_lsoa_connect',  label: CNI_LSOA_METRICS.cni_lsoa_connect.shortLabel,  source:'lsoaPcts' }
+      ]
+    }
   ];
+  // Mark first col of each group for visual separator
+  GROUPS.forEach(g => { g.cols[0].groupStart = true; });
+  const metricCols = GROUPS.flatMap(g => g.cols);
 
-  // Build data rows
+  // ── Build data rows ───────────────────────────────────────────────────────
   let rows = lsoaCodes.map(code => {
     const d = APP.lsoaData.get(code) || {};
     const row = { code, name: d.name || code, typology: d.typology || '' };
-    cols.filter(c => c.lsoa).forEach(c => {
-      if (c.source === 'lsoaPcts') {
-        row[c.id] = (APP.lsoaPcts.get(c.id) || new Map()).get(code) ?? null;
-      } else {
-        row[c.id] = d.pcts ? (d.pcts[c.id] ?? null) : null;
-      }
+    metricCols.forEach(c => {
+      row[c.id] = c.source === 'lsoaPcts'
+        ? (APP.lsoaPcts.get(c.id) || new Map()).get(code) ?? null
+        : (d.pcts ? (d.pcts[c.id] ?? null) : null);
     });
     return row;
   });
 
-  // Sort
+  // ── Sort ──────────────────────────────────────────────────────────────────
   rows.sort((a,b) => {
     let av = a[sortCol], bv = b[sortCol];
     if (sortCol === 'name' || sortCol === 'typology') { av = String(av||''); bv = String(bv||''); }
@@ -1012,32 +1038,42 @@ function buildTable(msoaCode, container) {
     return sortDir === 'asc' ? cmp : -cmp;
   });
 
-  const headers = cols.map(c => {
-    const cls = sortCol===c.id ? 'sort-'+sortDir : '';
-    return '<th class="'+cls+'" data-col="'+c.id+'">'+c.label+'</th>';
-  }).join('');
+  // ── Build header (two rows: group labels + individual sort columns) ────────
+  const sc = id => sortCol === id ? ' sort-'+sortDir : '';
+  const groupRow =
+    '<th rowspan="2" data-col="name"     class="'+sc('name')+'">LSOA Name</th>'
+   +'<th rowspan="2" data-col="typology" class="'+sc('typology')+'">Typology</th>'
+   +GROUPS.map(g => '<th colspan="'+g.cols.length+'" class="col-group-hdr">'+g.label+'</th>').join('');
+  const colRow = metricCols.map(c =>
+    '<th data-col="'+c.id+'" class="'+sc(c.id)+(c.groupStart?' col-group-start':'')+'">'+c.label+'</th>'
+  ).join('');
+
+  // ── Build body ────────────────────────────────────────────────────────────
+  const pctCell = (v, groupStart) => {
+    const clr  = getColor(v);
+    const rank = v != null ? Math.max(1, Math.round((v / 100) * 33755)) : null;
+    return '<td'+(groupStart?' class="col-group-start"':'')+'>'
+      +'<div class="pct-cell"><div class="pct-cell-bar"><div class="pct-cell-fill" style="width:'+(v!=null?Math.round(v):0)+'%;background:'+clr+'"></div></div>'
+      +'<span>'+(v!=null?Math.round(v)+'%':'N/A')+'</span></div>'
+      +(rank!=null?'<div class="pct-rank">'+rank.toLocaleString('en-GB')+'\u202f/\u202f33,755 LSOAs</div><div class="pct-rank-hint">1\u2009=\u2009highest need</div>':'')
+      +'</td>';
+  };
 
   const bodyRows = rows.map(row => {
-    const cells = cols.map(c => {
-      if (c.id === 'name')     return '<td>'+escapeHTML(row.name)+'</td>';
-      if (c.id === 'typology') {
-        const cls = typologyClass(row.typology);
-        return '<td>'+(row.typology ? '<span class="typology-badge '+cls+'">'+row.typology+'</span>' : '')+'</td>';
-      }
-      const v    = row[c.id];
-      const col  = getColor(v);
-      const rank = v != null ? Math.max(1, Math.round((v / 100) * 33755)) : null;
-      return '<td>'
-        +'<div class="pct-cell"><div class="pct-cell-bar"><div class="pct-cell-fill" style="width:'+(v!=null?Math.round(v):0)+'%;background:'+col+'"></div></div><span>'+(v!=null?Math.round(v)+'%':'N/A')+'</span></div>'
-        +(rank!=null?'<div class="pct-rank">'+rank.toLocaleString('en-GB')+'\u202f/\u202f33,755 LSOAs</div><div class="pct-rank-hint">1\u2009=\u2009highest need</div>':'')
-        +'</td>';
-    }).join('');
-    return '<tr data-code="'+row.code+'">'+cells+'</tr>';
+    const nameTd   = '<td>'+escapeHTML(row.name)+'</td>';
+    const typTd    = '<td>'+(row.typology ? '<span class="typology-badge '+typologyClass(row.typology)+'">'+row.typology+'</span>' : '')+'</td>';
+    const metricTds = metricCols.map(c => pctCell(row[c.id], c.groupStart)).join('');
+    return '<tr data-code="'+row.code+'">'+nameTd+typTd+metricTds+'</tr>';
   }).join('');
 
-  container.innerHTML = '<table id="msoa-table"><thead><tr>'+headers+'</tr></thead><tbody>'+bodyRows+'</tbody></table>';
+  container.innerHTML =
+    '<table id="msoa-table">'
+   +'<thead><tr>'+groupRow+'</tr><tr>'+colRow+'</tr></thead>'
+   +'<tbody>'+bodyRows+'</tbody>'
+   +'</table>';
 
-  container.querySelectorAll('#msoa-table th').forEach(th => {
+  // Sort: only attach to th[data-col] — group headers are excluded
+  container.querySelectorAll('#msoa-table th[data-col]').forEach(th => {
     th.addEventListener('click', () => {
       const c = th.dataset.col;
       APP.sortState = { col:c, dir: APP.sortState.col===c && APP.sortState.dir==='asc' ? 'desc' : 'asc' };
@@ -1251,7 +1287,10 @@ function downloadCSV(filename, headers, rows) {
 const TABLE_CSV_HEADERS = [
   'lsoa_code','lsoa_name','typology','msoa_code','neighbourhood','la_name',
   'hlnm25_overall_pctile','hlnm25_growth_pctile','hlnm25_energy_pctile',
-  'hlnm25_crime_pctile','hlnm25_opportunity_pctile','hlnm25_health_pctile'
+  'hlnm25_crime_pctile','hlnm25_opportunity_pctile','hlnm25_health_pctile',
+  'imd_overall_pctile','imd_income_pctile','imd_employment_pctile','imd_education_pctile',
+  'imd_health_pctile','imd_crime_pctile','imd_barriers_pctile','imd_livingenv_pctile',
+  'cni_overall_pctile','cni_active_pctile','cni_civic_pctile','cni_connect_pctile'
 ];
 
 function buildLSOARow(lsoaCode, msoaCode) {
@@ -1259,6 +1298,7 @@ function buildLSOARow(lsoaCode, msoaCode) {
   const pip = APP.pipMSOAs.get(msoaCode);
   const geo = APP.geo.lookup.get(msoaCode) || {};
   const p   = d.pcts || {};
+  const lp  = id => { const m = APP.lsoaPcts.get(id); const v = m && m.get(lsoaCode); return v != null ? v : ''; };
   return {
     lsoa_code:                 lsoaCode,
     lsoa_name:                 d.name     || lsoaCode,
@@ -1271,7 +1311,19 @@ function buildLSOARow(lsoaCode, msoaCode) {
     hlnm25_energy_pctile:      p.hlnm25_energy      != null ? p.hlnm25_energy      : '',
     hlnm25_crime_pctile:       p.hlnm25_crime       != null ? p.hlnm25_crime       : '',
     hlnm25_opportunity_pctile: p.hlnm25_opportunity != null ? p.hlnm25_opportunity : '',
-    hlnm25_health_pctile:      p.hlnm25_health      != null ? p.hlnm25_health      : ''
+    hlnm25_health_pctile:      p.hlnm25_health      != null ? p.hlnm25_health      : '',
+    imd_overall_pctile:        lp('imd_lsoa_overall'),
+    imd_income_pctile:         lp('imd_lsoa_income'),
+    imd_employment_pctile:     lp('imd_lsoa_employment'),
+    imd_education_pctile:      lp('imd_lsoa_education'),
+    imd_health_pctile:         lp('imd_lsoa_health'),
+    imd_crime_pctile:          lp('imd_lsoa_crime'),
+    imd_barriers_pctile:       lp('imd_lsoa_barriers'),
+    imd_livingenv_pctile:      lp('imd_lsoa_living_env'),
+    cni_overall_pctile:        lp('cni_lsoa_overall'),
+    cni_active_pctile:         lp('cni_lsoa_active'),
+    cni_civic_pctile:          lp('cni_lsoa_civic'),
+    cni_connect_pctile:        lp('cni_lsoa_connect')
   };
 }
 
@@ -1283,7 +1335,7 @@ function downloadTableFiltered() {
 }
 
 async function downloadTableFull() {
-  await loadLSOAData();
+  await Promise.all([loadLSOAData(), loadIMDLSOAData(), loadCNILSOAData()]);
   const rows = [];
   for (const msoaCode of APP.pipMSOAs.keys()) {
     for (const lsoaCode of (APP.geo.msoaToLSOAs.get(msoaCode) || new Set())) {
