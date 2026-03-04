@@ -1017,7 +1017,7 @@ function drawBarChart(elId, data, metricId, nationalMedian) {
   data.forEach((row, i) => {
     const y   = i * (barH + gap);
     const val = row[metricId];
-    const clr = CMP_COLORS[i % CMP_COLORS.length];
+    const clr = getColor(val);
     const lbl = row.name.length > 23 ? row.name.slice(0,21)+'\u2026' : row.name;
 
     g.append('text').attr('x',-8).attr('y',y+barH/2+4.5)
