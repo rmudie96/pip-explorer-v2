@@ -362,6 +362,7 @@ function fetchCSV(filename) {
     Papa.parse(url, {
       download: true, header: true, skipEmptyLines: true,
       transformHeader: h => h.replace(/^\uFEFF/,'').trim(),
+      transform: value => typeof value === 'string' ? decodeHTML(value) : value,
       complete: r => resolve(r),
       error: e => reject(new Error('Failed to load '+filename+': '+e.message))
     });
@@ -525,21 +526,20 @@ function buildPiPList() {
 // ── PiP SEARCH (entry point) ──────────────────────────────────────
 function populatePiPSearch() {
   const sel = document.getElementById('pip-select');
-  sel.innerHTML = '<option value="">Search by neighbourhood or local authority\u2026</option>';
-  APP.geo.pipList.forEach(item => {
-    const opt    = document.createElement('option');
-    opt.value    = item.msoaCode;
-    opt.textContent = item.neighbourhood
-      ? item.neighbourhood + ' \u2014 ' + item.laName
-      : item.msoaName + ' \u2014 ' + item.laName;
-    sel.appendChild(opt);
-  });
+  sel.innerHTML = '';
   if (APP.pipChoices) APP.pipChoices.destroy();
   APP.pipChoices = new Choices(sel, {
     searchEnabled: true, itemSelectText: '', allowHTML: false,
+    placeholderValue: 'Search by neighbourhood or local authority\u2026',
     searchPlaceholderValue: 'Type neighbourhood or local authority\u2026',
     noResultsText: 'No Pride in Place areas found',
-    shouldSort: false
+    shouldSort: false,
+    choices: APP.geo.pipList.map(item => ({
+      value: item.msoaCode,
+      label: item.neighbourhood
+        ? item.neighbourhood + ' \u2014 ' + item.laName
+        : item.msoaName + ' \u2014 ' + item.laName
+    }))
   });
 }
 
