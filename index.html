@@ -163,6 +163,10 @@ h3 { font-size: 0.95rem; }
 .dl-btn-wrap { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 10px; flex-wrap: wrap; }
 .cmp-block { background: var(--white); border: 1px solid var(--ltgrey); border-radius: 6px; padding: 14px; }
 .cmp-block-title { font-size: .83rem; font-weight: 400; color: var(--navy); margin-bottom: 10px; }
+.cmp-section-divider { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.cmp-section-divider span { font-size: .75rem; font-weight: 500; color: var(--slate); text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+.cmp-section-divider::before,.cmp-section-divider::after { content: ''; flex: 1; height: 1px; background: var(--ltgrey); }
+.cmp-section-divider::before { display: none; }
 
 /* SHARED */
 .loading-msg { padding: 22px; display: flex; align-items: center; justify-content: center; gap: 9px; color: var(--slate); font-size: .87rem; }
@@ -312,9 +316,10 @@ const IMD_LSOA_METRICS = {
 
 // LSOA-level CNI metrics from cni_lsoa.csv (national percentiles pre-computed)
 const CNI_LSOA_METRICS = {
-  cni_lsoa_active:  { id:'cni_lsoa_active',  col:'active_engaged_pct', label:'Community Needs Index — Active & Engaged Community (LSOA)', shortLabel:'Active Community' },
-  cni_lsoa_civic:   { id:'cni_lsoa_civic',   col:'civic_assets_pct',  label:'Community Needs Index — Civic Assets (LSOA)',               shortLabel:'Civic Assets'    },
-  cni_lsoa_connect: { id:'cni_lsoa_connect', col:'connectedness_pct', label:'Community Needs Index — Connectedness (LSOA)',              shortLabel:'Connectedness'   }
+  cni_lsoa_overall: { id:'cni_lsoa_overall', col:'cni_overall_pct',   label:'Community Needs Index — Overall (LSOA)',                    shortLabel:'Overall Community Need' },
+  cni_lsoa_active:  { id:'cni_lsoa_active',  col:'active_engaged_pct', label:'Community Needs Index — Active & Engaged Community (LSOA)', shortLabel:'Active Community'       },
+  cni_lsoa_civic:   { id:'cni_lsoa_civic',   col:'civic_assets_pct',  label:'Community Needs Index — Civic Assets (LSOA)',               shortLabel:'Civic Assets'           },
+  cni_lsoa_connect: { id:'cni_lsoa_connect', col:'connectedness_pct', label:'Community Needs Index — Connectedness (LSOA)',              shortLabel:'Connectedness'          }
 };
 
 // ── STATE ─────────────────────────────────────────────────────────
@@ -978,6 +983,7 @@ function buildTable(msoaCode, container) {
     { id:'hlnm25_crime',       label: LSOA_METRICS.hlnm25_crime.shortLabel,          lsoa:true, source:'pcts'     },
     { id:'hlnm25_opportunity', label: LSOA_METRICS.hlnm25_opportunity.shortLabel,    lsoa:true, source:'pcts'     },
     { id:'hlnm25_health',      label: LSOA_METRICS.hlnm25_health.shortLabel,         lsoa:true, source:'pcts'     },
+    { id:'cni_lsoa_overall',   label: CNI_LSOA_METRICS.cni_lsoa_overall.shortLabel,  lsoa:true, source:'lsoaPcts' },
     { id:'cni_lsoa_active',    label: CNI_LSOA_METRICS.cni_lsoa_active.shortLabel,   lsoa:true, source:'lsoaPcts' },
     { id:'cni_lsoa_civic',     label: CNI_LSOA_METRICS.cni_lsoa_civic.shortLabel,    lsoa:true, source:'lsoaPcts' },
     { id:'cni_lsoa_connect',   label: CNI_LSOA_METRICS.cni_lsoa_connect.shortLabel,  lsoa:true, source:'lsoaPcts' }
@@ -1106,13 +1112,49 @@ async function renderCompareCharts() {
       return row;
     });
 
+    // Also load CNI LSOA data for the subdomain section
+    await loadCNILSOAData();
+
     container.innerHTML = '';
+
+    // ── Headline MSOA metrics ──────────────────────────────────────
     HEADLINE_IDS.forEach(id => {
       const block = document.createElement('div');
       block.className = 'cmp-block';
       block.innerHTML = '<div class="cmp-block-title">'+METRICS[id].label+'</div><div id="cmp-'+id+'"></div>';
       container.appendChild(block);
       drawBarChart('cmp-'+id, msoaData, id, null); // no median line for composite indexes
+    });
+
+    // ── CNI LSOA subdomains — mean percentile across neighbourhood LSOAs ──
+    const cniIds  = Object.keys(CNI_LSOA_METRICS);
+    const cniData = APP.compareMSOAs.map(code => {
+      const pip = APP.pipMSOAs.get(code);
+      const row = {
+        code,
+        name: pip && pip.neighbourhood ? pip.neighbourhood : (APP.geo.lookup.get(code)||{}).msoaName || code
+      };
+      const lsoaCodes = [...(APP.geo.msoaToLSOAs.get(code) || new Set())];
+      cniIds.forEach(id => {
+        const pctMap = APP.lsoaPcts.get(id) || new Map();
+        const vals   = lsoaCodes.map(lc => pctMap.get(lc)).filter(v => v != null);
+        row[id]      = vals.length ? Math.round(vals.reduce((s,v) => s+v, 0) / vals.length * 10) / 10 : null;
+      });
+      return row;
+    });
+
+    const divider = document.createElement('div');
+    divider.className = 'cmp-section-divider';
+    divider.innerHTML = '<span>Community Needs Index (LSOA \u2014 neighbourhood average)</span>';
+    container.appendChild(divider);
+
+    cniIds.forEach(id => {
+      const m     = CNI_LSOA_METRICS[id];
+      const block = document.createElement('div');
+      block.className = 'cmp-block';
+      block.innerHTML = '<div class="cmp-block-title">'+m.shortLabel+'</div><div id="cmp-'+id+'"></div>';
+      container.appendChild(block);
+      drawBarChart('cmp-'+id, cniData, id, null);
     });
   } catch(e) {
     container.innerHTML = errHTML(e.message);
