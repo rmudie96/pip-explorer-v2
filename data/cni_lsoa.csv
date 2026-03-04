@@ -1,0 +1,745 @@
+lsoa_code,lsoa_name,msoa_code,active_engaged_pct,civic_assets_pct,connectedness_pct
+E01001051,New Addington North - Croydon 030A,E02000223,15.1,1.5,30.2
+E01001052,New Addington North - Croydon 030B,E02000223,2.9,1.2,56.3
+E01001054,New Addington North - Croydon 030C,E02000223,20.3,1.6,73.6
+E01001056,New Addington North - Croydon 030D,E02000223,11.7,1.4,49.6
+E01001057,New Addington North - Croydon 030E,E02000223,14.2,1.5,45.3
+E01002280,Harold Hill East - Havering 004A,E02000467,3.3,2.9,17.2
+E01002282,Harold Hill East - Havering 004B,E02000467,5.9,3.2,18.5
+E01002284,Harold Hill East - Havering 004C,E02000467,2.6,3.1,40.6
+E01002297,Harold Hill East - Havering 004D,E02000467,10.7,2.7,17.2
+E01002314,Harold Hill East - Havering 004E,E02000467,8.7,2.7,40.1
+E01002316,Harold Hill East - Havering 004F,E02000467,8.4,2.8,11.5
+E01004787,Breightmet North - Bolton 013A,E02000996,8.8,11.8,14.7
+E01004793,Breightmet North - Bolton 013B,E02000996,6.3,13.1,19.1
+E01004794,Breightmet North - Bolton 013C,E02000996,24.7,15.5,34.3
+E01004795,Breightmet North - Bolton 013D,E02000996,15.7,11.2,23.8
+E01004797,Breightmet North - Bolton 013E,E02000996,16.6,13.4,53.1
+E01004990,Radcliffe - Bury 016A,E02001034,9.4,23,61.9
+E01004996,Radcliffe - Bury 016B,E02001034,23.2,21.7,19.8
+E01005004,Radcliffe - Bury 016C,E02001034,31.1,23.4,1.9
+E01005008,Radcliffe - Bury 016D,E02001034,16.3,25.5,34.8
+E01005009,Radcliffe - Bury 016E,E02001034,36.8,25.3,29.7
+E01005087,Benchill South & Wythenshawe Central - Manchester 050A,E02001094,1.1,15.7,40.4
+E01005088,Benchill South & Wythenshawe Central - Manchester 050B,E02001094,1.3,15.8,25
+E01005090,Benchill South & Wythenshawe Central - Manchester 050C,E02001094,1.3,16.6,10
+E01005091,Benchill South & Wythenshawe Central - Manchester 050D,E02001094,2.1,17.6,39.3
+E01005093,Clayton Vale - Manchester 012A,E02001056,8.8,60.7,18
+E01005094,Clayton Vale - Manchester 012B,E02001056,10.9,60.1,19.8
+E01005097,Clayton Vale - Manchester 012C,E02001056,5.8,60.8,30.6
+E01005195,Gorton South - Manchester 023A,E02001067,8.2,50.2,32.6
+E01005197,Gorton South - Manchester 023C,E02001067,10.3,46.8,22.2
+E01005198,Gorton South - Manchester 023D,E02001067,3.4,48.7,23.5
+E01005201,Gorton South - Manchester 023E,E02001067,8.2,48.9,38
+E01005202,Hapurhey South & Monsall - Manchester 009A,E02001053,4.8,47,8
+E01005203,Hapurhey South & Monsall - Manchester 009B,E02001053,6.4,46.5,7.1
+E01005227,Hapurhey South & Monsall - Manchester 009D,E02001053,3.2,42.4,25.6
+E01005228,Hapurhey South & Monsall - Manchester 009E,E02001053,5.1,45.6,5.3
+E01005255,Clayton Vale - Manchester 012D,E02001056,4,55.8,3.9
+E01005261,Clayton Vale - Manchester 012E,E02001056,8.1,56.5,17.2
+E01005291,Benchill South & Wythenshawe Central - Manchester 050E,E02001094,5.6,13.3,4.9
+E01005383,Alt - Oldham 026A,E02001123,2.2,38.6,57.1
+E01005386,Alt - Oldham 026D,E02001123,5.7,35.2,15.6
+E01005578,Hurstead & Smallbridge - Rochdale 004A,E02001135,22.5,15.9,15.6
+E01005579,Hurstead & Smallbridge - Rochdale 004B,E02001135,13.3,17.6,42
+E01005586,Hurstead & Smallbridge - Rochdale 004C,E02001135,1,17.1,5.6
+E01005593,Hurstead & Smallbridge - Rochdale 004D,E02001135,12.6,19,64.2
+E01005595,Hurstead & Smallbridge - Rochdale 004E,E02001135,3.9,15.3,3.5
+E01005681,Pendleton - Salford 024C,E02001180,2.9,83.7,5.7
+E01005682,Pendleton - Salford 024D,E02001180,1.9,85.5,2.9
+E01005729,Peel Green - Salford 025A,E02001181,0.7,49.7,4.5
+E01005730,Peel Green - Salford 025B,E02001181,21.4,53.1,76.5
+E01005731,Peel Green - Salford 025C,E02001181,2.4,52.4,44.1
+E01005732,Peel Green - Salford 025D,E02001181,12.6,49.3,25.2
+E01005753,Brinnington - Stockport 004A,E02001190,0.3,28.7,11.8
+E01005754,Brinnington - Stockport 004B,E02001190,0,30.7,2.2
+E01005755,Brinnington - Stockport 004C,E02001190,0.2,29.7,13.6
+E01005756,Brinnington - Stockport 004D,E02001190,0.4,32.6,3
+E01006025,Hattersley - Tameside 027A,E02001255,3.5,1.5,33
+E01006027,Hattersley - Tameside 027B,E02001255,0.2,1.6,16.2
+E01006050,Hattersley - Tameside 027C,E02001255,4.3,1.3,19.5
+E01006052,Hattersley - Tameside 027D,E02001255,15.9,1.2,37.6
+E01006213,Platt Bridge & Spring View - Wigan 024A,E02001310,11.3,14.3,29
+E01006215,Platt Bridge & Spring View - Wigan 024B,E02001310,16.5,15.7,24.8
+E01006217,Platt Bridge & Spring View - Wigan 024C,E02001310,0.4,17.3,61
+E01006218,Platt Bridge & Spring View - Wigan 024D,E02001310,0.5,17.6,70.3
+E01006219,Platt Bridge & Spring View - Wigan 024E,E02001310,3.2,10.7,78.7
+E01006350,Laithwaite & Marsh Green - Wigan 010A,E02001296,0,60.3,9.4
+E01006351,Laithwaite & Marsh Green - Wigan 010B,E02001296,0.6,60.8,11.6
+E01006357,Laithwaite & Marsh Green - Wigan 010C,E02001296,2.4,61.2,9.6
+E01006360,Laithwaite & Marsh Green - Wigan 010D,E02001296,1.6,59.2,3.9
+E01006361,Laithwaite & Marsh Green - Wigan 010E,E02001296,0.7,59.7,13.8
+E01006453,Page Moss & Fincham - Knowsley 008A,E02001334,0.2,68.1,26.2
+E01006467,Page Moss & Fincham - Knowsley 008B,E02001334,0.1,70.2,18.7
+E01006470,Page Moss & Fincham - Knowsley 008E,E02001334,1,70.4,19.9
+E01006540,Everton East - Liverpool 024A,E02001370,2.1,97.2,10.3
+E01006563,Everton East - Liverpool 024B,E02001370,6.4,96.6,3.8
+E01006598,Norris Green East - Liverpool 010A,E02001356,3.2,38.6,14.8
+E01006599,Norris Green East - Liverpool 010B,E02001356,0.2,39.3,46.4
+E01006647,Everton East - Liverpool 024C,E02001370,4.5,97.5,18.9
+E01006672,Norris Green East - Liverpool 010E,E02001356,2.9,40.5,36.7
+E01006690,Fairfield West & Newsham Park - Liverpool 028A,E02001374,7.5,95.6,20.6
+E01006692,Fairfield West & Newsham Park - Liverpool 028B,E02001374,9.4,96.3,32.5
+E01006693,Everton East - Liverpool 024D,E02001370,6.1,96.6,6.6
+E01006695,Fairfield West & Newsham Park - Liverpool 028C,E02001374,6.7,95,17.7
+E01006753,Speke East - Liverpool 059A,E02001405,0.1,3.3,21.1
+E01006754,Speke East - Liverpool 059B,E02001405,0.5,2.7,13.9
+E01006755,Speke East - Liverpool 059C,E02001405,5.6,2.9,9.7
+E01006756,Speke East - Liverpool 059D,E02001405,0.7,3.1,22.5
+E01006757,Speke East - Liverpool 059E,E02001405,0.5,2.9,31.4
+E01006758,Speke East - Liverpool 059F,E02001405,2,2.9,21.9
+E01006759,Fairfield West & Newsham Park - Liverpool 028D,E02001374,11.9,93.2,62.2
+E01006760,Fairfield West & Newsham Park - Liverpool 028E,E02001374,13.7,94.2,13.8
+E01006845,Town Centre East & Fingerpost - St. Helens 014A,E02001419,21.6,94.3,47.5
+E01006870,Town Centre East & Fingerpost - St. Helens 014B,E02001419,13.5,93.1,29.9
+E01006872,Town Centre East & Fingerpost - St. Helens 014C,E02001419,11.4,93.3,5.7
+E01006873,Town Centre East & Fingerpost - St. Helens 014D,E02001419,4.6,93.4,11.4
+E01006874,Town Centre East & Fingerpost - St. Helens 014E,E02001419,3.2,93.1,7.8
+E01006967,Bootle South - Sefton 037A,E02001465,9.1,84.6,5
+E01007007,Bootle South - Sefton 037B,E02001465,7.7,81,3.3
+E01007008,Bootle South - Sefton 037C,E02001465,5.4,81.3,6.4
+E01007009,Bootle South - Sefton 037D,E02001465,8,84.5,3.2
+E01007010,Bootle South - Sefton 037E,E02001465,5,83.6,14.3
+E01007127,Birkenhead Central - Wirral 016B,E02001482,10.6,95.6,5.5
+E01007128,Birkenhead Central - Wirral 016C,E02001482,22.4,95.5,2.3
+E01007129,Birkenhead Central - Wirral 016D,E02001482,18.8,95.1,3.3
+E01007133,Birkenhead Central - Wirral 016E,E02001482,9,94.5,2.3
+E01007249,Woodchurch - Wirral 025A,E02001491,7.6,45.9,28.2
+E01007251,Woodchurch - Wirral 025B,E02001491,23,45.8,55.6
+E01007257,Woodchurch - Wirral 025C,E02001491,1.3,45.7,13.7
+E01007272,Seacombe - Wirral 008A,E02001474,23.3,74.5,19.8
+E01007273,Seacombe - Wirral 008B,E02001474,16.7,73,4.6
+E01007274,Seacombe - Wirral 008C,E02001474,12.7,73.3,2.7
+E01007277,Seacombe - Wirral 008D,E02001474,33.4,74,19.1
+E01007278,Seacombe - Wirral 008E,E02001474,25.9,73.7,19.7
+E01007303,Woodchurch - Wirral 025D,E02001491,6.4,47.1,7.3
+E01007304,Woodchurch - Wirral 025E,E02001491,10.3,48.7,17
+E01007536,Conisbrough North - Doncaster 032A,E02001570,43.9,79.3,36.9
+E01007542,Conisbrough North - Doncaster 032B,E02001570,10.6,80.7,7.6
+E01007543,Conisbrough North - Doncaster 032C,E02001570,15.4,75.4,2.1
+E01007544,Conisbrough North - Doncaster 032D,E02001570,11,77.4,1.3
+E01007571,Mexborough West - Doncaster 031A,E02001569,19.7,21.6,49.6
+E01007572,Mexborough West - Doncaster 031B,E02001569,8.4,18.6,60.4
+E01007573,Mexborough West - Doncaster 031C,E02001569,0.4,20.4,5.9
+E01007574,Mexborough West - Doncaster 031D,E02001569,17.3,20.8,12.2
+E01007576,Mexborough West - Doncaster 031E,E02001569,26.8,17.6,44.3
+E01007577,Mexborough West - Doncaster 031F,E02001569,5.9,18.8,4.5
+E01007590,New Rossington - Doncaster 037A,E02001575,25.3,5.7,48.1
+E01007592,New Rossington - Doncaster 037B,E02001575,13,6.8,26.5
+E01007593,New Rossington - Doncaster 037C,E02001575,13.1,7.3,49.8
+E01007595,New Rossington - Doncaster 037D,E02001575,10.7,6.3,24.7
+E01007597,New Rossington - Doncaster 037E,E02001575,1.4,6.4,14.4
+E01007757,Maltby East - Rotherham 020A,E02001597,15.4,6.8,43.3
+E01007758,Maltby East - Rotherham 020B,E02001597,16.5,6.9,24.8
+E01007759,Maltby East - Rotherham 020C,E02001597,15.9,6.2,15.8
+E01007760,Maltby East - Rotherham 020D,E02001597,15.6,7.3,15.8
+E01007763,Maltby East - Rotherham 020E,E02001597,25.7,7.3,13
+E01007764,Maltby East - Rotherham 020F,E02001597,7.1,9.1,7.9
+E01008081,Batemoor & Jordanthorpe - Sheffield 070A,E02001680,4.4,16.5,0.5
+E01008082,Batemoor & Jordanthorpe - Sheffield 070B,E02001680,8,19.5,0.5
+E01008083,Batemoor & Jordanthorpe - Sheffield 070C,E02001680,2.2,18.2,0.5
+E01008084,Batemoor & Jordanthorpe - Sheffield 070D,E02001680,4.7,19.4,0.5
+E01008085,Parson Cross - Sheffield 009A,E02001619,15.2,23.2,8.4
+E01008086,Parson Cross - Sheffield 009B,E02001619,11.6,26.5,17.5
+E01008116,Parson Cross - Sheffield 009C,E02001619,1.4,22.7,5.8
+E01008117,Parson Cross - Sheffield 009D,E02001619,2.2,26.7,3.1
+E01008118,Parson Cross - Sheffield 009E,E02001619,5.1,24.2,10.4
+E01008119,Parson Cross - Sheffield 009F,E02001619,7.2,26.4,8.4
+E01008125,Parson Cross - Sheffield 009G,E02001619,29.1,25.6,20.4
+E01008218,Beacon Lough & Wrekenton - Gateshead 021A,E02001702,10.7,41.3,3.4
+E01008220,Beacon Lough & Wrekenton - Gateshead 021B,E02001702,1.5,38.4,2.9
+E01008221,Beacon Lough & Wrekenton - Gateshead 021C,E02001702,23.6,44.2,18.2
+E01008225,Beacon Lough & Wrekenton - Gateshead 021D,E02001702,37.5,40.1,22.1
+E01008227,Beacon Lough & Wrekenton - Gateshead 021E,E02001702,6.7,42.8,5.6
+E01008331,Elswick - Newcastle upon Tyne 041A,E02007104,35.9,99.6,24.9
+E01008388,Walker North - Newcastle upon Tyne 028A,E02001735,2.3,83.1,1.2
+E01008389,Walker North - Newcastle upon Tyne 028B,E02001735,14.7,82.9,1.7
+E01008426,Walker North - Newcastle upon Tyne 028C,E02001735,11.9,82.3,1.5
+E01008429,Walker North - Newcastle upon Tyne 028D,E02001735,21.2,82.3,1.7
+E01008437,Elswick - Newcastle upon Tyne 041C,E02007104,26.3,99.6,1.2
+E01008438,Elswick - Newcastle upon Tyne 041B,E02007104,23.6,99.6,2.2
+E01008539,Percy Main - North Tyneside 027A,E02001764,31.8,94.5,44.8
+E01008540,Percy Main - North Tyneside 027B,E02001764,11.7,94.7,3.1
+E01008541,Percy Main - North Tyneside 027C,E02001764,26.9,94.1,2.2
+E01008544,Percy Main - North Tyneside 027D,E02001764,5.4,93.7,2.1
+E01008545,Percy Main - North Tyneside 027E,E02001764,10.5,93.1,1.1
+E01008593,Biddick Hill - South Tyneside 016A,E02001783,0.6,59,15.3
+E01008605,Biddick Hill - South Tyneside 016B,E02001783,5,55.8,32.1
+E01008606,Biddick Hill - South Tyneside 016C,E02001783,1.4,62.3,11.2
+E01008607,Biddick Hill - South Tyneside 016D,E02001783,0.3,59.4,11
+E01008609,Biddick Hill - South Tyneside 016E,E02001783,8,61.6,17.4
+E01008702,Hendon & Docks - Sunderland 016A,E02001806,38.9,93.6,1.1
+E01008735,Hendon & Docks - Sunderland 016B,E02001806,60.3,95.6,8.1
+E01008736,Hendon & Docks - Sunderland 016C,E02001806,30.5,92.4,2.3
+E01008737,Hendon & Docks - Sunderland 016D,E02001806,54.7,93.2,23.1
+E01008738,Hendon & Docks - Sunderland 016E,E02001806,37.5,92.1,9.4
+E01008823,Thorney Close & Plains Farm - Sunderland 023A,E02001813,10.7,22.4,8.8
+E01008824,Thorney Close & Plains Farm - Sunderland 023B,E02001813,7.3,22,15.3
+E01008825,Thorney Close & Plains Farm - Sunderland 023C,E02001813,31.2,23.3,15.9
+E01008826,Thorney Close & Plains Farm - Sunderland 023D,E02001813,19.7,21.6,28.3
+E01008827,Thorney Close & Plains Farm - Sunderland 023E,E02001813,4.6,19.3,13.1
+E01008828,Thorney Close & Plains Farm - Sunderland 023F,E02001813,5.8,21.4,18.2
+E01008829,Thorney Close & Plains Farm - Sunderland 023G,E02001813,7.5,21.6,4.2
+E01008836,Hendon & Docks - Sunderland 016F,E02001806,52.7,93.9,2.7
+E01008917,Woodgate - Birmingham 102A,E02001928,22.6,1,73
+E01008923,Woodgate - Birmingham 102B,E02001928,4.8,0.9,15.3
+E01008925,Woodgate - Birmingham 102C,E02001928,9.8,0.9,76.5
+E01008927,Woodgate - Birmingham 102D,E02001928,1.1,0.9,12.3
+E01008928,Woodgate - Birmingham 102E,E02001928,3.8,1,9.9
+E01008976,Druids Heath - Birmingham 121A,E02001947,19.8,24.3,24.1
+E01008978,Druids Heath - Birmingham 121B,E02001947,3.4,22.9,1.4
+E01008979,Druids Heath - Birmingham 121C,E02001947,12.6,25.7,6.4
+E01008980,Druids Heath - Birmingham 121D,E02001947,8.5,25.5,12.6
+E01009019,Fox Hollies - Birmingham 103A,E02001929,10.5,28.1,39
+E01009020,Fox Hollies - Birmingham 103B,E02001929,6,26,57.6
+E01009021,Fox Hollies - Birmingham 103C,E02001929,2.9,27.5,48.7
+E01009024,Fox Hollies - Birmingham 103D,E02001929,8.7,27.6,32.8
+E01009025,Fox Hollies - Birmingham 103E,E02001929,1.8,25.8,44.6
+E01009033,Fox Hollies - Birmingham 103F,E02001929,25.5,27,32.1
+E01009092,Glebe Farm - Birmingham 054A,E02001880,1,12.8,54.8
+E01009093,Glebe Farm - Birmingham 054B,E02001880,2.4,12.8,40.3
+E01009094,Glebe Farm - Birmingham 054C,E02001880,0.3,11.8,59.2
+E01009107,Hawkesley - Birmingham 128A,E02001954,4.7,3.9,16.1
+E01009110,Hawkesley - Birmingham 128B,E02001954,7.4,4.4,26.8
+E01009113,Hawkesley - Birmingham 128C,E02001954,3,4.2,8.6
+E01009114,Hawkesley - Birmingham 128D,E02001954,1.9,3.8,12.9
+E01009115,Hawkesley - Birmingham 128E,E02001954,8.3,4.2,19.5
+E01009127,Kingstanding South East - Birmingham 011A,E02001837,2.1,14.3,40.7
+E01009128,Kingstanding South East - Birmingham 011B,E02001837,5.9,13.4,38.7
+E01009130,Kingstanding South East - Birmingham 011C,E02001837,2.5,14,33.3
+E01009131,Kingstanding South East - Birmingham 011D,E02001837,1.6,12.4,55
+E01009133,Kingstanding South East - Birmingham 011E,E02001837,1.3,14.1,26.2
+E01009134,Kingstanding South East - Birmingham 011F,E02001837,7.1,13.4,20.8
+E01009137,Kingstanding South East - Birmingham 011G,E02001837,15.2,14,53.5
+E01009201,Nechells - Birmingham 043A,E02001869,11.8,89.6,33.1
+E01009202,Nechells - Birmingham 043B,E02001869,15.1,89.5,43
+E01009298,Glebe Farm - Birmingham 054D,E02001880,1.7,10.7,34.3
+E01009311,Glebe Farm - Birmingham 054E,E02001880,1.6,12,55.1
+E01009362,Sparkbrook North - Birmingham 071A,E02001897,11.8,93,12.4
+E01009363,Sparkbrook North - Birmingham 071B,E02001897,31.7,94.6,46.4
+E01009364,Sparkbrook North - Birmingham 071C,E02001897,9.1,94.1,15.3
+E01009365,Sparkbrook North - Birmingham 071D,E02001897,29.6,94.7,32.4
+E01009379,Sparkbrook North - Birmingham 071E,E02001897,31.9,94.9,9.7
+E01009511,Glebe Farm - Birmingham 054F,E02001880,1.7,10,32.9
+E01009539,Willenhall - Coventry 039A,E02001996,0.8,10.4,10.9
+E01009540,Willenhall - Coventry 039B,E02001996,8.7,11,36.9
+E01009541,Willenhall - Coventry 039C,E02001996,21,8.5,24.3
+E01009542,Willenhall - Coventry 039D,E02001996,6.3,10,21.2
+E01009962,Friar Park - Sandwell 004A,E02002046,1.7,40.4,48.6
+E01009963,Friar Park - Sandwell 004B,E02002046,0.8,40.5,53
+E01009964,Friar Park - Sandwell 004C,E02002046,0.1,43.1,51.7
+E01009965,Friar Park - Sandwell 004D,E02002046,0.1,39.6,73.7
+E01010111,Chelmsley Wood East - Solihull 008A,E02002088,18.1,9.2,36.4
+E01010126,Chelmsley Wood East - Solihull 008B,E02002088,1.7,10.4,40.1
+E01010127,Chelmsley Wood East - Solihull 008C,E02002088,1.4,12.3,84.6
+E01010128,Chelmsley Wood East - Solihull 008D,E02002088,3.6,10.7,64.3
+E01010130,Chelmsley Wood East - Solihull 008E,E02002088,13.2,11.3,37
+E01010131,Chelmsley Wood East - Solihull 008F,E02002088,5.6,8.3,27.2
+E01010277,Blakenall South - Walsall 013B,E02002122,31,58.6,48.6
+E01010283,Blakenall South - Walsall 013D,E02002122,3.1,61,42.2
+E01010482,Low Hill - Wolverhampton 007A,E02002155,1.3,51.3,53.6
+E01010483,Low Hill - Wolverhampton 007B,E02002155,3.6,54.2,36.2
+E01010484,Low Hill - Wolverhampton 007C,E02002155,2.8,52.2,53.2
+E01010485,Low Hill - Wolverhampton 007D,E02002155,1.5,59.9,45.1
+E01010612,Holme Wood - Bradford 052A,E02002234,1.4,27.7,3.5
+E01010649,Ravenscliffe - Bradford 027A,E02002209,6.6,73.4,22.6
+E01010650,Ravenscliffe - Bradford 027B,E02002209,14.6,76.9,15.6
+E01010654,Ravenscliffe - Bradford 027C,E02002209,18.2,75.4,10
+E01010819,Holme Wood - Bradford 052B,E02002234,9.7,28.2,2.4
+E01010820,Holme Wood - Bradford 052C,E02002234,2.5,28.1,4
+E01010821,Holme Wood - Bradford 052D,E02002234,0.3,31.5,19.1
+E01010822,Holme Wood - Bradford 052E,E02002234,3.5,26.8,7.4
+E01010826,Ravenscliffe - Bradford 027D,E02002209,2.6,73.5,14.7
+E01010914,Mixenden - Calderdale 002A,E02002245,15.1,30.9,61.1
+E01010924,Mixenden - Calderdale 002B,E02002245,3.4,23,3.5
+E01010925,Mixenden - Calderdale 002C,E02002245,6.3,30.5,26.6
+E01010926,Mixenden - Calderdale 002D,E02002245,1.1,23.3,20.1
+E01011284,Armley & New Wortley - Leeds 071A,E02002400,18,86.1,30.8
+E01011292,Armley & New Wortley - Leeds 071B,E02002400,18.8,84.6,4.2
+E01011293,Armley & New Wortley - Leeds 071C,E02002400,29.6,84.2,12.7
+E01011294,Armley & New Wortley - Leeds 071D,E02002400,33.4,83.7,10.5
+E01011363,Armley & New Wortley - Leeds 071E,E02002400,22.2,84.4,6.2
+E01011491,Middleton Park Avenue - Leeds 101A,E02002430,1,16.9,6.2
+E01011492,Middleton Park Avenue - Leeds 101B,E02002430,13.8,19.3,8.4
+E01011493,Middleton Park Avenue - Leeds 101C,E02002430,1.6,18.9,7.9
+E01011494,Middleton Park Avenue - Leeds 101D,E02002430,2.8,18.8,21.3
+E01011497,Middleton Park Avenue - Leeds 101E,E02002430,4.2,19.8,8.2
+E01011656,Seacroft North & Monkswood - Leeds 035A,E02002364,14.8,50.4,13.4
+E01011657,Seacroft North & Monkswood - Leeds 035B,E02002364,33.6,49.6,4.1
+E01011659,Seacroft North & Monkswood - Leeds 035C,E02002364,9.9,50,3.9
+E01011661,Seacroft North & Monkswood - Leeds 035D,E02002364,13.3,52.4,1.3
+E01011725,Farnley East - Leeds 078A,E02002407,10.5,64.7,3.4
+E01011729,Farnley East - Leeds 078B,E02002407,27.9,66.4,8.5
+E01011730,Farnley East - Leeds 078C,E02002407,12.2,66.4,16.5
+E01011735,Farnley East - Leeds 078D,E02002407,3.1,65.5,6.6
+E01011779,Featherstone - Wakefield 027A,E02002464,23.8,2.5,37.9
+E01011780,Featherstone - Wakefield 027B,E02002464,2.8,3,2.5
+E01011781,Featherstone - Wakefield 027C,E02002464,17.6,3.6,19.7
+E01011782,Featherstone - Wakefield 027D,E02002464,10.8,3,42.6
+E01011783,Featherstone - Wakefield 027E,E02002464,28.2,2.9,31.7
+E01011899,Lupset - Wakefield 026A,E02002463,13.9,1.9,46.3
+E01011900,Lupset - Wakefield 026B,E02002463,4.1,1.9,10
+E01011901,Lupset - Wakefield 026C,E02002463,2.3,2,30.9
+E01011904,Lupset - Wakefield 026D,E02002463,4.9,2.2,53.6
+E01011918,Lupset - Wakefield 026E,E02002463,7.7,3,42.7
+E01011922,Lupset - Wakefield 026F,E02002463,7.8,1.8,11.3
+E01012015,Thorntree - Middlesbrough 007A,E02002502,0.5,36,0.6
+E01012016,Thorntree - Middlesbrough 007B,E02002502,0.1,42.8,2.3
+E01012017,Thorntree - Middlesbrough 007C,E02002502,11,36.4,12.3
+E01012082,Park End - Middlesbrough 010A,E02002505,1.1,42.3,10.4
+E01012083,Park End - Middlesbrough 010B,E02002505,0.3,44.5,10.1
+E01012084,Park End - Middlesbrough 010C,E02002505,0.6,45.1,3
+E01012085,Park End - Middlesbrough 010D,E02002505,0.1,43.6,5.9
+E01012089,Thorntree - Middlesbrough 007D,E02002502,0.6,41,0.7
+E01012090,Thorntree - Middlesbrough 007E,E02002502,0,40.7,0.4
+E01012091,Thorntree - Middlesbrough 007F,E02002502,2.3,43.3,7
+E01012267,"Central Stockton, Portrack & Low Hartburn - Stockton-on-Tees 025C",E02007060,23,94.7,4
+E01012377,Hough Green - Halton 004A,E02002577,3.5,5.4,42.8
+E01012390,Hough Green - Halton 004B,E02002577,1.1,5.4,50.4
+E01012419,Hough Green - Halton 004C,E02002577,1,3.9,28.8
+E01012420,Hough Green - Halton 004D,E02002577,0.1,4,9.8
+E01012422,Hough Green - Halton 004E,E02002577,1,5.1,25.5
+E01012526,Hulme - Warrington 006A,E02002595,8.1,18.6,38.4
+E01012534,Hulme - Warrington 006B,E02002595,0.3,17,29.1
+E01012535,Hulme - Warrington 006C,E02002595,0.2,18,53.3
+E01012537,Hulme - Warrington 006D,E02002595,0.1,15,26.1
+E01012539,Hulme - Warrington 006E,E02002595,8.3,16.2,40.1
+E01012576,Shadsworth & Intack - Blackburn with Darwen 008A,E02002622,34.3,44.7,32.5
+E01012637,Shadsworth & Intack - Blackburn with Darwen 008B,E02002622,5.8,44.3,23.7
+E01012638,Shadsworth & Intack - Blackburn with Darwen 008C,E02002622,1.3,43.6,20.8
+E01012639,Shadsworth & Intack - Blackburn with Darwen 008D,E02002622,3.8,45.6,31.2
+E01012640,Shadsworth & Intack - Blackburn with Darwen 008E,E02002622,23.4,46.2,57.5
+E01012641,Shadsworth & Intack - Blackburn with Darwen 008F,E02002622,14.1,44.6,60.4
+E01012707,Little Layton & Little Carleton - Blackpool 007A,E02002639,5.9,18.2,13.2
+E01012720,Little Layton & Little Carleton - Blackpool 007B,E02002639,0.5,20.4,13.8
+E01012721,Little Layton & Little Carleton - Blackpool 007C,E02002639,1.2,21.1,1.7
+E01012724,Little Layton & Little Carleton - Blackpool 007D,E02002639,0.2,19.7,4.6
+E01012842,Greatfield - Kingston upon Hull 021A,E02002672,1.1,36.7,8.7
+E01012843,Greatfield - Kingston upon Hull 021B,E02002672,2.8,40.1,2
+E01012845,Greatfield - Kingston upon Hull 021C,E02002672,0,35.9,1.3
+E01012846,Greatfield - Kingston upon Hull 021D,E02002672,0.1,36.1,2
+E01012847,Greatfield - Kingston upon Hull 021E,E02002672,0.2,33.2,2.3
+E01012859,Boulevard & St Andrew's Quay - Kingston upon Hull 030A,E02002681,6.6,85.6,23.7
+E01012875,Orchard Park - Kingston upon Hull 003A,E02002654,1.7,18.6,1.1
+E01012876,Orchard Park - Kingston upon Hull 003B,E02002654,0,18.4,1.1
+E01012877,Orchard Park - Kingston upon Hull 003C,E02002654,0,17.5,5
+E01012878,Orchard Park - Kingston upon Hull 003D,E02002654,0,18.3,6.5
+E01012879,Orchard Park - Kingston upon Hull 003E,E02002654,0.3,16.1,1.1
+E01012889,Boulevard & St Andrew's Quay - Kingston upon Hull 030B,E02002681,9.1,85.7,2.4
+E01012891,Boulevard & St Andrew's Quay - Kingston upon Hull 030C,E02002681,6.1,87.3,5.7
+E01012892,Boulevard & St Andrew's Quay - Kingston upon Hull 030D,E02002681,8.6,86.7,18.2
+E01012893,Boulevard & St Andrew's Quay - Kingston upon Hull 030E,E02002681,8.7,84.9,3.7
+E01012928,Bridlington West - East Riding of Yorkshire 003A,E02002686,14.2,73.5,1
+E01012931,Bridlington West - East Riding of Yorkshire 003B,E02002686,5.9,73.7,0.2
+E01012932,Bridlington West - East Riding of Yorkshire 003C,E02002686,9.6,72.6,6.8
+E01012946,Bridlington West - East Riding of Yorkshire 003D,E02002686,6.3,75.4,1.4
+E01012949,Bridlington West - East Riding of Yorkshire 003E,E02002686,23.7,70.8,5.5
+E01013079,Withernsea East & Patrington - East Riding of Yorkshire 039A,E02002722,85.9,27.4,3.2
+E01013080,Withernsea East & Patrington - East Riding of Yorkshire 039B,E02002722,21.7,26.8,3.5
+E01013083,Withernsea East & Patrington - East Riding of Yorkshire 039C,E02002722,55.7,26.5,3.8
+E01013084,Withernsea East & Patrington - East Riding of Yorkshire 039D,E02002722,43.4,25.3,0.1
+E01013086,Withernsea East & Patrington - East Riding of Yorkshire 039E,E02002722,87.1,29.6,1.2
+E01013087,Withernsea East & Patrington - East Riding of Yorkshire 039F,E02002722,90.4,28.7,2.3
+E01013174,Immingham & Habrough - North East Lincolnshire 001A,E02002726,6.8,1,21
+E01013175,Immingham & Habrough - North East Lincolnshire 001B,E02002726,20.2,1.2,28.6
+E01013176,Immingham & Habrough - North East Lincolnshire 001C,E02002726,24.8,0.7,50.9
+E01013177,Immingham & Habrough - North East Lincolnshire 001D,E02002726,17,0.8,4.2
+E01013178,Immingham & Habrough - North East Lincolnshire 001E,E02002726,35,0.8,37.1
+E01013179,Immingham & Habrough - North East Lincolnshire 001F,E02002726,13.6,0.8,32.3
+E01013180,Immingham & Habrough - North East Lincolnshire 001G,E02002726,40.3,0.6,34.7
+E01013533,Chaddesden West - Derby 007A,E02002802,0.9,91,8.5
+E01013535,Chaddesden West - Derby 007B,E02002802,0.2,91.6,30.7
+E01013536,Chaddesden West - Derby 007C,E02002802,6.8,90.8,6
+E01013537,Chaddesden West - Derby 007D,E02002802,10.6,91.2,32.3
+E01013538,Chaddesden West - Derby 007E,E02002802,14.8,91.5,20.1
+E01013631,Braunstone Park West - Leicester 026A,E02002852,6.6,52.6,69
+E01013632,Braunstone Park West - Leicester 026B,E02002852,7.8,53.7,4.9
+E01013638,Braunstone Park West - Leicester 026C,E02002852,15.5,51,5.6
+E01013640,Braunstone Park West - Leicester 026D,E02002852,19.8,54.8,34.5
+E01013673,Eyres Monsell - Leicester 036A,E02002862,2.3,24.3,32.3
+E01013674,Eyres Monsell - Leicester 036B,E02002862,1,23.4,6.7
+E01013675,Eyres Monsell - Leicester 036C,E02002862,0.3,22.6,39.9
+E01013676,Eyres Monsell - Leicester 036D,E02002862,2,26.2,42.9
+E01013677,Eyres Monsell - Leicester 036E,E02002862,0.5,21.7,13.1
+E01013698,Thurnby Lodge - Leicester 037B,E02006815,7.4,4.8,52.2
+E01013767,Thurnby Lodge - Leicester 037C,E02006815,14,5,46
+E01013768,Thurnby Lodge - Leicester 037D,E02006815,13.4,5.1,5.8
+E01013772,Thurnby Lodge - Leicester 037E,E02006815,13.1,4.6,29.5
+E01013817,Broxtowe & Cinderhill - Nottingham 011A,E02002878,2.2,18.3,10.2
+E01013818,Broxtowe & Cinderhill - Nottingham 011B,E02002878,5.3,17.7,22.9
+E01013822,Broxtowe & Cinderhill - Nottingham 011C,E02002878,3.2,18.5,29.4
+E01013825,Broxtowe & Cinderhill - Nottingham 011D,E02002878,3.8,19.4,39.2
+E01013826,Broxtowe & Cinderhill - Nottingham 011E,E02002878,6.4,19.8,19.1
+E01013954,St Ann's East - Nottingham 021A,E02002888,14.1,97.1,11.8
+E01013959,St Ann's East - Nottingham 021B,E02002888,7.6,97,7.2
+E01013960,St Ann's East - Nottingham 021C,E02002888,9.6,96.7,3.4
+E01013962,St Ann's East - Nottingham 021D,E02002888,8,96.8,9
+E01013992,Hereford South West - Herefordshire 017A,E02002921,0.5,52.4,18.8
+E01013993,Hereford South West - Herefordshire 017B,E02002921,0.4,53.5,15.9
+E01013994,Hereford South West - Herefordshire 017C,E02002921,13.5,50.2,10
+E01013995,Hereford South West - Herefordshire 017D,E02002921,0.1,53.5,6.3
+E01014071,Hereford South West - Herefordshire 017E,E02002921,1.8,51.2,7.4
+E01014197,Woodside - Telford and Wrekin 021A,E02002948,8.1,22.2,69.6
+E01014198,Woodside - Telford and Wrekin 021B,E02002948,0.6,19.9,42.1
+E01014199,Woodside - Telford and Wrekin 021C,E02002948,2.7,21.8,56.3
+E01014200,Woodside - Telford and Wrekin 021D,E02002948,0.1,19.6,69
+E01014201,Woodside - Telford and Wrekin 021E,E02002948,0.3,17.9,68.5
+E01014220,Bentilee & Ubberley - Stoke-on-Trent 017A,E02002967,0.1,3.8,8.7
+E01014221,Bentilee & Ubberley - Stoke-on-Trent 017B,E02002967,0.2,3.6,22.7
+E01014222,Bentilee & Ubberley - Stoke-on-Trent 017C,E02002967,1.6,3.6,10.6
+E01014223,Bentilee & Ubberley - Stoke-on-Trent 017D,E02002967,1.2,4.1,6.7
+E01014224,Bentilee & Ubberley - Stoke-on-Trent 017E,E02002967,0.3,3.6,8
+E01014229,Bentilee & Ubberley - Stoke-on-Trent 017F,E02002967,0.2,4.1,23.8
+E01014321,Meir North - Stoke-on-Trent 028A,E02002978,6.8,26.6,42.4
+E01014366,Meir North - Stoke-on-Trent 028B,E02002978,0.5,30.2,14.2
+E01014367,Meir North - Stoke-on-Trent 028C,E02002978,0.4,29,7.5
+E01014368,Meir North - Stoke-on-Trent 028D,E02002978,0.4,29.5,23.1
+E01014461,Twerton - Bath and North East Somerset 011A,E02002995,25.8,52.9,17.7
+E01014462,Twerton - Bath and North East Somerset 011B,E02002995,9.7,56,6.9
+E01014463,Twerton - Bath and North East Somerset 011C,E02002995,6.4,57.4,1.3
+E01014464,Twerton - Bath and North East Somerset 011D,E02002995,26.4,54.3,1.1
+E01014726,Hartcliffe - Bristol 053B,E02003064,1.8,16,4.8
+E01014727,Hartcliffe - Bristol 053C,E02003064,2.4,15.3,8.1
+E01014829,Weston Bournville - North Somerset 021A,E02003085,11.6,82,14.3
+E01014830,Weston Bournville - North Somerset 021B,E02003085,19.3,79.8,41.3
+E01014831,Weston Bournville - North Somerset 021C,E02003085,13.8,78.6,4.3
+E01014832,Weston Bournville - North Somerset 021D,E02003085,5.8,79.3,6.7
+E01014833,Weston Bournville - North Somerset 021E,E02003085,14.1,80.1,9.9
+E01015043,"Devonport, Mount Wise & Morice Town - Plymouth 026A",E02003147,6.9,49.1,1.9
+E01015045,"Devonport, Mount Wise & Morice Town - Plymouth 026B",E02003147,9.7,52.3,2.6
+E01015046,"Devonport, Mount Wise & Morice Town - Plymouth 026C",E02003147,9.7,55.1,0.8
+E01015047,"Devonport, Mount Wise & Morice Town - Plymouth 026D",E02003147,12.6,57.2,1.6
+E01015048,"Devonport, Mount Wise & Morice Town - Plymouth 026E",E02003147,10.6,57.7,1.4
+E01015076,St Budeaux - Plymouth 009A,E02003130,18,11.8,24.6
+E01015142,St Budeaux - Plymouth 009B,E02003130,22.3,10.5,7.5
+E01015143,St Budeaux - Plymouth 009C,E02003130,16.1,10.5,13.8
+E01015144,St Budeaux - Plymouth 009D,E02003130,9.1,12.8,11.5
+E01015146,St Budeaux - Plymouth 009E,E02003130,9.9,13.7,8.6
+E01015149,St Budeaux - Plymouth 009F,E02003130,2.1,11.6,4.4
+E01015150,St Budeaux - Plymouth 009G,E02003130,19.9,10.9,11.1
+E01015190,Blatchcombe & Blagdon - Torbay 013A,E02003166,54.6,2.4,7.4
+E01015191,Blatchcombe & Blagdon - Torbay 013B,E02003166,22.8,2.1,23.8
+E01015192,Blatchcombe & Blagdon - Torbay 013C,E02003166,14.8,1.9,22.5
+E01015193,Blatchcombe & Blagdon - Torbay 013D,E02003166,8.8,2,27.1
+E01015194,Blatchcombe & Blagdon - Torbay 013E,E02003166,15.2,2.1,8.5
+E01015196,Blatchcombe & Blagdon - Torbay 013G,E02003166,9.3,2.1,9.3
+E01015538,Walcot East - Swindon 016A,E02003227,5.7,56.9,12.9
+E01015543,Penhill - Swindon 003A,E02003214,7.8,67.4,18.4
+E01015544,Penhill - Swindon 003B,E02003214,0.3,67.4,1.8
+E01015545,Penhill - Swindon 003C,E02003214,0.3,67.2,1.6
+E01015546,Penhill - Swindon 003D,E02003214,0.6,68.7,2.7
+E01015572,Walcot East - Swindon 016B,E02003227,0.8,53,23.3
+E01015573,Walcot East - Swindon 016C,E02003227,5.3,59.6,21.2
+E01015575,Walcot East - Swindon 016D,E02003227,1.1,51.6,29.4
+E01015607,Paston - Peterborough 007A,E02003243,8.9,9.6,6.8
+E01015609,Paston - Peterborough 007B,E02003243,5.3,10.2,22.5
+E01015637,Orton Malborne & Goldhay - Peterborough 021A,E02003257,8.8,6,40.3
+E01015639,Orton Malborne & Goldhay - Peterborough 021B,E02003257,6.2,6.5,8.7
+E01015640,Orton Malborne & Goldhay - Peterborough 021C,E02003257,19.9,6.4,32.2
+E01015641,Orton Malborne & Goldhay - Peterborough 021D,E02003257,6.8,5.5,26.8
+E01015642,Orton Malborne & Goldhay - Peterborough 021E,E02003257,14.5,6.1,30.5
+E01015647,Orton Malborne & Goldhay - Peterborough 021F,E02003257,24.9,6.3,10.3
+E01015656,Paston - Peterborough 007C,E02003243,5.9,9.5,17.2
+E01015658,Paston - Peterborough 007E,E02003243,9.6,9.3,16.6
+E01015660,Paston - Peterborough 007F,E02003243,29.1,9.3,16.9
+E01015876,Shoeburyness - Southend-on-Sea 013A,E02003291,32.3,2.3,18.5
+E01015877,Shoeburyness - Southend-on-Sea 013B,E02003291,44,1.9,12
+E01015878,Shoeburyness - Southend-on-Sea 013C,E02003291,36.5,1.4,14.1
+E01015879,Shoeburyness - Southend-on-Sea 013D,E02003291,5.3,1.5,7.3
+E01015880,Shoeburyness - Southend-on-Sea 013E,E02003291,12.3,1.7,1.6
+E01015881,Shoeburyness - Southend-on-Sea 013F,E02003291,41.3,1.7,12.1
+E01015882,Shoeburyness - Southend-on-Sea 013G,E02003291,12.5,1.8,10.5
+E01016864,Whitehawk - Brighton and Hove 025A,E02003515,24.1,89.7,12.2
+E01016865,Whitehawk - Brighton and Hove 025B,E02003515,13,89.1,8.9
+E01016866,Whitehawk - Brighton and Hove 025C,E02003515,11.4,88.9,6.6
+E01016867,Whitehawk - Brighton and Hove 025D,E02003515,1.5,88.8,1.9
+E01016868,Whitehawk - Brighton and Hove 025E,E02003515,6.1,89.5,1.4
+E01016895,Whitehawk - Brighton and Hove 025F,E02003515,27.2,90,24.9
+E01017031,Fratton West & Portsea - Portsmouth 028A,E02006976,6.1,97.7,5.7
+E01017039,Fratton West & Portsea - Portsmouth 028C,E02006976,7.2,97.6,16.1
+E01017040,Fratton West & Portsea - Portsmouth 028B,E02006976,5.6,97.3,5.9
+E01017112,Paulsgrove East - Portsmouth 001A,E02003524,3.5,7,24.2
+E01017115,Paulsgrove East - Portsmouth 001B,E02003524,3.5,6.4,27.9
+E01017117,Paulsgrove East - Portsmouth 001C,E02003524,1.3,7.4,19.8
+E01017119,Paulsgrove East - Portsmouth 001D,E02003524,3.7,7.1,22.2
+E01017120,Paulsgrove East - Portsmouth 001E,E02003524,11.2,6.7,4
+E01017236,Redbridge & Millbrook West - Southampton 012A,E02003560,7,47.6,17.5
+E01017237,Redbridge & Millbrook West - Southampton 012B,E02003560,2.2,49.4,25.8
+E01017239,Redbridge & Millbrook West - Southampton 012C,E02003560,22,48.3,45.6
+E01017240,Redbridge & Millbrook West - Southampton 012D,E02003560,7.6,45.1,12.3
+E01017245,Redbridge & Millbrook West - Southampton 012E,E02003560,5.8,48.7,7.9
+E01017274,Weston - Southampton 032A,E02003580,9.5,20.7,14
+E01017277,Weston - Southampton 032B,E02003580,31.5,20.8,51.4
+E01017280,Weston - Southampton 032C,E02003580,2.4,21.2,10.7
+E01017281,Weston - Southampton 032D,E02003580,14.4,19.9,1.6
+E01018313,Blacon South - Cheshire West and Chester 031A,E02003799,6.1,9.4,45.9
+E01018314,Blacon South - Cheshire West and Chester 031B,E02003799,7.2,12.7,20.5
+E01018315,Blacon South - Cheshire West and Chester 031C,E02003799,25.4,9.8,40.7
+E01018316,Blacon South - Cheshire West and Chester 031D,E02003799,1.8,11,19.3
+E01018317,Blacon South - Cheshire West and Chester 031E,E02003799,0.6,10.9,4.7
+E01018519,Ellesmere Port Town & Rossmore - Cheshire West and Chester 007A,E02003845,15.1,24.2,29.5
+E01018520,Ellesmere Port Town & Rossmore - Cheshire West and Chester 007B,E02003845,2.9,26.8,38.3
+E01018525,Ellesmere Port Town & Rossmore - Cheshire West and Chester 007C,E02003845,0.4,27.8,32.2
+E01019095,"Flimby, Ellenborough & Broughton Moor - Allerdale 005A",E02003969,13.2,44.3,0.7
+E01019097,"Flimby, Ellenborough & Broughton Moor - Allerdale 005B",E02003969,9.3,47.5,0.9
+E01019098,"Flimby, Ellenborough & Broughton Moor - Allerdale 005C",E02003969,25.6,46.2,3.7
+E01019099,"Flimby, Ellenborough & Broughton Moor - Allerdale 005D",E02003969,37.8,48.6,6.4
+E01019141,Barrow Central - Barrow-in-Furness 008A,E02003984,10.4,77.2,0.7
+E01019142,Barrow Central - Barrow-in-Furness 008B,E02003984,7.8,78.1,8.9
+E01019143,Barrow Central - Barrow-in-Furness 008C,E02003984,7.6,78.7,1.3
+E01019157,Barrow Central - Barrow-in-Furness 008D,E02003984,12.5,78.2,3.9
+E01019158,Barrow Central - Barrow-in-Furness 008E,E02003984,15.3,75.6,12.6
+E01019193,Raffles & Morton - Carlisle 009A,E02003995,1.1,32.6,6.1
+E01019194,Raffles & Morton - Carlisle 009B,E02003995,6.7,33.9,15.8
+E01019230,Raffles & Morton - Carlisle 009C,E02003995,11.1,29.7,2.2
+E01019231,Raffles & Morton - Carlisle 009D,E02003995,1.1,29.4,0.4
+E01019232,Raffles & Morton - Carlisle 009E,E02003995,13.9,28.2,18.5
+E01019252,Raffles & Morton - Carlisle 009F,E02003995,17,27.6,6.9
+E01019291,"Mirehouse, Kells & Woodhouse - Copeland 005A",E02004004,8.8,44.5,7
+E01019292,"Mirehouse, Kells & Woodhouse - Copeland 005B",E02004004,29.6,41.7,7.9
+E01019294,"Mirehouse, Kells & Woodhouse - Copeland 005C",E02004004,4.4,44.4,4.4
+E01019295,"Mirehouse, Kells & Woodhouse - Copeland 005D",E02004004,35.3,45.3,3.7
+E01019296,"Mirehouse, Kells & Woodhouse - Copeland 005E",E02004004,18.6,43.9,3.9
+E01019301,"Mirehouse, Kells & Woodhouse - Copeland 005F",E02004004,9.1,45.4,0.3
+E01019302,"Mirehouse, Kells & Woodhouse - Copeland 005G",E02004004,8.5,46.4,4
+E01019644,Cotmanhay - Erewash 001A,E02004078,17.3,18.8,3.9
+E01019646,Cotmanhay - Erewash 001B,E02004078,23.9,20.9,5.3
+E01019663,Cotmanhay - Erewash 001C,E02004078,0.1,22.8,0.5
+E01019664,Cotmanhay - Erewash 001D,E02004078,0.4,18.9,11
+E01019665,Cotmanhay - Erewash 001E,E02004078,22.7,20.2,7.9
+E01019796,Grassmoor & Holmewood - North East Derbyshire 009A,E02004113,19.3,5.9,4.1
+E01019797,Grassmoor & Holmewood - North East Derbyshire 009B,E02004113,12.4,9.2,13
+E01019799,Grassmoor & Holmewood - North East Derbyshire 009C,E02004113,20.8,10.6,6.1
+E01019800,Grassmoor & Holmewood - North East Derbyshire 009D,E02004113,11.4,9.1,44.5
+E01019808,Grassmoor & Holmewood - North East Derbyshire 009E,E02004113,26.5,8.7,11.7
+E01019826,Grassmoor & Holmewood - North East Derbyshire 009F,E02004113,23.9,7.5,15.2
+E01020551,Broadwey & Littlemoor - Dorset 038A,E02004281,41.3,3.3,8.6
+E01020552,Broadwey & Littlemoor - Dorset 038B,E02004281,6,2.8,0.5
+E01020570,Broadwey & Littlemoor - Dorset 038C,E02004281,84.3,3.3,15.3
+E01020571,Broadwey & Littlemoor - Dorset 038D,E02004281,23.6,3.3,9.2
+E01020647,Stanley South - County Durham 008A,E02004301,7.4,7.9,22.6
+E01020648,Stanley South - County Durham 008B,E02004301,12.1,9.8,14.8
+E01020649,Stanley South - County Durham 008C,E02004301,4.4,6.3,16.4
+E01020673,Stanley South - County Durham 008D,E02004301,20.1,6.6,2.3
+E01020675,Stanley South - County Durham 008E,E02004301,6.3,6.8,9.6
+E01020745,Peterlee East - County Durham 032A,E02004325,3,28.7,8.5
+E01020753,Peterlee East - County Durham 032B,E02004325,10.9,36.6,3.2
+E01020757,Peterlee East - County Durham 032C,E02004325,10.3,28.6,8.3
+E01020758,Peterlee East - County Durham 032D,E02004325,9.4,31.7,9
+E01020759,Peterlee East - County Durham 032E,E02004325,6.8,34.2,10.6
+E01020765,Peterlee East - County Durham 032F,E02004325,2.7,33.1,7.7
+E01020876,Crook North & Tow Low - County Durham 045A,E02004349,18.6,10,9.7
+E01020878,Crook North & Tow Low - County Durham 045B,E02004349,22.4,10,11
+E01020887,Crook North & Tow Low - County Durham 045C,E02004349,25.2,10.7,14.5
+E01020892,Crook North & Tow Low - County Durham 045D,E02004349,39.7,8.3,6.3
+E01020894,Crook North & Tow Low - County Durham 045E,E02004349,36.9,8.6,8.2
+E01020898,Crook North & Tow Low - County Durham 045F,E02004349,5,9.9,0.5
+E01021271,Chalvedon - Basildon 013A,E02004436,4.8,31.7,37.1
+E01021286,Laindon Central - Basildon 016A,E02004439,3.7,15.2,22.7
+E01021288,Laindon Central - Basildon 016B,E02004439,0.8,17.3,33.2
+E01021289,Laindon Central - Basildon 016C,E02004439,3.9,18.2,57.7
+E01021290,Laindon Central - Basildon 016D,E02004439,0.1,15.1,29.1
+E01021291,Laindon Central - Basildon 016E,E02004439,0.8,18.2,36.3
+E01021302,Chalvedon - Basildon 013B,E02004436,5.2,32.2,14
+E01021304,Chalvedon - Basildon 013C,E02004436,4.6,28.5,23
+E01021305,Chalvedon - Basildon 013D,E02004436,5.7,27.8,31.8
+E01021306,Chalvedon - Basildon 013E,E02004436,3.1,30.5,36.6
+E01021696,Greenstead - Colchester 008A,E02004513,4.9,25.8,0.6
+E01021697,Greenstead - Colchester 008B,E02004513,1,25.9,8.4
+E01021698,Greenstead - Colchester 008C,E02004513,0.2,23.7,18.1
+E01021699,Greenstead - Colchester 008D,E02004513,0.2,24.3,5.2
+E01021700,Greenstead - Colchester 008E,E02004513,0.2,23.7,7.2
+E01022819,Rowner - Gosport 004A,E02004744,1.4,14.4,26.9
+E01022820,Rowner - Gosport 004B,E02004744,0.2,15.4,39.5
+E01022841,Rowner - Gosport 004E,E02004744,0.4,12.3,34.7
+E01022842,Rowner - Gosport 004F,E02004744,2.8,15.8,54
+E01022903,Leigh Park - Havant 008A,E02004769,1.4,17.6,14.1
+E01022906,Leigh Park - Havant 008B,E02004769,2.4,16.9,35.6
+E01022919,Cowplain West - Havant 019A,E02006830,22.5,5.8,34.9
+E01022933,Cowplain West - Havant 019B,E02006830,10.8,5.8,8.7
+E01022934,Cowplain West - Havant 019C,E02006830,0.8,6.8,15.1
+E01022968,Leigh Park - Havant 008C,E02004769,0.2,13.7,27
+E01022969,Leigh Park - Havant 008D,E02004769,0.2,15.3,33.9
+E01024193,Buckland & St Radigunds - Dover 011A,E02005051,0.6,38.9,6.1
+E01024194,Buckland & St Radigunds - Dover 011B,E02005051,5,38.9,41.7
+E01024195,Buckland & St Radigunds - Dover 011C,E02005051,12.8,41,29.3
+E01024196,Buckland & St Radigunds - Dover 011D,E02005051,1.9,40.3,7.9
+E01024197,Buckland & St Radigunds - Dover 011E,E02005051,1.9,39.7,13.2
+E01024240,Buckland & St Radigunds - Dover 011F,E02005051,6.3,44.1,8.1
+E01024241,Buckland & St Radigunds - Dover 011G,E02005051,4.1,45.2,25.8
+E01024248,Buckland & St Radigunds - Dover 011H,E02005051,13.3,43.2,19.3
+E01024390,Parkwood & Senacre - Maidstone 013B,E02005080,0.8,0.5,27.2
+E01024391,Parkwood & Senacre - Maidstone 013C,E02005080,7.5,0.3,49
+E01024397,Parkwood & Senacre - Maidstone 013D,E02005080,8.2,0.3,5.3
+E01024398,Parkwood & Senacre - Maidstone 013E,E02005080,3,0.4,22.7
+E01024399,Parkwood & Senacre - Maidstone 013F,E02005080,9.1,0.3,5.5
+E01024400,Parkwood & Senacre - Maidstone 013G,E02005080,3.6,0.3,29.3
+E01024580,Sheppey East - Swale 006A,E02005120,62.8,3.6,2.6
+E01024581,Sheppey East - Swale 006B,E02005120,32.2,2.2,11.5
+E01024586,Sheppey East - Swale 006C,E02005120,53,2.7,28.8
+E01025110,Morecambe West End - Lancaster 009A,E02005229,14.9,68.4,3.9
+E01025116,Morecambe West End - Lancaster 009B,E02005229,30.4,67.7,11.6
+E01025117,Morecambe West End - Lancaster 009C,E02005229,18.4,67.6,6.9
+E01025120,Morecambe West End - Lancaster 009D,E02005229,40.3,66.9,24.1
+E01025236,Ribbleton - Preston 009A,E02005261,3.6,17.8,60
+E01025283,Ribbleton - Preston 009B,E02005261,0.9,18.5,36.4
+E01025284,Ribbleton - Preston 009C,E02005261,4.1,18.9,77.8
+E01025285,Ribbleton - Preston 009D,E02005261,13.4,16.7,73.2
+E01025286,Ribbleton - Preston 009E,E02005261,3.9,20,34.2
+E01025287,Ribbleton - Preston 009F,E02005261,5.2,19.2,21.1
+E01025493,Skelmersdale South East - West Lancashire 014A,E02005317,5.7,22,7.8
+E01025494,Skelmersdale South East - West Lancashire 014B,E02005317,14.2,24,7.3
+E01025503,Skelmersdale South East - West Lancashire 014C,E02005317,2,22.9,39
+E01025504,Skelmersdale South East - West Lancashire 014D,E02005317,5.8,18.9,13.5
+E01025505,Skelmersdale South East - West Lancashire 014E,E02005317,27.4,21.9,27
+E01025573,Fleetwood Town - Wyre 001A,E02005319,12.1,53,31
+E01025574,Fleetwood Town - Wyre 001B,E02005319,16.2,54.4,1.6
+E01025581,Fleetwood Town - Wyre 001C,E02005319,47.2,53.9,21.5
+E01025582,Fleetwood Town - Wyre 001D,E02005319,11,52.2,4.2
+E01025583,Fleetwood Town - Wyre 001E,E02005319,27.4,52.4,6.7
+E01025584,Fleetwood Town - Wyre 001F,E02005319,29.6,54.2,0.8
+E01026072,Mablethorpe - East Lindsey 005A,E02005428,17.5,32,0.1
+E01026073,Mablethorpe - East Lindsey 005B,E02005428,45.1,31.4,0.1
+E01026074,Mablethorpe - East Lindsey 005C,E02005428,44.6,34.7,0.1
+E01026099,Mablethorpe - East Lindsey 005D,E02005428,82.4,35.1,2.1
+E01026127,Birchwood West - Lincoln 007A,E02005448,1.5,1.6,2.4
+E01026129,Birchwood West - Lincoln 007C,E02005448,1.2,2.1,0.9
+E01026131,Birchwood West - Lincoln 007D,E02005448,14.7,1.7,14.8
+E01026378,Gainsborough West - West Lindsey 004A,E02005495,17.2,9.7,26.7
+E01026379,Gainsborough West - West Lindsey 004B,E02005495,51.5,10.8,34.7
+E01026381,Gainsborough West - West Lindsey 004C,E02005495,22.3,9.8,8.3
+E01026382,Gainsborough West - West Lindsey 004D,E02005495,41.4,9.5,16.4
+E01026383,Gainsborough West - West Lindsey 004E,E02005495,23.5,7.5,3.7
+E01026384,Gainsborough West - West Lindsey 004F,E02005495,63.2,12,10.3
+E01026791,Bowthorpe & West Earlham - Norwich 005A,E02005588,24.5,3.2,4.8
+E01026792,Bowthorpe & West Earlham - Norwich 005B,E02005588,18.2,3.2,10.4
+E01026793,Bowthorpe & West Earlham - Norwich 005C,E02005588,4.9,3.3,13.8
+E01026794,Bowthorpe & West Earlham - Norwich 005D,E02005588,36.9,3.4,36.1
+E01026796,Bowthorpe & West Earlham - Norwich 005F,E02005588,6.9,3.3,22.6
+E01026803,Heartsease & Pilling Park - Norwich 004A,E02005587,14.6,16.6,0.8
+E01026804,Heartsease & Pilling Park - Norwich 004B,E02005587,50.6,16.5,13.4
+E01026805,Heartsease & Pilling Park - Norwich 004C,E02005587,5.7,17,2.5
+E01026806,Heartsease & Pilling Park - Norwich 004D,E02005587,32.9,15.6,20.2
+E01026807,Heartsease & Pilling Park - Norwich 004E,E02005587,36.8,15,23
+E01026808,Heartsease & Pilling Park - Norwich 004F,E02005587,21.2,15.8,1.2
+E01026809,Heartsease & Pilling Park - Norwich 004G,E02005587,9.7,18.2,0.2
+E01026959,Corby Kingswood - North Northamptonshire 007A,E02005617,0.7,9.1,33.1
+E01026960,Corby Kingswood - North Northamptonshire 007B,E02005617,4.2,10.1,21.3
+E01026961,Corby Kingswood - North Northamptonshire 007C,E02005617,0.4,9.7,34.1
+E01026965,Corby Kingswood - North Northamptonshire 007D,E02005617,1,10.7,23.1
+E01026966,Corby Kingswood - North Northamptonshire 007E,E02005617,17.5,10,39.4
+E01026967,Corby Kingswood - North Northamptonshire 007F,E02005617,1.6,10.8,27.9
+E01026968,Corby Kingswood - North Northamptonshire 007G,E02005617,5.9,10.9,9.7
+E01027081,Kettering Avondale Grange - North Northamptonshire 016A,E02005643,0.5,35.8,43.4
+E01027082,Kettering Avondale Grange - North Northamptonshire 016B,E02005643,1.8,37.4,37.3
+E01027083,Kettering Avondale Grange - North Northamptonshire 016C,E02005643,1.8,36.9,15.2
+E01027127,Kettering Avondale Grange - North Northamptonshire 016D,E02005643,1.3,39.6,14.2
+E01027128,Kettering Avondale Grange - North Northamptonshire 016E,E02005643,12.4,39.4,51
+E01028520,Greater Leys - Oxford 018A,E02005957,6.7,11.2,27.2
+E01028568,Greater Leys - Oxford 018B,E02005957,10.2,10.3,17.4
+E01028569,Greater Leys - Oxford 018C,E02005957,0.8,10.5,28.7
+E01028570,Greater Leys - Oxford 018D,E02005957,1.9,12.4,59
+E01029097,Bridgwater South - Sedgemoor 013A,E02006073,3.7,34.8,8.6
+E01029098,Bridgwater South - Sedgemoor 013B,E02006073,12.4,37.6,12.5
+E01029099,Bridgwater South - Sedgemoor 013C,E02006073,2,31.9,3.1
+E01029100,Bridgwater South - Sedgemoor 013D,E02006073,6.4,31.9,26.3
+E01029105,Bridgwater South - Sedgemoor 013E,E02006073,13.6,37.8,2.3
+E01029840,Glascote Heath - Tamworth 007A,E02006223,0.5,31.1,83.3
+E01029842,Glascote Heath - Tamworth 007B,E02006223,6.9,29.2,53.9
+E01029843,Glascote Heath - Tamworth 007C,E02006223,1.1,31.4,83.9
+E01029845,Glascote Heath - Tamworth 007D,E02006223,1.5,27.2,17.1
+E01029859,Glascote Heath - Tamworth 007E,E02006223,0.5,34.5,62.5
+E01029942,Lakenheath - West Suffolk 001A,E02006239,60.3,0.4,22.8
+E01029944,Lakenheath - West Suffolk 001B,E02006239,23.1,0.5,17.5
+E01030160,Felixstowe West - East Suffolk 029A,E02006300,5.8,36,0.6
+E01030161,Felixstowe West - East Suffolk 029B,E02006300,12,36.9,12.2
+E01030168,Felixstowe West - East Suffolk 029C,E02006300,21.8,35.1,0.7
+E01030169,Felixstowe West - East Suffolk 029D,E02006300,10.4,33.3,5.2
+E01030170,Felixstowe West - East Suffolk 029E,E02006300,13,38.6,0.6
+E01030246,Lowestoft Central - East Suffolk 004A,E02006305,12.5,46.8,6.7
+E01030248,Lowestoft Central - East Suffolk 004B,E02006305,11.4,47.5,9.3
+E01030249,Lowestoft Central - East Suffolk 004C,E02006305,17.9,48.1,1.2
+E01030250,Lowestoft Central - East Suffolk 004D,E02006305,10.4,50.3,0.4
+E01030264,Lowestoft Central - East Suffolk 004E,E02006305,5.5,47.6,4.7
+E01030265,Lowestoft Central - East Suffolk 004F,E02006305,4.9,45.8,5.7
+E01031073,Camp Hill - Nuneaton and Bedworth 002C,E02006476,11.2,26.2,81.1
+E01031074,Camp Hill - Nuneaton and Bedworth 002D,E02006476,0.9,23.9,55.8
+E01031075,Camp Hill - Nuneaton and Bedworth 002E,E02006476,1.9,27.3,51.6
+E01031427,Wick & Toddington - Arun 004A,E02006545,16.5,9.4,3.2
+E01031429,Wick & Toddington - Arun 004B,E02006545,7.2,8.8,4.1
+E01031430,Wick & Toddington - Arun 004C,E02006545,8.3,8.5,11.1
+E01031547,Bewbush - Crawley 010A,E02006584,0.6,1.1,82
+E01031548,Bewbush - Crawley 010B,E02006584,7.4,1.3,76.3
+E01031549,Bewbush - Crawley 010C,E02006584,0.5,1.4,84.7
+E01031550,Bewbush - Crawley 010D,E02006584,2.4,1,77.1
+E01031569,Bewbush - Crawley 010E,E02006584,3.6,1,49.2
+E01031980,Salisbury Bemerton - Wiltshire 052A,E02006667,5.2,4.7,37.3
+E01031981,Salisbury Bemerton - Wiltshire 052B,E02006667,15,3.2,22.7
+E01031982,Salisbury Bemerton - Wiltshire 052C,E02006667,23.1,2.5,31.2
+E01031983,Salisbury Bemerton - Wiltshire 052D,E02006667,1,3.2,13.2
+E01032250,Greenlands - Redditch 010A,E02006730,0.5,19.1,38.5
+E01032251,Greenlands - Redditch 010B,E02006730,1,23.9,53.8
+E01032252,Greenlands - Redditch 010C,E02006730,1.7,21.5,16.3
+E01032254,Greenlands - Redditch 010D,E02006730,0.5,25.3,56.2
+E01032303,Warndon West - Worcester 002A,E02006735,2.9,7.7,40.4
+E01032304,Warndon West - Worcester 002B,E02006735,2,9.5,26.4
+E01032331,Warndon West - Worcester 002C,E02006735,0.5,8.4,15.7
+E01032332,Warndon West - Worcester 002D,E02006735,1.1,8.9,6.5
+E01032469,Birchen Coppice - Wyre Forest 009A,E02006775,18,17.6,23.9
+E01032471,Birchen Coppice - Wyre Forest 009C,E02006775,7.3,18.4,5.1
+E01032514,Hartcliffe - Bristol 053E,E02003064,0.2,20,18.1
+E01032515,Hartcliffe - Bristol 053F,E02003064,29.3,20.3,33
+E01032556,Alt - Oldham 026E,E02001123,25.1,34.9,74.3
+E01032557,Alt - Oldham 026F,E02001123,1.6,36.1,34
+E01032597,Thurnby Lodge - Leicester 037F,E02006815,5.4,4.2,12.1
+E01032618,Cowplain West - Havant 019D,E02006830,20.4,6.5,34.5
+E01033228,Page Moss & Fincham - Knowsley 008F,E02001334,0.7,78.1,54
+E01033435,Bowthorpe & West Earlham - Norwich 005G,E02005588,24.3,3.3,15.5
+E01033436,Bowthorpe & West Earlham - Norwich 005H,E02005588,9.2,3.5,5.8
+E01033678,Hapurhey South & Monsall - Manchester 009F,E02001053,10.1,44,36.8
+E01033679,Hapurhey South & Monsall - Manchester 009G,E02001053,10.7,41.8,21
+E01033719,Greenstead - Colchester 008G,E02004513,4.5,23.9,16.9
+E01033722,Greenstead - Colchester 008H,E02004513,1.9,23.4,17.7
+E01033894,Blakenall South - Walsall 013F,E02002122,7.7,62,32.3
+E01033895,Blakenall South - Walsall 013G,E02002122,0.7,60.7,38
+E01033984,Pendleton - Salford 024E,E02001180,3,88.4,18.1
+E01034017,Thurnby Lodge - Leicester 037G,E02006815,15.1,4.4,65
+E01034018,Thurnby Lodge - Leicester 037H,E02006815,7.6,4.7,42.3
+E01034060,Rowner - Gosport 004H,E02004744,3.9,19.1,31.7
+E01034061,Rowner - Gosport 004I,E02004744,0,11.8,32.5
+E01034120,Gorton South - Manchester 023F,E02001067,9.2,46.5,37.5
+E01034121,Gorton South - Manchester 023G,E02001067,13.5,44.1,62.7
+E01034171,Blatchcombe & Blagdon - Torbay 013H,E02003166,54.5,1.6,13
+E01034172,Blatchcombe & Blagdon - Torbay 013I,E02003166,53.9,2.3,37.6
+E01034333,Birchen Coppice - Wyre Forest 009D,E02006775,14.1,13.8,21.1
+E01034334,Birchen Coppice - Wyre Forest 009E,E02006775,5.7,14.7,28.1
+E01034396,Norris Green East - Liverpool 010G,E02001356,0.9,41,54.7
+E01034397,Norris Green East - Liverpool 010H,E02001356,0,40.2,77
+E01034561,Lakenheath - West Suffolk 001C,E02006239,11.8,0.5,13.2
+E01034562,Lakenheath - West Suffolk 001D,E02006239,2.3,0.8,14.2
+E01034563,Lakenheath - West Suffolk 001E,E02006239,0.9,0.4,14.1
+E01034689,Birchwood West - Lincoln 007E,E02005448,2.3,1.4,31.4
+E01034690,Birchwood West - Lincoln 007F,E02005448,17.8,1.7,29.1
+E01034816,Wick & Toddington - Arun 004F,E02006545,0.7,11.7,39.6
+E01034817,Wick & Toddington - Arun 004G,E02006545,1.4,10.3,26.9
+E01034818,Wick & Toddington - Arun 004H,E02006545,9.7,10.2,31.3
+E01034819,Wick & Toddington - Arun 004I,E02006545,5.8,9.4,20.6
+E01034838,Birkenhead Central - Wirral 016F,E02001482,12.7,93.3,3.6
+E01034839,Birkenhead Central - Wirral 016G,E02001482,15.7,93.3,2.8
+E01034927,Nechells - Birmingham 043D,E02001869,9.2,89.4,15.5
+E01034928,Nechells - Birmingham 043E,E02001869,5.9,88,21.6
+E01034995,Parkwood & Senacre - Maidstone 013H,E02005080,0.2,0.4,25.3
+E01034996,Parkwood & Senacre - Maidstone 013I,E02005080,3.6,0.4,20
+E01035016,Camp Hill - Nuneaton and Bedworth 002G,E02006476,0.3,25.3,54.6
+E01035017,Camp Hill - Nuneaton and Bedworth 002H,E02006476,0.2,25.5,64.9
+E01035197,"Central Stockton, Portrack & Low Hartburn - Stockton-on-Tees 025A",E02007060,22.3,94.8,1.8
+E01035198,Central Stockton & Portrack - Stockton-on-Tees 025B,E02007060,15.3,94.3,10.6
+E01035199,Central Stockton & Portrack - Stockton-on-Tees 025D,E02007060,20,92.7,4.6
+E01035300,Sheppey East - Swale 006E,E02005120,50.2,4.1,17.3
+E01035301,Sheppey East - Swale 006F,E02005120,57.5,3.5,18.1
+E01035365,Ellesmere Port Town & Rossmore - Cheshire West and Chester 007F,E02003845,16,26.1,18
+E01035366,Ellesmere Port Town & Rossmore - Cheshire West and Chester 007G,E02003845,24,28.9,49.3
+E01035367,Ellesmere Port Town & Rossmore - Cheshire West and Chester 007H,E02003845,3.6,26.6,31.3
+E01035368,Ellesmere Port Town & Rossmore - Cheshire West and Chester 007I,E02003845,6.2,25.6,3.5
+E01035538,Paston - Peterborough 007G,E02003243,10.9,9.1,30.3
+E01035539,Paston - Peterborough 007H,E02003243,3.8,9.8,20.7

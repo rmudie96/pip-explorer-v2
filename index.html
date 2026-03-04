@@ -310,6 +310,13 @@ const IMD_LSOA_METRICS = {
   imd_lsoa_living_env: { id:'imd_lsoa_living_env', col:'livingenvironment_pct', label:'Index of Multiple Deprivation — Living Environment (LSOA)',  shortLabel:'Living Environment'  }
 };
 
+// LSOA-level CNI metrics from cni_lsoa.csv (national percentiles pre-computed)
+const CNI_LSOA_METRICS = {
+  cni_lsoa_active:  { id:'cni_lsoa_active',  col:'active_engaged_pct', label:'Community Needs Index — Active & Engaged Community (LSOA)', shortLabel:'Active Community' },
+  cni_lsoa_civic:   { id:'cni_lsoa_civic',   col:'civic_assets_pct',  label:'Community Needs Index — Civic Assets (LSOA)',               shortLabel:'Civic Assets'    },
+  cni_lsoa_connect: { id:'cni_lsoa_connect', col:'connectedness_pct', label:'Community Needs Index — Connectedness (LSOA)',              shortLabel:'Connectedness'   }
+};
+
 // ── STATE ─────────────────────────────────────────────────────────
 const APP = {
   selectedMSOA:  null,            // currently selected PiP MSOA code
@@ -525,6 +532,34 @@ async function loadIMDLSOAData() {
   });
 }
 
+// Load LSOA-level CNI data (percentiles pre-computed on full national dataset)
+async function loadCNILSOAData() {
+  if (_fileCache.has('__cni_lsoa_done__')) return;
+  _fileCache.set('__cni_lsoa_done__', true);
+  const results = await fetchCSV('cni_lsoa.csv');
+  const rows = results.data;
+
+  // Populate lsoaData entries (name only) for any LSOA not already present
+  rows.forEach(r => {
+    const code = String(r['lsoa_code']||'').trim();
+    if (!code) return;
+    if (!APP.lsoaData.has(code)) {
+      APP.lsoaData.set(code, { name: decodeHTML(r['lsoa_name'] || code), laName: '', typology: '', pcts: {} });
+    }
+  });
+
+  // Store pre-computed percentiles for each CNI LSOA metric
+  Object.values(CNI_LSOA_METRICS).forEach(m => {
+    const pctMap = new Map();
+    rows.forEach(r => {
+      const code = String(r['lsoa_code']||'').trim();
+      const val  = parseFloat(r[m.col]);
+      if (code && !isNaN(val)) pctMap.set(code, val);
+    });
+    APP.lsoaPcts.set(m.id, pctMap);
+  });
+}
+
 async function loadLSOAGeoJSON() {
   if (APP.lsoaGeojson) return APP.lsoaGeojson;
   const fname = 'Lower_layer_Super_Output_Areas_December_2021_Boundaries_EW_BSC_V4_-4299016806856585929.geojson';
@@ -637,9 +672,9 @@ function populateMapMetricSelect() {
   addGroup('Index of Multiple Deprivation (LSOA)',
     Object.keys(IMD_LSOA_METRICS),
     IMD_LSOA_METRICS);
-  addGroup('Community Needs Index',
-    ['cni','cni_active','cni_civic','cni_connectedness'],
-    METRICS);
+  addGroup('Community Needs Index (LSOA)',
+    Object.keys(CNI_LSOA_METRICS),
+    CNI_LSOA_METRICS);
   addGroup('Hyper-Local Need Measure',
     Object.keys(LSOA_METRICS),
     LSOA_METRICS);
@@ -751,7 +786,7 @@ async function renderMap(msoaCode) {
 
   try {
     // Load LSOA data + GeoJSON in parallel; also load MSOA metric if needed
-    const extraLoads = LSOA_METRICS[APP.mapMetric] ? [] : IMD_LSOA_METRICS[APP.mapMetric] ? [loadIMDLSOAData()] : [loadMetric(APP.mapMetric)];
+    const extraLoads = LSOA_METRICS[APP.mapMetric] ? [] : IMD_LSOA_METRICS[APP.mapMetric] ? [loadIMDLSOAData()] : CNI_LSOA_METRICS[APP.mapMetric] ? [loadCNILSOAData()] : [loadMetric(APP.mapMetric)];
     await Promise.all([loadLSOAData(), loadLSOAGeoJSON(), ...extraLoads]);
 
     const msoaLSOAs = APP.geo.msoaToLSOAs.get(msoaCode) || new Set();
@@ -772,9 +807,9 @@ async function renderMap(msoaCode) {
     if (APP.mapLayer) { APP.map.removeLayer(APP.mapLayer); APP.mapLayer = null; }
 
     // Build a pct-lookup function that works for both LSOA-level and MSOA-level metrics
-    const metricLabel = (LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric] || METRICS[APP.mapMetric] || {}).shortLabel || APP.mapMetric;
+    const metricLabel = (LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric] || CNI_LSOA_METRICS[APP.mapMetric] || METRICS[APP.mapMetric] || {}).shortLabel || APP.mapMetric;
     let getPct;
-    if (LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric]) {
+    if (LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric] || CNI_LSOA_METRICS[APP.mapMetric]) {
       const pctMap = APP.lsoaPcts.get(APP.mapMetric) || new Map();
       getPct = code => pctMap.get(code);
     } else {
@@ -839,6 +874,7 @@ async function renderLSOADetail(lsoaCode) {
   // Resolve metric group from the currently selected map metric
   const isHLNM    = !!LSOA_METRICS[APP.mapMetric];
   const isIMDLSOA = !!IMD_LSOA_METRICS[APP.mapMetric];
+  const isCNILSOA = !!CNI_LSOA_METRICS[APP.mapMetric];
   let groupIds, groupLabel, getPct;
   if (isHLNM) {
     // HLNM25 LSOA-level metrics — data already in d.pcts
@@ -849,6 +885,11 @@ async function renderLSOADetail(lsoaCode) {
     // IMD LSOA-level metrics — loaded from imd_lsoa.csv
     groupLabel = 'Index of Multiple Deprivation (LSOA)';
     groupIds   = Object.keys(IMD_LSOA_METRICS);
+    getPct     = id => (APP.lsoaPcts.get(id) || new Map()).get(lsoaCode) ?? null;
+  } else if (isCNILSOA) {
+    // CNI LSOA-level metrics — loaded from cni_lsoa.csv
+    groupLabel = 'Community Needs Index (LSOA)';
+    groupIds   = Object.keys(CNI_LSOA_METRICS);
     getPct     = id => (APP.lsoaPcts.get(id) || new Map()).get(lsoaCode) ?? null;
   } else {
     // MSOA-level: resolve to parent index then include overall + all subdomains
@@ -883,11 +924,12 @@ async function renderLSOADetail(lsoaCode) {
   // Load any not-yet-cached MSOA metrics, then render metric cards
   const body = document.getElementById('lsoa-metrics-body');
   try {
-    if (!isHLNM && !isIMDLSOA) await Promise.all(groupIds.map(id => loadMetric(id)));
+    if (!isHLNM && !isIMDLSOA && !isCNILSOA) await Promise.all(groupIds.map(id => loadMetric(id)));
     if (isIMDLSOA) await loadIMDLSOAData();
+    if (isCNILSOA) await loadCNILSOAData();
     body.className = 'lsoa-metrics-grid';
     body.innerHTML = groupIds.map(id => {
-      const m   = isHLNM ? LSOA_METRICS[id] : isIMDLSOA ? IMD_LSOA_METRICS[id] : METRICS[id];
+      const m   = isHLNM ? LSOA_METRICS[id] : isIMDLSOA ? IMD_LSOA_METRICS[id] : isCNILSOA ? CNI_LSOA_METRICS[id] : METRICS[id];
       if (!m) return '';
       const pct = getPct(id);
       const col = getColor(pct);
@@ -910,7 +952,7 @@ async function renderTable(msoaCode) {
   const container = document.getElementById('table-container');
   container.innerHTML = spinHTML('Loading LSOA data\u2026');
   try {
-    await loadLSOAData();
+    await Promise.all([loadLSOAData(), loadCNILSOAData()]);
     buildTable(msoaCode, container);
   } catch(e) {
     container.innerHTML = errHTML(e.message);
@@ -926,23 +968,32 @@ function buildTable(msoaCode, container) {
 
   const { col: sortCol, dir: sortDir } = APP.sortState;
 
-  // Column definitions
+  // Column definitions  (source:'pcts' = d.pcts map; source:'lsoaPcts' = APP.lsoaPcts)
   const cols = [
-    { id:'name',            label:'LSOA Name',       lsoa:false },
-    { id:'typology',        label:'Typology',         lsoa:false },
-    { id:'hlnm25_overall',     label: LSOA_METRICS.hlnm25_overall.shortLabel,     lsoa:true },
-    { id:'hlnm25_growth',      label: LSOA_METRICS.hlnm25_growth.shortLabel,      lsoa:true },
-    { id:'hlnm25_energy',      label: LSOA_METRICS.hlnm25_energy.shortLabel,      lsoa:true },
-    { id:'hlnm25_crime',       label: LSOA_METRICS.hlnm25_crime.shortLabel,       lsoa:true },
-    { id:'hlnm25_opportunity',  label: LSOA_METRICS.hlnm25_opportunity.shortLabel, lsoa:true },
-    { id:'hlnm25_health',      label: LSOA_METRICS.hlnm25_health.shortLabel,      lsoa:true }
+    { id:'name',               label:'LSOA Name',       lsoa:false },
+    { id:'typology',           label:'Typology',         lsoa:false },
+    { id:'hlnm25_overall',     label: LSOA_METRICS.hlnm25_overall.shortLabel,        lsoa:true, source:'pcts'     },
+    { id:'hlnm25_growth',      label: LSOA_METRICS.hlnm25_growth.shortLabel,         lsoa:true, source:'pcts'     },
+    { id:'hlnm25_energy',      label: LSOA_METRICS.hlnm25_energy.shortLabel,         lsoa:true, source:'pcts'     },
+    { id:'hlnm25_crime',       label: LSOA_METRICS.hlnm25_crime.shortLabel,          lsoa:true, source:'pcts'     },
+    { id:'hlnm25_opportunity', label: LSOA_METRICS.hlnm25_opportunity.shortLabel,    lsoa:true, source:'pcts'     },
+    { id:'hlnm25_health',      label: LSOA_METRICS.hlnm25_health.shortLabel,         lsoa:true, source:'pcts'     },
+    { id:'cni_lsoa_active',    label: CNI_LSOA_METRICS.cni_lsoa_active.shortLabel,   lsoa:true, source:'lsoaPcts' },
+    { id:'cni_lsoa_civic',     label: CNI_LSOA_METRICS.cni_lsoa_civic.shortLabel,    lsoa:true, source:'lsoaPcts' },
+    { id:'cni_lsoa_connect',   label: CNI_LSOA_METRICS.cni_lsoa_connect.shortLabel,  lsoa:true, source:'lsoaPcts' }
   ];
 
   // Build data rows
   let rows = lsoaCodes.map(code => {
     const d = APP.lsoaData.get(code) || {};
     const row = { code, name: d.name || code, typology: d.typology || '' };
-    cols.filter(c => c.lsoa).forEach(c => { row[c.id] = d.pcts ? (d.pcts[c.id] ?? null) : null; });
+    cols.filter(c => c.lsoa).forEach(c => {
+      if (c.source === 'lsoaPcts') {
+        row[c.id] = (APP.lsoaPcts.get(c.id) || new Map()).get(code) ?? null;
+      } else {
+        row[c.id] = d.pcts ? (d.pcts[c.id] ?? null) : null;
+      }
+    });
     return row;
   });
 
@@ -1202,7 +1253,7 @@ async function downloadTableFull() {
 
 function downloadMapFiltered() {
   if (!APP.selectedMSOA) return;
-  const isLSOA  = !!(LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric]);
+  const isLSOA  = !!(LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric] || CNI_LSOA_METRICS[APP.mapMetric]);
   const colName = APP.mapMetric + '_pctile';
   const headers = ['lsoa_code','lsoa_name','msoa_code','neighbourhood','la_name', colName];
   const pctMap  = isLSOA
@@ -1228,10 +1279,12 @@ function downloadMapFiltered() {
 }
 
 async function downloadMapFull() {
-  const isLSOA  = !!(LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric]);
+  const isLSOA  = !!(LSOA_METRICS[APP.mapMetric] || IMD_LSOA_METRICS[APP.mapMetric] || CNI_LSOA_METRICS[APP.mapMetric]);
   const colName = APP.mapMetric + '_pctile';
   if (isLSOA) {
-    if (IMD_LSOA_METRICS[APP.mapMetric]) await loadIMDLSOAData(); else await loadLSOAData();
+    if (IMD_LSOA_METRICS[APP.mapMetric]) await loadIMDLSOAData();
+    else if (CNI_LSOA_METRICS[APP.mapMetric]) await loadCNILSOAData();
+    else await loadLSOAData();
     const headers = ['lsoa_code','lsoa_name','msoa_code','neighbourhood','la_name', colName];
     const pctMap  = APP.lsoaPcts.get(APP.mapMetric) || new Map();
     const rows    = [];
