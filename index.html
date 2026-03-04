@@ -355,7 +355,7 @@ function ordinal(n) {
 function pctNarrative(pct) {
   if (pct == null || isNaN(pct)) return 'Data not available';
   const p = Math.max(1, Math.round(pct));
-  return 'At the '+ordinal(p)+' percentile nationally \u2014 '+p+'% of areas have a higher level of need';
+  return 'At the '+ordinal(p)+' percentile nationally \u2014 '+(100-p)+'% of areas have a lower level of need';
 }
 
 function spinHTML(msg) { return '<div class="loading-msg"><div class="spinner"></div>'+msg+'</div>'; }
