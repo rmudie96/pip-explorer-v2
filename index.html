@@ -1284,5 +1284,16 @@ async function init() {
 
 document.addEventListener('DOMContentLoaded', init);
 </script>
+<script>
+  function sendHeight() {
+    const height = document.documentElement.scrollHeight;
+    window.parent.postMessage({ iframeHeight: height }, '*');
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  // Also fire on any DOM mutations (tab switches, data loads etc.)
+  const observer = new MutationObserver(sendHeight);
+  observer.observe(document.body, { subtree: true, childList: true, attributes: true });
+</script>
 </body>
 </html>
