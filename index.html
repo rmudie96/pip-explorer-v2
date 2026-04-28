@@ -533,14 +533,13 @@ async function loadHLNM() {
       ? computeRankPct(rows, cc, s.col)
       : computeScorePct(rows, cc, s.col));
   });
-  const overallMap = new Map();
-  rows.forEach(r => {
-    const code = String(r[cc]||'').trim();
-    if (!code) return;
-    const pcts = subs.map(s => APP.data.get(s.id).get(code)).filter(v => v!=null&&!isNaN(v));
-    if (pcts.length) overallMap.set(code, pcts.reduce((a,b)=>a+b,0)/pcts.length);
-  });
-  APP.data.set('hlnm', overallMap);
+  // Overall HLNM: rank against OCSI's published composite Value (higher = more need)
+  // across all 6,855 English MSOAs. Uses the same percentile convention as the
+  // subdomain bars (100 = lowest need, 1 = highest need) via computeScorePct.
+  // Replaces the previous mean-of-subdomain-percentiles, which understated need
+  // for areas with one or two very high subdomain scores.
+  const overallResults = await fetchCSV('MSOA_Hyper Local Need Measure_New.csv');
+  APP.data.set('hlnm', computeScorePct(overallResults.data, 'Area Code', 'Value'));
 }
 
 async function loadMetric(id) {
